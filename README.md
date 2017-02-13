@@ -25,7 +25,7 @@ This module does not have any configuration settings of its own. All settings ar
 
 ## Submodules
 
-As described above, other modules are responsible for getting a DOI from an external source (typically an API) and for persisting it (typically in a datastream in each object). The Islandora DOI module provides a hook for accomplishing each of those tasks. These hooks are documented in the `islandora_doi.api.php` file and are illustrated in the included submodule.
+As described above, other modules are responsible for getting a DOI from an external source (typically an API) and for persisting it (typically in a datastream in each object). The Islandora DOI module provides a hook for accomplishing each of those tasks. These hooks are documented in the `islandora_doi.api.php` file and are illustrated in the included submodule. Note that both hooks do not need to be implemented in the same module.
 
 To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
 
@@ -36,6 +36,7 @@ This module provides a Drush command to assign DOIs to a list of objects identif
 ```
 islandora:23
 islandora:29
+// This is an excellent object.
 islandora:107
 islandora:2183
 ```
@@ -50,7 +51,12 @@ The command (using a file at `/tmp/pids.txt` containing the above list) is:
 
 ## Development and feedback
 
-Pull requests are welcome, as are submodules. Please open an issue in this module's Github repo before opening a pull request.
+Pull requests against this module are welcome, as are submodules (suggestions below). Please open an issue in this module's Github repo before opening a pull request.
+
+## To do
+
+* Write submodules implementing `hook_islandora_doi_fetch()` for DOI registrars such as CrossRef, DataCite, and EZID.
+* Write submodules implementing `hook_islandora_doi_save()` that persist the DOI to MODS, DDI, or other datastreams, or to a database table
 
 ## License
 
