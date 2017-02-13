@@ -43,11 +43,11 @@ function drush_islandora_doi_assign_dois() {
   foreach ($pids as $pid) {
     if ($doi = islandora_doi_fetch_doi()) {
       if (islandora_doi_save_doi($doi, $pid)) {
-        drush_log(dt('DOI !doi assigned successfully to object !pid',
+        drush_log(dt('DOI !doi assigned to object !pid',
           array('!doi' => $doi, '!pid' => $pid)), 'ok');
       }
       else {
-        drush_set_error('DOI_NOT_ASSIGNED', dt('DOI !doi was assigned to object !pid',
+        drush_set_error('DOI_NOT_ASSIGNED', dt('DOI !doi was not assigned to object !pid',
           array('!doi' => $doi, '!pid' => $pid)));
       }
     }

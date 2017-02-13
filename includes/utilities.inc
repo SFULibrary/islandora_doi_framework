@@ -25,7 +25,12 @@ function islandora_doi_fetch_doi() {
  */
 function islandora_doi_save_doi($doi, $pid) {
   $doi_saved = module_invoke_all('islandora_doi_save', $doi, $pid);
-  return $doi_saved[0];
+  if (count($doi_saved)) {
+    return $doi_saved[0];
+  }
+  else {
+    return FALSE;
+  }
 }
 
 /**
