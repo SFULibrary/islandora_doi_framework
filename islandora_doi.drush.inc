@@ -47,7 +47,7 @@ function drush_islandora_doi_assign_dois() {
           array('!doi' => $doi, '!pid' => $pid)), 'ok');
       }
       else {
-        drupal_set_error('DOI_NOT_ASSIGNED', dt('DOI !doi was assigned to object !pid',
+        drush_set_error('DOI_NOT_ASSIGNED', dt('DOI !doi was assigned to object !pid',
           array('!doi' => $doi, '!pid' => $pid)));
       }
     }

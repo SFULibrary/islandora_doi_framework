@@ -29,6 +29,12 @@ As described above, other modules are responsible for getting a DOI from an exte
 
 To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
 
+## Assigning DOIs to sets of objects
+
+This module provides a Drush command to assign DOIs to a set of objects identified in a "PID file." The PID file is a simple list of object PIDS, one PID per line. The command is:
+
+`drush islandora_doi_assign_dois --user=admin --pid_file=/tmp/pids.txt`
+
 ## Maintainer
 
 * [Mark Jordan](https://github.com/mjordan)
