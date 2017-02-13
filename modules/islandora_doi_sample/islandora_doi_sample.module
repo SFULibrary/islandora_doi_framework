@@ -42,17 +42,23 @@ function islandora_doi_sample_admin_settings() {
 
 /**
  * Implements hook_islandora_doi_fetch().
+ *
+ * This example implementation generates a DOI locally
+ * instead of requesting one from an external service. 
  */
 function islandora_doi_sample_islandora_doi_fetch() {
-  // Randomly generated DOI is an example only. Typically, this
-  // function fetches a DOI from an external API, using configuration
-  // values managed in the submodule's admin settings.
+  $endpoint = variable_get('islandora_doi_sample_api_url', 'https://api.example.com/v1');
   $doi = '10.1000/' . drupal_random_key();
   return $doi;
 }
 
 /**
  * Implements hook_islandora_doi_save().
+ *
+ * This example implementation adds the DOI to the object's
+ * MODS datastream. It might be a good idea to verify that
+ * the MODS datastream doesn't already contain a DOI before
+ * adding one.
  */
 function islandora_doi_sample_islandora_doi_save($doi, $pid) {
   $object = islandora_object_load($pid);
