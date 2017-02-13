@@ -1,0 +1,6 @@
+name = Islandora DOI
+description = "Basic module for assigning DOIs to objects."
+package = Islandora Tools
+version = 7.x-dev
+core = 7.x
+files[] = includes/utilities.inc

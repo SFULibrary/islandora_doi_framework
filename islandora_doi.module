@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_doi_menu() {
+  $items = array();
+  $items['admin/islandora/tools/islandora_doi'] = array(
+    'title' => 'Islandora DOI',
+    'description' => 'Configure Islandora DOI module.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('islandora_doi_admin_settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['islandora/object/%islandora_object/manage/assign_doi'] = array(
+    'title' => 'Assign DOI',
+    'access arguments' => array('use mik helper'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_doi_assign_doi'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_permission().
+ */
+function islandora_doi_permission() {
+  return array(
+    'assign DOIs to Islandora objects' => array(
+      'title' => t('Assign DOIs to Islandora objects'),
+      'description' => t('Assign DOIs to Islandora objects'),
+    ),
+  );
+}
+
+/**
+ * Admin settings form builder.
+ */
+function islandora_doi_admin_settings() {
+  $form['islandora_doi_api_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('API URL'),
+    '#default_value' => variable_get('islandora_doi_api_url', ''),
+    '#description' => t('The API endpoint.'),
+  );
+  $form['islandora_doi_token'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Token'),
+    '#default_value' => variable_get('islandora_doi_token', ''),
+    '#description' => t('Your token.'),
+  );
+  return system_settings_form($form);
+}
+
+function islandora_doi_assign_doi() {
+  $pid = arg(2);
+  $object = islandora_object_load($pid);
+  $form['islandora_doi_object_message'] = array(
+    '#markup' => t("You are about to assign a DOI to object !pid (!label) ",
+      array('!pid' => $pid, '!label' => $object->label)),
+  );
+  $form['islandora_doi_pid'] = array(
+    '#type' => 'value',
+    '#value' => $pid,
+  );
+  $form['islandora_doi_assign_doi'] = array(
+    '#title' => t('Configuration ID'),
+    '#type' => 'submit',
+    '#value' => 'Assign DOI',
+  );
+  return $form;
+}
+
+function islandora_doi_assign_doi_submit($form, &$form_state) {
+  module_load_include('inc', 'islandora_doi', 'includes/utilities');
+  $pid = $form_state['values']['islandora_doi_pid'];
+  if ($doi = islandora_doi_fetch_doi()) {
+    if (islandora_doi_save_doi($doi, $pid)) {
+      drupal_set_message(t('DOI !doi assigned successfully to object !pid',
+        array('!doi' => $doi, '!pid' => $pid)));
+    }
+  }
+}
