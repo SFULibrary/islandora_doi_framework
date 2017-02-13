@@ -1,0 +1,76 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_doi_sample_menu() {
+  $items = array();
+  $items['admin/islandora/tools/islandora_doi_sample'] = array(
+    'title' => 'Islandora DOI Sample',
+    'description' => 'Configure Islandora DOI sample module.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('islandora_doi_sample_admin_settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Admin settings form builder.
+ */
+function islandora_doi_sample_admin_settings() {
+  $form['islandora_doi_sample_api_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('API URL'),
+    '#default_value' => variable_get('islandora_doi_sample_api_url', 'https://api.example.com/v1'),
+    '#description' => t('The API endpoint.'),
+  );
+  $form['islandora_doi_sample_token'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Token'),
+    '#default_value' => variable_get('islandora_doi_sample_token', '65748392-10293847'),
+    '#description' => t('Your API token.'),
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_islandora_doi_fetch().
+ */
+function islandora_doi_sample_islandora_doi_fetch() {
+  // Randomly generated DOI is an example only. Typically, this
+  // function fetches a DOI from an external API, using configuration
+  // values managed in the submodule's admin settings.
+  $doi = '10.1000/' . drupal_random_key();
+  return $doi;
+}
+
+/**
+ * Implements hook_islandora_doi_save().
+ */
+function islandora_doi_sample_islandora_doi_save($doi, $pid) {
+  $object = islandora_object_load($pid);
+  if ($object['MODS']) {
+    // Add the DOI to the MODS in an <identifier type="doi"> element.
+    $dom = new DOMDocument;
+    $dom->loadXML($object['MODS']->content);
+    $doi_element_string = '<identifier type="doi">' . $doi . '</identifier>';
+    $doi_element = $dom->createDocumentFragment();
+    $doi_element->appendXML($doi_element_string);
+    $dom->documentElement->appendChild($doi_element);
+
+    // Replace the MODS datastream content.
+    $mods_xml = $dom->saveXML();
+    $object['MODS']->content = $mods_xml;
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}

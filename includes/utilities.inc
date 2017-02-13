@@ -7,10 +7,11 @@
 
 /**
  * @return string|boolean
- *    The DOI was fetched, false if not.
+ *    The DOI that was fetched, false if DOI was not fetched.
  */
 function islandora_doi_fetch_doi() {
-  return 'doi:12345';
+  $doi = module_invoke_all('islandora_doi_fetch');
+  return $doi[0];
 }
 
 /**
@@ -23,7 +24,8 @@ function islandora_doi_fetch_doi() {
  *    True if the DOI was saved, false if not.
  */
 function islandora_doi_save_doi($doi, $pid) {
-  return TRUE;
+  $doi_saved = module_invoke_all('islandora_doi_save', $doi, $pid);
+  return $doi_saved[0];
 }
 
 /**

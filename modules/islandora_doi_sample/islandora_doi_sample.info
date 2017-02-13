@@ -1,0 +1,6 @@
+name = Islandora DOI Sample
+description = "Sample module that implements hooks provided by the Islandora DOI module."
+package = Islandora Tools
+dependencies[] = islandora_doi
+version = 7.x-dev
+core = 7.x

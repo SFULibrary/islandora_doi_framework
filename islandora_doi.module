@@ -10,17 +10,9 @@
  */
 function islandora_doi_menu() {
   $items = array();
-  $items['admin/islandora/tools/islandora_doi'] = array(
-    'title' => 'Islandora DOI',
-    'description' => 'Configure Islandora DOI module.',
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('administer site configuration'),
-    'page arguments' => array('islandora_doi_admin_settings'),
-    'type' => MENU_NORMAL_ITEM,
-  );
   $items['islandora/object/%islandora_object/manage/assign_doi'] = array(
     'title' => 'Assign DOI',
-    'access arguments' => array('use mik helper'),
+    'access arguments' => array('assign DOIs to Islandora objects'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('islandora_doi_assign_doi'),
     'type' => MENU_LOCAL_TASK,
@@ -39,25 +31,6 @@ function islandora_doi_permission() {
       'description' => t('Assign DOIs to Islandora objects'),
     ),
   );
-}
-
-/**
- * Admin settings form builder.
- */
-function islandora_doi_admin_settings() {
-  $form['islandora_doi_api_url'] = array(
-    '#type' => 'textfield',
-    '#title' => t('API URL'),
-    '#default_value' => variable_get('islandora_doi_api_url', ''),
-    '#description' => t('The API endpoint.'),
-  );
-  $form['islandora_doi_token'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Token'),
-    '#default_value' => variable_get('islandora_doi_token', ''),
-    '#description' => t('Your token.'),
-  );
-  return system_settings_form($form);
 }
 
 function islandora_doi_assign_doi() {

@@ -1,6 +1,6 @@
 name = Islandora DOI
-description = "Basic module for assigning DOIs to objects."
+description = "Framework module for assigning DOIs to objects. Requires the use of a submodule."
 package = Islandora Tools
+dependencies[] = islandora
 version = 7.x-dev
 core = 7.x
-files[] = includes/utilities.inc
