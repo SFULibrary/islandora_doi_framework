@@ -7,9 +7,9 @@ Utility module that provides a framework for other modules to assign DOIs ([Digi
 * an "Assign DOI" subtab under each object's "Mangage" tab
 * two Drupal hooks
   * one for fetching a DOI from an external API
-  * one for persisting it, for example in a datastream for database
+  * one for persisting it, for example in a datastream or database table
 * a "Assign DOIs to Islandora objects" permission
-* a Drush script for adding a DOI to objects
+* a Drush script for adding a DOI to a list of objects
 
 ## Requirements
 
@@ -21,7 +21,7 @@ Same as for any other Drupal module.
 
 ## Configuration
 
-This module does not have any configuration options of its own. All settings are managed by submodules.
+This module does not have any configuration settings of its own. All settings are managed by submodules.
 
 ## Submodules
 
@@ -29,9 +29,18 @@ As described above, other modules are responsible for getting a DOI from an exte
 
 To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
 
-## Assigning DOIs to sets of objects
+## Assigning DOIs to lists of objects
 
-This module provides a Drush command to assign DOIs to a set of objects identified in a "PID file." The PID file is a simple list of object PIDS, one PID per line. The command is:
+This module provides a Drush command to assign DOIs to a list of objects identified in a "PID file." The PID file is a simple list of object PIDS, one PID per line, like this:
+
+```
+islandora:23
+islandora:29
+islandora:107
+islandora:2183
+```
+
+The command (using a file at `/tmp/pids.txt` containing the above list) is:
 
 `drush islandora_doi_assign_dois --user=admin --pid_file=/tmp/pids.txt`
 
@@ -41,7 +50,7 @@ This module provides a Drush command to assign DOIs to a set of objects identifi
 
 ## Development and feedback
 
-Pull requests are welcome, as are use cases and suggestions.
+Pull requests are welcome, as are submodules. Please open an issue in this module's Github repo before opening a pull request.
 
 ## License
 
