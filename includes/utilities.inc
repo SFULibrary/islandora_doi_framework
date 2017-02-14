@@ -25,10 +25,20 @@ function islandora_doi_fetch_doi() {
  */
 function islandora_doi_save_doi($doi, $pid) {
   $dois_saved = module_invoke_all('islandora_doi_save', $doi, $pid);
-  if (count($dois_saved)) {
+  // We only want the first member, and we want to be able to test
+  // whether it is the value TRUE.
+  if (count($dois_saved) > 1) {
+    $dois_saved = array_slice($dois_saved, 0, 1, TRUE);
+  }
+
+  if (in_array(TRUE, $dois_saved)) {
+    watchdog('islandora_doi', 'DOI !doi assigned successfully to object !pid',
+      array('!doi' => $doi, '!pid' => $pid));
     return $dois_saved[0];
   }
   else {
+    watchdog('islandora_doi', 'DOI !doi was not assigned to object !pid',
+      array('!doi' => $doi, '!pid' => $pid), WATCHDOG_ERROR);
     return FALSE;
   }
 }

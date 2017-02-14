@@ -46,10 +46,6 @@ function drush_islandora_doi_assign_dois() {
         drush_log(dt('DOI !doi assigned to object !pid',
           array('!doi' => $doi, '!pid' => $pid)), 'ok');
       }
-      else {
-        drush_set_error('DOI_NOT_ASSIGNED', dt('DOI !doi was not assigned to object !pid',
-          array('!doi' => $doi, '!pid' => $pid)));
-      }
     }
   }
 }

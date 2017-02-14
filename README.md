@@ -36,7 +36,7 @@ This module provides a Drush command to assign DOIs to a list of objects identif
 ```
 islandora:23
 islandora:29
-// This is an excellent object.
+// Comments can be prefixed by // or #.
 islandora:107
 islandora:2183
 ```
