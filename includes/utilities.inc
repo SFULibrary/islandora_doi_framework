@@ -6,25 +6,29 @@
  */
 
 /**
+ * Defines hook_islandora_doi_framework_fetch().
+ *
  * @return string|boolean
- *    The DOI that was fetched, false if DOI was not fetched.
+ *   The DOI that was fetched, false if DOI was not fetched.
  */
-function islandora_doi_fetch_doi() {
-  $dois = module_invoke_all('islandora_doi_fetch');
+function islandora_doi_framework_fetch_doi() {
+  $dois = module_invoke_all('islandora_doi_framework_fetch');
   return $dois[0];
 }
 
 /**
+ * Defines hook_islandora_doi_framework_fetch().
+ *
  * @param string $doi
- *    The fetched DOI.
+ *   The fetched DOI.
  * @param string $pid
- *    The object's PID.
+ *   The object's PID.
  *
  * @return boolan
- *    True if the DOI was saved, false if not.
+ *   True if the DOI was saved, false if not.
  */
-function islandora_doi_save_doi($doi, $pid) {
-  $dois_saved = module_invoke_all('islandora_doi_save', $doi, $pid);
+function islandora_doi_framework_save_doi($doi, $pid) {
+  $dois_saved = module_invoke_all('islandora_doi_framework_save', $doi, $pid);
   // We only want the first member, and we want to be able to test
   // whether it is the value TRUE.
   if (count($dois_saved) > 1) {
@@ -52,7 +56,7 @@ function islandora_doi_save_doi($doi, $pid) {
  * @return array
  *   A list of PIDs.
  */
-function islandora_doi_read_pid_file($pid_file_path) {
+function islandora_doi_framework_read_pid_file($pid_file_path) {
   if (!file_exists($pid_file_path)) {
     drush_set_error('PID_FILE_NOT_FOUND',
     dt('The specified PID file (!pid_file) does not exist.',
