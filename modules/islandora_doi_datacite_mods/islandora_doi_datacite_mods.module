@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_doi_datacite_mods_menu() {
+  $items = array();
+  $items['admin/islandora/tools/islandora_doi_datacite_mods'] = array(
+    'title' => 'Islandora DOI DataCite/MODS',
+    'description' => 'Configure Islandora DOI Datacite/MODS module.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('islandora_doi_datacite_mods_admin_settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Admin settings form builder.
+ */
+function islandora_doi_datacite_mods_admin_settings() {
+  $form['islandora_doi_datacite_mods_api_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('API endpoint'),
+    '#default_value' => variable_get('islandora_doi_datacite_mods_api_url', 'https://mds.datacite.org/'),
+    '#description' => t('The DataCite API endpoint.'),
+  );
+  $form['islandora_doi_datacite_mods_username'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Datacite symbol (username)'),
+    '#default_value' => variable_get('islandora_doi_datacite_mods_username', 'CISTI-FOO'),
+    '#description' => t("Your institution's DataCite symbol (username)."),
+  );
+  $form['islandora_doi_datacite_mods_password'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Datacite password'),
+    '#default_value' => variable_get('islandora_doi_datacite_mods_password', ''),
+    '#description' => t("Your insitution's DataCite password."),
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function islandora_doi_datacite_mods_theme() {
+  return array(
+    'datacite_metadata' => array(
+      'variables' => array(
+        'ds_location' => NULL,
+        'ds_checksum_type' => NULL,
+        'outcome' => NULL,
+      ),
+      'template' => 'datacite-metadata',
+    ),
+  );
+}
+
+/**
+ * Implements hook_islandora_doi_framework_mint().
+ *
+ * This example implementation generates a DOI locally
+ * instead of requesting one from an external service. 
+ */
+function islandora_doi_datacite_mods_islandora_doi_framework_mint() {
+  $endpoint = variable_get('islandora_doi_datacite_mods_api_url', 'https://api.example.com/v1');
+  $doi = '10.1000/' . drupal_random_key();
+  return $doi;
+}
+
+/**
+ * Implements hook_islandora_doi_framework_persist().
+ */
+function islandora_doi_datacite_mods_islandora_doi_framework_persist($doi, $pid) {
+  $object = islandora_object_load($pid);
+  if ($object['MODS']) {
+    // Add the DOI to the MODS in an <identifier type="doi"> element.
+    $dom = new DOMDocument();
+    $dom->loadXML($object['MODS']->content);
+
+    $existing_dois = $xpath->query("//mods:identifier[@type='doi']");
+    if ($existing_uuid_identifiers->length == 0) {
+      $doi_element_string = '<identifier type="doi">' . $doi . '</identifier>';
+      $doi_element = $dom->createDocumentFragment();
+      $doi_element->appendXML($doi_element_string);
+      $dom->documentElement->appendChild($doi_element);
+
+      // Replace the MODS datastream content.
+      $mods_xml = $dom->saveXML();
+      $object['MODS']->content = $mods_xml;
+      return TRUE;
+    }
+  }
+  else {
+    drupal_set_message(t("The MODS datastream for object %pid already contains a DOI.", array('%pid' => $pid)));
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_islandora_doi_framework_update().
+ *
+ * Must update both the URL and the metadata, if applicable, via the
+ * Datacite API.
+ */
+function islandora_doi_datacite_mods_islandora_doi_framework_update($doi, $pid) {
+}

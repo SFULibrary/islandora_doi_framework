@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_doi_framework_menu() {
+  $items = array();
+  $items['islandora/object/%islandora_object/manage/assign_doi'] = array(
+    'title' => 'Assign DOI',
+    'access arguments' => array('assign DOIs to Islandora objects'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_doi_framework_assign_doi'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function islandora_doi_framework_permission() {
+  return array(
+    'assign DOIs to Islandora objects' => array(
+      'title' => t('Assign DOIs to Islandora objects'),
+      'description' => t('Assign DOIs to Islandora objects using the Islandora DOI Framework'),
+    ),
+  );
+}
+
+/**
+ * Form definition for assigning a DOI.
+ */
+function islandora_doi_framework_assign_doi() {
+  $pid = arg(2);
+  $object = islandora_object_load($pid);
+  $form['islandora_doi_object_message'] = array(
+    '#prefix' => '<div>',
+    '#markup' => t("You are about to assign a DOI to object !pid (!label)",
+      array('!pid' => $pid, '!label' => $object->label)),
+    '#suffix' => '</div>',
+  );
+  $form['islandora_doi_pid'] = array(
+    '#type' => 'value',
+    '#value' => $pid,
+  );
+  $form['islandora_doi_framework_assign_doi'] = array(
+    '#title' => t('Configuration ID'),
+    '#type' => 'submit',
+    '#value' => 'Assign DOI',
+  );
+  return $form;
+}
+
+/**
+ * Form submit handler.
+ */
+function islandora_doi_framework_assign_doi_submit($form, &$form_state) {
+  module_load_include('inc', 'islandora_doi', 'includes/utilities');
+  $pid = $form_state['values']['islandora_doi_pid'];
+  if ($doi = islandora_doi_fetch_doi()) {
+    if (islandora_doi_save_doi($doi, $pid)) {
+      drupal_set_message(t('DOI !doi assigned successfully to object !pid',
+        array('!doi' => $doi, '!pid' => $pid)));
+    }
+    else {
+      drupal_set_message(t('DOI !doi was assigned to object !pid',
+        array('!doi' => $doi, '!pid' => $pid)), 'error');
+    }
+    $form_state['redirect'] = 'islandora/object/' . $pid;
+  }
+}

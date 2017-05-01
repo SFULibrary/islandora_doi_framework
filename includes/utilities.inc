@@ -36,12 +36,12 @@ function islandora_doi_framework_save_doi($doi, $pid) {
   }
 
   if (in_array(TRUE, $dois_saved)) {
-    watchdog('islandora_doi', 'DOI !doi assigned successfully to object !pid',
+    watchdog('islandora_doi_framework', 'DOI !doi assigned successfully to object !pid',
       array('!doi' => $doi, '!pid' => $pid));
     return $dois_saved[0];
   }
   else {
-    watchdog('islandora_doi', 'DOI !doi was not assigned to object !pid',
+    watchdog('islandora_doi_framework', 'DOI !doi was not assigned to object !pid',
       array('!doi' => $doi, '!pid' => $pid), WATCHDOG_ERROR);
     return FALSE;
   }
