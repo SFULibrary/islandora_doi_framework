@@ -68,7 +68,7 @@ function islandora_doi_datacite_mods_theme() {
  * This example implementation generates a DOI locally
  * instead of requesting one from an external service. 
  */
-function islandora_doi_datacite_mods_islandora_doi_framework_mint() {
+function islandora_doi_datacite_mods_islandora_doi_framework_mint($pid) {
   $endpoint = variable_get('islandora_doi_datacite_mods_api_url', 'https://api.example.com/v1');
   $doi = '10.1000/' . drupal_random_key();
   return $doi;

@@ -12,11 +12,18 @@
  * the value from the first implementation is used.
  *
  * @return string|bool
- *   The DOI that was fetched, false if DOI was not fetched.
+ *   The DOI that was minted, false if DOI was not minted.
+ *
+ * @param string $pid
+ *   The object's PID.
  */
-function hook_islandora_doi_framework_mint() {
-  // Go get the DOI from an API, etc.
-  return 'doi:999921391';
+function hook_islandora_doi_framework_mint($pid) {
+  // Go get the DOI from an API, etc. Each institution has its own
+  // DOI prefix (the part to the left of the /), assigned by a
+  // Registration Agency. The suffix (the part to the right of the /)
+  // is assigned by organization that wishes to register DOI names
+  // (publisher, university, etc.).
+  return '10.99999/' . $pid;
 }
 
 /**
