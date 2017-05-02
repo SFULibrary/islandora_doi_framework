@@ -15,6 +15,7 @@ Utility module that provides a framework for other modules to assign DOIs ([Digi
 ## Requirements
 
 * Islandora
+* A submodule, such as the included [DataCite/MODS](modules/islandora_doi_datacite_mods) module, that implements the hooks provided by this module.
 
 ## Installation
 

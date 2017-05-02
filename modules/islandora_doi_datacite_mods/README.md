@@ -1,8 +1,10 @@
-# Islandora Sample DOI
+# Islandora DOI Framework DataCite/MODS
 
 ## Overview
 
 Submodule of the Islandora DOI framework module that manages DOIs provided by [DataCite](https://www.datacite.org/) and persists them to objects' MODS datastream.
+
+This module creates a record complying with the [DataCite Metadata Schema](https://schema.datacite.org/) from an object's DC datastream, and using the "Assign DOI" functionality provided by the Islandora DOI Framework module, posts it to the DataCite Metadata Store along with the object's URL. These two tasks together mint a DOI for the object. The object's PID is used as its DOI's "suffix", resulting in DOIs that look like 10.5072/islandora:1234 ('10.5072' is the test DOI prefix; the one assigned to your institution will be used instead).
 
 ## Requirements
 
@@ -15,7 +17,7 @@ Same as for any other Drupal module.
 
 ## Configuration
 
-Some sample admin values are available at `admin/islandora/tools/islandora_doi_datacite_mods.
+Go to `admin/islandora/tools/islandora_doi_datacite_mods` to enter your DataCite institutional symbol and password.
 
 ## Maintainer
 

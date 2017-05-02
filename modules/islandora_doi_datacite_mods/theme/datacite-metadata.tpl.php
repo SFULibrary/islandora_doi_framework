@@ -4,14 +4,13 @@
  * @file
  * Theme template for the DataCite metadata record.
  */
-
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version = "1.0" encoding = "UTF-8"?>
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">
   <!-- Required -->
   <identifier identifierType="DOI">10.5072/D3P26Q35R-Test</identifier>
   <!-- Required -->
   <creators>
-    <?php foreach($creators as $creator): ?>
+    <?php foreach($creators as $creator) : ?>
     <creator>
       <creatorName><?php print $creator; ?></creatorName>
     </creator>
