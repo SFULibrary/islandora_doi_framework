@@ -59,9 +59,16 @@ function islandora_doi_datacite_mods_theme() {
   return array(
     'datacite_metadata' => array(
       'variables' => array(
-        'ds_location' => NULL,
-        'ds_checksum_type' => NULL,
-        'outcome' => NULL,
+        'doi' => NULL,
+        'creators' => NULL,
+        'titles' => NULL,
+        'publisher' => NULL,
+        'publication_year' => NULL,
+        'subjects' => NULL,
+        'language' => NULL,
+        'version' => NULL,
+        'resource_type' => NULL,
+        'description' => NULL,
       ),
       'template' => 'datacite-metadata',
     ),
@@ -76,7 +83,7 @@ function islandora_doi_datacite_mods_theme() {
  */
 function islandora_doi_datacite_mods_islandora_doi_framework_mint($pid) {
   module_load_include('inc', 'islandora_doi_datacite_mods', 'includes/utilities');
-  if ($doi = islandora_doi_datacite_mods_post_new($pid)) {;
+  if ($doi = islandora_doi_datacite_mods_post_new($pid)) {
     return $doi;
   }
   else {

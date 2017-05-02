@@ -1,45 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Theme template for the DataCite metadata record.
+ */
+
 <?xml version="1.0" encoding="UTF-8"?>
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">
   <!-- Required -->
   <identifier identifierType="DOI">10.5072/D3P26Q35R-Test</identifier>
   <!-- Required -->
   <creators>
+    <?php foreach($creators as $creator): ?>
     <creator>
-      <creatorName>Fosmire, Michael</creatorName>
+      <creatorName><?php print $creator; ?></creatorName>
     </creator>
-    <creator>
-      <creatorName>Wertz, Ruth</creatorName>
-    </creator>
-    <creator>
-      <creatorName>Purzer, Senay</creatorName>
-    </creator>
+      <?php endforeach; ?>
   </creators>
   <!-- Required -->
   <titles>
-    <title>Critical Engineering Literacy Test (CELT)</title>
+    <?php foreach($titles as $title): ?>
+    <title><?php print $title; ?></title>
+    <?php endforeach; ?>
   </titles>
   <!-- Required -->
-  <publisher>Purdue University Research Repository (PURR)</publisher>
+  <publisher><?php print $publisher; ?></publisher>
   <!-- Required -->
-  <publicationYear>2013</publicationYear>
+  <publicationYear><?php print $publication_year; ?></publicationYear>
+  <?php if (count($subjects)): ?>
   <subjects>
-    <subject>Assessment</subject>
-    <subject>Information Literacy</subject>
-    <subject>Engineering</subject>
-    <subject>Undergraduate Students</subject>
-    <subject>CELT</subject>
-    <subject>Purdue University</subject>
+    <?php foreach($subjects as $subject): ?>
+    <subject><?php print $subject; ?></subject>
+    <?php endforeach; ?>
   </subjects>
-  <language>eng</language>
+  <?php endif; ?>
+  <?php if ($language): ?>
+    <language><?php print $language; ?></language>
+  <?php endif; ?>
   <!-- Required -->
-  <resourceType resourceTypeGeneral="Dataset">Dataset</resourceType>
-  <version>1</version>
+  <resourceType resourceTypeGeneral="<?php print $resource_type; ?>"><?php print $resource_type; ?></resourceType>
+  <?php if ($version): ?>
+  <version><?php print $version; ?></version>
+  <?php endif; ?>
+  <?php if (count($descriptions)): ?>
   <descriptions>
+    <?php foreach($descriptions as $description): ?>
     <description descriptionType="Abstract">
-      We developed an instrument, Critical Engineering Literacy Test (CELT), which is a multiple choice instrument designed to measure undergraduate students’ scientific and information literacy skills. It requires students to first read a technical memo
-      and, based on the memo’s arguments, answer eight multiple choice and six open-ended response questions. We collected data from 143 first-year engineering students and conducted an item analysis. The KR-20 reliability of the instrument was .39. Item
-      difficulties ranged between .17 to .83. The results indicate low reliability index but acceptable levels of item difficulties and item discrimination indices. Students were most challenged when answering items measuring scientific and mathematical
-      literacy (i.e., identifying incorrect information).
+    <?php endforeach; ?>
     </description>
   </descriptions>
+  <?php endif; ?>
 </resource>

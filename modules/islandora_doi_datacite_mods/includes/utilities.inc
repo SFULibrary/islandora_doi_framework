@@ -17,7 +17,7 @@
  */
 function islandora_doi_datacite_mods_get_dc_values($xml) {
   $dc_values = array();
-  $dom = new DOMDocument;
+  $dom = new DOMDocument();
   $dom->loadXML($xml);
   $elements = $dom->getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', '*');
   foreach ($elements as $e) {
@@ -54,22 +54,39 @@ function islandora_doi_datacite_mods_post_new($pid) {
   // <identifier identifierType="DOI"> element.
   $api_url = variable_get('islandora_doi_datacite_mods_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-  // !Dev only - $metadata_xml should be populated from the object's meatadata.
-  $metadata_xml = file_get_contents('/tmp/datacite-example-dataset-v4.0.xml');
+  $object = islandora_object_load($pid);
+  $dc_values = islandora_doi_datacite_mods_get_dc_values($object['DC']->content);
+  $metadata_xml = theme('datacite-metadata', array(
+    'doi' => $doi,
+    'creators' => $dc_values['creator'],
+    'titles' => $dc_values['title'],
+    'publisher' => $dc_values['publisher'],
+    'publication_year' => $dc_values['date'],
+    'subjects' => $dc_values['subject'],
+    'language' => $dc_values['language'],
+    // 'version' => NULL,
+    'resource_type' => $dc_values['type'],
+    'descriptions' => $dc_values['description'],
+  ));
+  dd($metadata_xml);
 
   $response = drupal_http_request($api_url, array(
     'headers' => array(
       'Content-Type' => 'application/xml;charset=UTF-8',
       'Authorization' => 'Basic ' . base64_encode($symbol . ':' . $password),
     ),
-    'method' => 'POST', 
+    'method' => 'POST',
     'data' => $metadata_xml,
   ));
   if ($response->code != 201) {
     watchdog(
       'islandora_doi_datacite_mods',
       'Error registering metadata for object !pid, so cannot proceed: !code, !message',
-      array('!pid' => $pid, '!code' => $response->code, '!message' => $response->status_message),
+      array(
+        '!pid' => $pid,
+        '!code' => $response->code,
+        '!message' => $response->status_message,
+      ),
       WATCHDOG_ERROR
     );
     return FALSE;
@@ -85,7 +102,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
       'Content-Type' => 'text/plain;charset=UTF-8',
       'Authorization' => 'Basic ' . base64_encode($symbol . ':' . $password),
     ),
-    'method' => 'POST', 
+    'method' => 'POST',
     'data' => 'doi=' . $doi . PHP_EOL . 'url=' . $url,
   ));
   if ($response->code == 201) {
@@ -95,7 +112,11 @@ function islandora_doi_datacite_mods_post_new($pid) {
     watchdog(
       'islandora_doi_datacite_mods',
       'Error assigning URL to DOI !doi for object !pid: !code, !message',
-      array('!doi' => $doi, '!pid' => $pid, '!code' => $response->code, '!message' => $response->status_message),
+      array(
+        '!doi' => $doi,
+        '!pid' => $pid,
+        '!code' => $response->code,
+        '!message' => $response->status_message),
       WATCHDOG_ERROR
     );
     return FALSE;
