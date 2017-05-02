@@ -27,7 +27,7 @@ This module does not have any configuration settings of its own. All settings ar
 
 ## Submodules
 
-As described above, submodule are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. The Islandora DOI Framework module provides a hook for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included "DataCite/MODS" submodule. Note that all three hooks do not need to be implemented in the same module.
+As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. Submodules handle the combination of tasks to mint a DOI from a specific source and then to persist it in a specific place in the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included "DataCite/MODS" submodule. Note that all three hooks do not need to be implemented in the same module.
 
 To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
 

@@ -5,7 +5,6 @@
  * Utility functions.
  */
 
-
 /**
  * Parses the DC datastream into an array.
  *
