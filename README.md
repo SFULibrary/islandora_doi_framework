@@ -12,6 +12,8 @@ Utility module that provides a framework for other modules to assign DOIs ([Digi
 * a "Assign DOIs to Islandora objects" permission
 * a Drush script for adding a DOI to a list of objects
 
+This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) bundled with Islandora Scholar in that it and its submodules only mint new DOIs. Scholar's DOI module allows for the creation of new objects from a list of DOIs.
+
 ## Requirements
 
 * Islandora
@@ -27,7 +29,7 @@ This module does not have any configuration settings of its own. All settings ar
 
 ## Submodules
 
-As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. Submodules handle the combination of tasks required to mint a DOI from a specific source and then to persist it in a specific place in the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included "DataCite/MODS" submodule. Note that all three hooks do not need to be implemented in the same module.
+As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. Submodules handle the combination of tasks required to mint a DOI from a specific source and then to persist it in a specific place in the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included [DataCite/MODS](modules/islandora_doi_datacite_mods) submodule. Note that all three hooks do not need to be implemented in the same module.
 
 To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
 
