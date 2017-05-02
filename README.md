@@ -12,7 +12,7 @@ Utility module that provides a framework for other modules to assign DOIs ([Digi
 * a "Assign DOIs to Islandora objects" permission
 * a Drush script for adding a DOI to a list of objects
 
-This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) bundled with Islandora Scholar in that it and its submodules only mint new DOIs. Scholar's DOI module allows for the creation of new objects from a list of DOIs.
+This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) bundled with Islandora Scholar in that this module and its submodules only mint new DOIs and manage updating the data associated with a DOI. Scholar's DOI module allows for the creation of new objects from a list of DOIs.
 
 ## Requirements
 
@@ -60,7 +60,7 @@ Pull requests against this module are welcome, as are submodules (suggestions be
 ## To do
 
 * Complete the Drush script used to assign batches of DOIs.
-* Figure out best trigger and workflow for updating metadata. This should probably not happen every time the source datastream is modified. Maybe a second button under the "DOI" tab for updating metadata? Could also have an associated drush commnand.
+* Figure out best trigger and workflow for updating metadata. This should probably not happen every time the source datastream is modified, although that is one option. Maybe a second button under the "DOI" tab for updating metadata? Could also have an associated drush commnand.
 
 ## License
 
