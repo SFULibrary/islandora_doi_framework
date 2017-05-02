@@ -9,7 +9,7 @@ This module creates a record complying with the [DataCite Metadata Schema](https
 ## Requirements
 
 * Islandora
-* [Islandora DOI Framework](../../islandora_doi_framework)
+* [Islandora DOI Framework](../../../islandora_doi_framework)
 
 ## Installation
 
