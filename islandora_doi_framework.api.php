@@ -6,7 +6,7 @@
  */
 
 /**
- * Fetches a DOI from an external API.
+ * Mints a DOI using an external API.
  *
  * Note that if multiple implementations of this hook exist,
  * the value from the first implementation is used.
@@ -19,14 +19,15 @@
  */
 function hook_islandora_doi_framework_mint($pid) {
   // Each institution has its own DOI prefix (the part to the left of the /),
-  // assigned by an "allocator" (http://datacite.org/members). The suffix
-  // (the part to the right of the /) is assigned by the organization that
+  // assigned by an registration agency
+  // (http://www.doi.org/registration_agencies.html). The suffix (the part to
+  // the right of the /) is assigned by the organization that
   // wishes to register DOI names (publisher, university, etc.).
   return '10.99999/' . $pid;
 }
 
 /**
- * Saves a DOI somewhere (e.g., in a datastream).
+ * Saves an object's DOI somewhere (e.g., in a datastream).
  *
  * Note that if multiple implementations of this hook exist,
  * the value from the first implementation is used.
@@ -40,7 +41,7 @@ function hook_islandora_doi_framework_mint($pid) {
  *   True if the DOI was saved, false if not.
  */
 function hook_islandora_doi_framework_persist($doi, $pid) {
-  // Add the DOI to MODS, etc.
+  // Add the DOI to MODS, etc., then return a boolean value.
   return TRUE;
 }
 
@@ -60,6 +61,6 @@ function hook_islandora_doi_framework_persist($doi, $pid) {
  */
 function hook_islandora_doi_framework_update($doi, $pid) {
   // Update the object's URL locally, and/or metadata at the
-  // registrar, if necessary.
+  // registrar, if necessary, then return a boolean value.
   return TRUE;
 }
