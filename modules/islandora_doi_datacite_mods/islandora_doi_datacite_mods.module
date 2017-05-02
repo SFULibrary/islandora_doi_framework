@@ -29,12 +29,18 @@ function islandora_doi_datacite_mods_admin_settings() {
     '#type' => 'textfield',
     '#title' => t('API endpoint'),
     '#default_value' => variable_get('islandora_doi_datacite_mods_api_url', 'https://mds.datacite.org/'),
-    '#description' => t('The DataCite API endpoint.'),
+    '#description' => t('The DataCite API endpoint host, including the trailing /.'),
+  );
+  $form['islandora_doi_datacite_mods_prefix'] = array(
+    '#type' => 'textfield',
+    '#title' => t('DOI prefix'),
+    '#default_value' => variable_get('islandora_doi_datacite_mods_prefix', '10.99999/'),
+    '#description' => t("Your institution's DOI prefix, including the trailing slash."),
   );
   $form['islandora_doi_datacite_mods_username'] = array(
     '#type' => 'textfield',
     '#title' => t('Datacite symbol (username)'),
-    '#default_value' => variable_get('islandora_doi_datacite_mods_username', 'CISTI-FOO'),
+    '#default_value' => variable_get('islandora_doi_datacite_mods_username', 'CISTI.FOO'),
     '#description' => t("Your institution's DataCite symbol (username)."),
   );
   $form['islandora_doi_datacite_mods_password'] = array(
@@ -69,9 +75,13 @@ function islandora_doi_datacite_mods_theme() {
  * instead of requesting one from an external service. 
  */
 function islandora_doi_datacite_mods_islandora_doi_framework_mint($pid) {
-  $endpoint = variable_get('islandora_doi_datacite_mods_api_url', 'https://api.example.com/v1');
-  $doi = '10.1000/' . drupal_random_key();
-  return $doi;
+  module_load_include('inc', 'islandora_doi_datacite_mods', 'includes/utilities');
+  if ($doi = islandora_doi_datacite_mods_post_new($pid)) {;
+    return $doi;
+  }
+  else {
+    return FALSE;
+  }
 }
 
 /**
@@ -83,9 +93,10 @@ function islandora_doi_datacite_mods_islandora_doi_framework_persist($doi, $pid)
     // Add the DOI to the MODS in an <identifier type="doi"> element.
     $dom = new DOMDocument();
     $dom->loadXML($object['MODS']->content);
+    $xpath = new DOMXPath($dom);
 
-    $existing_dois = $xpath->query("//mods:identifier[@type='doi']");
-    if ($existing_uuid_identifiers->length == 0) {
+    $existing_doi_identifiers = $xpath->query("//mods:identifier[@type='doi']");
+    if ($existing_doi_identifiers->length == 0) {
       $doi_element_string = '<identifier type="doi">' . $doi . '</identifier>';
       $doi_element = $dom->createDocumentFragment();
       $doi_element->appendXML($doi_element_string);
@@ -96,9 +107,13 @@ function islandora_doi_datacite_mods_islandora_doi_framework_persist($doi, $pid)
       $object['MODS']->content = $mods_xml;
       return TRUE;
     }
+    else {
+      drupal_set_message(t("The MODS datastream for object !pid already contains a DOI.", array('!pid' => $pid)), 'error');
+      return FALSE;
+    }
   }
   else {
-    drupal_set_message(t("The MODS datastream for object %pid already contains a DOI.", array('%pid' => $pid)));
+    drupal_set_message(t("There is no MODS datastream for object for object !pid to update with a DOI.", array('!pid' => $pid)), 'error');
     return FALSE;
   }
 }

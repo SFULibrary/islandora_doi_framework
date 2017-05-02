@@ -41,8 +41,8 @@ function drush_islandora_doi_framework_assign_dois() {
 
   // Cycle through the objects and assign the DOIs.
   foreach ($pids as $pid) {
-    if ($doi = islandora_doi_framework_fetch_doi()) {
-      if (islandora_doi_framework_save_doi($doi, $pid)) {
+    if ($doi = islandora_doi_framework_mint_doi($pid)) {
+      if (islandora_doi_framework_persist_doi($doi, $pid)) {
         drush_log(dt('DOI !doi assigned to object !pid',
           array('!doi' => $doi, '!pid' => $pid)), 'ok');
       }

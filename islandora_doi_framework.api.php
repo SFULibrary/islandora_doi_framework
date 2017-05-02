@@ -18,11 +18,10 @@
  *   The object's PID.
  */
 function hook_islandora_doi_framework_mint($pid) {
-  // Go get the DOI from an API, etc. Each institution has its own
-  // DOI prefix (the part to the left of the /), assigned by a
-  // Registration Agency. The suffix (the part to the right of the /)
-  // is assigned by organization that wishes to register DOI names
-  // (publisher, university, etc.).
+  // Each institution has its own DOI prefix (the part to the left of the /),
+  // assigned by an "allocator" (http://datacite.org/members). The suffix
+  // (the part to the right of the /) is assigned by the organization that
+  // wishes to register DOI names (publisher, university, etc.).
   return '10.99999/' . $pid;
 }
 

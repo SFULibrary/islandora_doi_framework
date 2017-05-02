@@ -6,18 +6,26 @@
  */
 
 /**
- * Defines hook_islandora_doi_framework_fetch().
+ * Defines hook_islandora_doi_framework_mint().
  *
- * @return string|boolean
- *   The DOI that was fetched, false if DOI was not fetched.
+ * @param string $pid
+ *   The object's PID.
+ *
+ * @return string|bool
+ *   The DOI that was fetched, FALSE if DOI was not fetched.
  */
-function islandora_doi_framework_fetch_doi() {
-  $dois = module_invoke_all('islandora_doi_framework_fetch');
-  return $dois[0];
+function islandora_doi_framework_mint_doi($pid) {
+  $dois = module_invoke_all('islandora_doi_framework_mint', $pid);
+  if (count($dois)) {
+    return $dois[0];
+  }
+  else {
+    return FALSE;
+  }
 }
 
 /**
- * Defines hook_islandora_doi_framework_fetch().
+ * Defines hook_islandora_doi_framework_persist().
  *
  * @param string $doi
  *   The fetched DOI.
@@ -27,8 +35,8 @@ function islandora_doi_framework_fetch_doi() {
  * @return boolan
  *   True if the DOI was saved, false if not.
  */
-function islandora_doi_framework_save_doi($doi, $pid) {
-  $dois_saved = module_invoke_all('islandora_doi_framework_save', $doi, $pid);
+function islandora_doi_framework_persist_doi($doi, $pid) {
+  $dois_saved = module_invoke_all('islandora_doi_framework_persist', $doi, $pid);
   // We only want the first member, and we want to be able to test
   // whether it is the value TRUE.
   if (count($dois_saved) > 1) {

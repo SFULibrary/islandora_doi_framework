@@ -4,7 +4,7 @@
 
 Utility module that provides a framework for other modules to assign DOIs ([Digital Object Identifiers](https://en.wikipedia.org/wiki/Digital_object_identifier)) to objects. This module provides the following:
 
-* an "Assign DOI" subtab under each object's "Mangage" tab
+* a "DOI" subtab under each object's "Mangage" tab
 * three Drupal hooks
   * one for minting a DOI using an external API
   * one for persisting it, for example in a datastream or database table
@@ -56,8 +56,7 @@ Pull requests against this module are welcome, as are submodules (suggestions be
 
 ## To do
 
-* Write submodules implementing `hook_islandora_doi_framework_fetch()` for DOI registrars such as CrossRef, DataCite, and EZID.
-* Write submodules implementing `hook_islandora_doi_framework_save()` that persist the DOI to MODS, DDI, or other datastreams, or to a database table
+* Figure out best trigger and workflow for updating metadata. This should probably not happen every time the source datastream is modified. Maybe a second button under the "DOI" tab for updating metadata? Could also have an associated drush commnand.
 
 ## License
 
