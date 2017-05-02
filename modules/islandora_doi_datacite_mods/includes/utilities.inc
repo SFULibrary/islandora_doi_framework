@@ -14,6 +14,7 @@
  *
  * @return array
  *   An associative array containing element name => element values.
+ *   Not all DC elements are guaranteed to be present in the array.
  */
 function islandora_doi_datacite_mods_get_dc_values($xml) {
   $dc_values = array();
@@ -35,8 +36,13 @@ function islandora_doi_datacite_mods_get_dc_values($xml) {
 /**
  * Registers a DOI and associated metadata with DataCite.
  *
- * The resource's metadata must be registered first, then its URL.
- * See https://datacite.readme.io/docs/mds-2 for additional info.
+ * Also checks to make sure that the source DC datastream
+ * contains the elements required by the DataCite metadata
+ * schema.
+ *
+ * The resource's metadata must be registered via the DataCite MDS API
+ * first, then its URL. See https://datacite.readme.io/docs/mds-2 for
+ * additional info.
  *
  * @param string $pid
  *   The PID of the object.
@@ -56,7 +62,32 @@ function islandora_doi_datacite_mods_post_new($pid) {
 
   $object = islandora_object_load($pid);
   $dc_values = islandora_doi_datacite_mods_get_dc_values($object['DC']->content);
-  $metadata_xml = theme('datacite-metadata', array(
+
+  // Check for required fields: creator, title, publisher, publication_year,
+  // resource_type, and that there is a YYYY value in date..
+  $required_values = array('creator', 'title', 'publisher', 'date', 'type');
+  foreach ($required_values as $value) {
+    if (!isset($dc_values[$value]) || !count($dc_values[$value])) {
+      drupal_set_message(t("Can't assign DOI to object !pid because its DC is missing a required value, \"!value\".", array('!pid' => $pid, '!value' => $value)), 'error');
+      return FALSE;
+    }
+  }
+  $year_present = FALSE;
+  if (isset($dc_values['date'])) {
+    foreach ($dc_value['date'] as $date) {
+      if (preg_match('/(\d\d\d\d)/', $date, $matches)) {
+        $year = $matches[1];
+        $year_present = TRUE;
+        break;
+      }
+    }
+  }
+  if (!$year_present) {
+    drupal_set_message(t("Can't assign DOI to object !pid because its DC is missing a required value, !value.", array('!pid' => $pid, '!value' => $value)), 'error');
+    return FALSE;
+  }
+
+  $metadata_xml = theme('datacite_metadata', array(
     'doi' => $doi,
     'creators' => $dc_values['creator'],
     'titles' => $dc_values['title'],
@@ -64,11 +95,9 @@ function islandora_doi_datacite_mods_post_new($pid) {
     'publication_year' => $dc_values['date'],
     'subjects' => $dc_values['subject'],
     'language' => $dc_values['language'],
-    // 'version' => NULL,
     'resource_type' => $dc_values['type'],
     'descriptions' => $dc_values['description'],
   ));
-  dd($metadata_xml);
 
   $response = drupal_http_request($api_url, array(
     'headers' => array(
@@ -92,7 +121,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
     return FALSE;
   }
 
-  // Then POST the resource's URL.
+  // Then POST the resource's URL to mint the DOI.
   $api_url = variable_get('islandora_doi_datacite_mods_api_url', 'https://mds.datacite.org/') . 'doi';
   global $base_url;
   $url = $base_url . '/islandora/object/' . $pid;
