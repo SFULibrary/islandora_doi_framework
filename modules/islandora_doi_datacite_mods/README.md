@@ -2,7 +2,7 @@
 
 ## Overview
 
-Sample module illustrating how submodules of the Islandora DOI framework module work.
+Submodule of the Islandora DOI framework module that manages DOIs provided by [DataCite](https://www.datacite.org/) and persists them to objects' MODS datastream.
 
 ## Requirements
 
@@ -15,7 +15,7 @@ Same as for any other Drupal module.
 
 ## Configuration
 
-Some sample admin values are available at `admin/islandora/tools/islandora_doi_sample`.
+Some sample admin values are available at `admin/islandora/tools/islandora_doi_datacite_mods.
 
 ## Maintainer
 

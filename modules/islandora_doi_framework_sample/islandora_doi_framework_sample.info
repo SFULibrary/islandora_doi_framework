@@ -1,6 +1,0 @@
-name = Islandora DOI Framework Sample
-description = "Sample module that implements hooks provided by the Islandora DOI Framework module."
-package = Islandora Tools
-dependencies[] = islandora_doi_framework
-version = 7.x-dev
-core = 7.x

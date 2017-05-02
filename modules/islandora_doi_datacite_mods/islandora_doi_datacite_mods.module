@@ -29,7 +29,7 @@ function islandora_doi_datacite_mods_admin_settings() {
     '#type' => 'textfield',
     '#title' => t('API endpoint'),
     '#default_value' => variable_get('islandora_doi_datacite_mods_api_url', 'https://mds.datacite.org/'),
-    '#description' => t('The DataCite API endpoint host, including the trailing /.'),
+    '#description' => t("The DataCite API endpoint host, including the trailing /. You probably don't need to change this setting."),
   );
   $form['islandora_doi_datacite_mods_prefix'] = array(
     '#type' => 'textfield',
