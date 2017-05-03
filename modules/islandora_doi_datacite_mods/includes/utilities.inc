@@ -52,7 +52,14 @@ function islandora_doi_datacite_mods_get_dc_values($xml) {
 function islandora_doi_datacite_mods_post_new($pid) {
   $symbol = variable_get('islandora_doi_datacite_mods_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_mods_password', '');
-  $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $pid;
+  $suffix_source = variable_get('islandora_doi_datacite_mods_suffix_source', 0);
+  if ($suffix_source === 0) {
+    $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $pid;
+  }
+  if ($suffix_source === 1) {
+    $uuid = islandora_doi_datacite_mods_get_uuid();
+    $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $uuid;
+  }
 
   // POST the metadata first. This is a requirement of the API.
   // The DOI for the resource must be encoded in the XML in the
@@ -168,7 +175,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
  *   The normalized array of dc.type values.
  */
 function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
-  $replacements = variable_get('islandora_doi_datacite_mods_resourcetype_replacements', 'StillImage|Image\nThesis|Text');
+  $replacements = variable_get('islandora_doi_datacite_mods_resourcetype_replacements', "StillImage|Image\nThesis|Text");
   $replacements_array = preg_split('/\r\n|\n|\r/', $replacements, -1, PREG_SPLIT_NO_EMPTY);
   foreach ($resourcetypes as &$resourcetype) {
     foreach ($replacements_array as $replacement) {
@@ -178,3 +185,14 @@ function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
   }
   return $resourcetype;
 }
+
+/**
+ * Very lazy generation of a UUID.
+ *
+ * @return string
+ *   A UUID.
+ */
+function islandora_doi_datacite_mods_get_uuid() {
+  return shell_exec('uuidgen');
+}
+

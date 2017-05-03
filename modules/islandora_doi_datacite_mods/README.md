@@ -19,7 +19,18 @@ Same as for any other Drupal module.
 
 ## Configuration
 
-Go to `admin/islandora/tools/islandora_doi_datacite_mods` to enter your DataCite institutional symbol and password.
+Go to `admin/islandora/tools/islandora_doi_datacite_mods` to enter your DataCite institutional symbol and password, and your institution's DOI prefix (which will be assigned to you by DataCite).
+
+DataCite's metadata schema requires that the values used in its 'resourceType' elememts are from the list 'Audiovisual', 'Collection', 'Dataset', 'Event', 'Image', 'InteractiveResource', 'Model', 'PhysicalObject', 'Service', 'Software', 'Sound', 'Text', 'Workflow', and 'Other'. You can map DC.type values used in your repository to the required DataCite values using a list of source|replacement pairs here that maps values in your DC datastream's 'type' element to one of these values. Place each source and replacement value pair, separated by a |, on its own line. Two pairs are provided as examples:
+
+```
+StillImage|Image
+Thesis|Text
+```
+
+This module also provides the option of using an object's PID as the DOI suffix or using a UUID (version 4). PIDs are specific to an Islandora instance, while UUIDs are globally unique.
+
+Using these default replacement pairs as an example, if an object's DC.type element has a value of "Thesis", the DataCite metadata record will get a "resourceType" value of "Text".
 
 ## Maintainer
 

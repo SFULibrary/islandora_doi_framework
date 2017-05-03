@@ -37,6 +37,13 @@ function islandora_doi_datacite_mods_admin_settings() {
     '#default_value' => variable_get('islandora_doi_datacite_mods_prefix', '10.5072/'),
     '#description' => t("Your institution's DOI prefix, including the trailing slash. The test prefix is 10.5072/."),
   );
+  $form['islandora_doi_datacite_mods_suffix_source'] = array(
+    '#type' => 'radios',
+    '#title' => t('Source of DOI suffix'),
+    '#default_value' => variable_get('islandora_doi_datacite_mods_suffix_source', 0),
+    '#options' => array(0 => t('PID'), 1 => t('UUID')),
+    '#description' => t("Use either the object's PID or a randomly generated UUID as the DOI suffix."),
+  );
   $form['islandora_doi_datacite_mods_username'] = array(
     '#type' => 'textfield',
     '#title' => t('Datacite symbol (username)'),
