@@ -10,7 +10,7 @@ Note that the DataCite Metadata Schema enforces some constraints. Specifically, 
 
 ## Requirements
 
-* Islandora
+* [Islandora](https://github.com/Islandora/islandora)
 * [Islandora DOI Framework](../..)
 
 ## Installation
