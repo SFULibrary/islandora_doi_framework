@@ -49,6 +49,14 @@ function islandora_doi_datacite_mods_admin_settings() {
     '#default_value' => variable_get('islandora_doi_datacite_mods_password', ''),
     '#description' => t("Your insitution's DataCite password."),
   );
+  $default_replacements = 'StillImage|Image\nThesis|Text';
+  $form['islandora_doi_datacite_mods_resourcetype_replacements'] = array(
+    '#type' => 'textarea',
+    '#title' => t('resourceType replacements'),
+    '#rows' => 10,
+    '#default_value' => variable_get('islandora_doi_datacite_mods_resourcetype_replacements', ''),
+    '#description' => t("DataCite's metadata specification requires that the values of 'resourceType' are from the list 'Audiovisual', 'Collection', 'Dataset', 'Event', 'Image', 'InteractiveResource', 'Model', 'PhysicalObject', 'Service', 'Software', 'Sound', 'Text', 'Workflow', and 'Other'. You can define a list of source|replacement pairs here that maps values in your DC datastream's 'type' element to one of these values. Place each source and replacement value pair, separated by a |, on its own line."),
+  );
   return system_settings_form($form);
 }
 
@@ -62,15 +70,14 @@ function islandora_doi_datacite_mods_theme() {
         'doi' => NULL,
         'creators' => NULL,
         'titles' => NULL,
-        'publisher' => NULL,
-        'publication_year' => NULL,
+        'publishers' => NULL,
+        'publication_years' => NULL,
         'subjects' => NULL,
         'language' => NULL,
-        'version' => NULL,
-        'resource_type' => NULL,
-        'description' => NULL,
+        'resource_types' => NULL,
+        'descriptions' => NULL,
       ),
-      'template' => 'datacite-metadata',
+      'template' => 'theme/datacite-metadata',
     ),
   );
 }

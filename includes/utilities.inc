@@ -16,7 +16,7 @@
  */
 function islandora_doi_framework_mint_doi($pid) {
   $dois = module_invoke_all('islandora_doi_framework_mint', $pid);
-  if (count($dois)) {
+  if (count($dois) && strlen($dois[0])) {
     return $dois[0];
   }
   else {

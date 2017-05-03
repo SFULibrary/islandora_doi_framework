@@ -73,7 +73,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
   }
   $year_present = FALSE;
   if (isset($dc_values['date'])) {
-    foreach ($dc_value['date'] as $date) {
+    foreach ($dc_values['date'] as $date) {
       if (preg_match('/(\d\d\d\d)/', $date, $matches)) {
         $year = $matches[1];
         $year_present = TRUE;
@@ -86,16 +86,23 @@ function islandora_doi_datacite_mods_post_new($pid) {
     return FALSE;
   }
 
+  // resourceType must be from the list Audiovisual, Collection, Dataset,
+  // Event, Image, InteractiveResource, Model, PhysicalObject, Service,
+  // Software, Sound, Text, Workflow, Other.
+  if (isset($dc_values['type'])) {
+    $dc_values['type'] = islandora_doi_datacite_mods_normalize_resourcetype($dc_values['type']);
+  }
+
   $metadata_xml = theme('datacite_metadata', array(
     'doi' => $doi,
-    'creators' => $dc_values['creator'],
-    'titles' => $dc_values['title'],
-    'publisher' => $dc_values['publisher'],
-    'publication_year' => $dc_values['date'],
-    'subjects' => $dc_values['subject'],
-    'language' => $dc_values['language'],
-    'resource_type' => $dc_values['type'],
-    'descriptions' => $dc_values['description'],
+    'creators' => isset($dc_values['creator']) ? $dc_values['creator'] : array(),
+    'titles' => isset($dc_values['creator']) ? $dc_values['title'] : array(),
+    'publishers' => isset($dc_values['publisher']) ? $dc_values['publisher'] : array(),
+    'publication_years' => isset($dc_values['date']) ? $dc_values['date'] : array(),
+    'subjects' => isset($dc_values['subject']) ? $dc_values['subject'] : array(),
+    'languages' => isset($dc_values['language']) ? $dc_values['language'] : array(),
+    'resource_types' => isset($dc_values['type']) ? $dc_values['type'] : array(),
+    'descriptions' => isset($dc_values['description']) ? $dc_values['description'] : array(),
   ));
 
   $response = drupal_http_request($api_url, array(
@@ -149,4 +156,25 @@ function islandora_doi_datacite_mods_post_new($pid) {
     );
     return FALSE;
   }
+}
+
+/**
+ * Replaces values in DC type element with preferred values.
+ *
+ * @param array $resourcetypes
+ *   The array of dc.type values.
+ *
+ * @return array
+ *   The normalized array of dc.type values.
+ */
+function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
+  $replacements = variable_get('islandora_doi_datacite_mods_resourcetype_replacements', 'StillImage|Image\nThesis|Text');
+  $replacements_array = preg_split('/\r\n|\n|\r/', $replacements, -1, PREG_SPLIT_NO_EMPTY);
+  foreach ($resourcetypes as &$resourcetype) {
+    foreach ($replacements_array as $replacement) {
+      list($before, $after) = explode('|', $replacement);
+      $resourcetype = preg_replace('/' . $before . '/', trim($after), $resourcetype);
+    }
+  }
+  return $resourcetype;
 }
