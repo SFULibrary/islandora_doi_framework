@@ -49,7 +49,7 @@ function islandora_doi_datacite_mods_admin_settings() {
     '#default_value' => variable_get('islandora_doi_datacite_mods_password', ''),
     '#description' => t("Your insitution's DataCite password."),
   );
-  $default_replacements = 'StillImage|Image\nThesis|Text';
+  $default_replacements = "StillImage|Image\nThesis|Text";
   $form['islandora_doi_datacite_mods_resourcetype_replacements'] = array(
     '#type' => 'textarea',
     '#title' => t('resourceType replacements'),
