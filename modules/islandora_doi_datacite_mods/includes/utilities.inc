@@ -53,7 +53,6 @@ function islandora_doi_datacite_mods_post_new($pid) {
   $symbol = variable_get('islandora_doi_datacite_mods_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_mods_password', '');
   $suffix_source = variable_get('islandora_doi_datacite_mods_suffix_source', 'pid');
-  dd($suffix_source, 'Source');
   if ($suffix_source == 'pid') {
     $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $pid;
   }
@@ -61,7 +60,6 @@ function islandora_doi_datacite_mods_post_new($pid) {
     $uuid = islandora_doi_datacite_mods_get_uuid();
     $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $uuid;
   }
-  dd($doi, 'DOI');
 
   // POST the metadata first. This is a requirement of the API.
   // The DOI for the resource must be encoded in the XML in the
@@ -95,9 +93,9 @@ function islandora_doi_datacite_mods_post_new($pid) {
     return FALSE;
   }
 
-  // resourceType must be from the list Audiovisual, Collection, Dataset,
-  // Event, Image, InteractiveResource, Model, PhysicalObject, Service,
-  // Software, Sound, Text, Workflow, Other.
+  // resourceType must be Audiovisual, Collection, Dataset, Event Image,
+  // InteractiveResource, Model, PhysicalObject, Service, Software, Sound,
+  // Text, Workflow, or Other.
   if (isset($dc_values['type'])) {
     $dc_values['type'] = islandora_doi_datacite_mods_normalize_resourcetype($dc_values['type']);
   }
@@ -125,7 +123,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
   if ($response->code != 201) {
     watchdog(
       'islandora_doi_datacite_mods',
-      'Error registering metadata for object !pid, so cannot proceed: !code, !message',
+      'Error registering metadata for object !pid, so cannot mint DOI: !code, !message',
       array(
         '!pid' => $pid,
         '!code' => $response->code,
@@ -133,6 +131,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
       ),
       WATCHDOG_ERROR
     );
+    drupal_set_message(t("Can't post DataCite metadata for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
     return FALSE;
   }
 
@@ -155,7 +154,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
   else {
     watchdog(
       'islandora_doi_datacite_mods',
-      'Error assigning URL to DOI !doi for object !pid: !code, !message',
+      'Error minting DOI !doi for object !pid: !code, !message',
       array(
         '!doi' => $doi,
         '!pid' => $pid,
@@ -163,6 +162,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
         '!message' => $response->status_message),
       WATCHDOG_ERROR
     );
+    drupal_set_message(t("Can't mint DOI for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
     return FALSE;
   }
 }
@@ -185,7 +185,7 @@ function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
       $resourcetype = preg_replace('/' . $before . '/', trim($after), $resourcetype);
     }
   }
-  return $resourcetype;
+  return $resourcetypes;
 }
 
 /**
