@@ -52,14 +52,16 @@ function islandora_doi_datacite_mods_get_dc_values($xml) {
 function islandora_doi_datacite_mods_post_new($pid) {
   $symbol = variable_get('islandora_doi_datacite_mods_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_mods_password', '');
-  $suffix_source = variable_get('islandora_doi_datacite_mods_suffix_source', 0);
-  if ($suffix_source === 0) {
+  $suffix_source = variable_get('islandora_doi_datacite_mods_suffix_source', 'pid');
+  dd($suffix_source, 'Source');
+  if ($suffix_source == 'pid') {
     $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $pid;
   }
-  if ($suffix_source === 1) {
+  if ($suffix_source == 'uuid') {
     $uuid = islandora_doi_datacite_mods_get_uuid();
     $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $uuid;
   }
+  dd($doi, 'DOI');
 
   // POST the metadata first. This is a requirement of the API.
   // The DOI for the resource must be encoded in the XML in the

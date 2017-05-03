@@ -27,10 +27,10 @@ DataCite's metadata schema requires that the values used in its 'resourceType' e
 StillImage|Image
 Thesis|Text
 ```
-
-This module also provides the option of using an object's PID as the DOI suffix or using a UUID (version 4). PIDs are specific to an Islandora instance, while UUIDs are globally unique.
-
 Using these default replacement pairs as an example, if an object's DC.type element has a value of "Thesis", the DataCite metadata record will get a "resourceType" value of "Text".
+
+This module also provides the option of using an object's PID as the DOI suffix or using a UUID (version 4). PIDs are specific to an Islandora instance, while UUIDs are globally unique. PIDs make completely suitable DOI suffixes, but should you migrate to another platform in the future, your DOIs would still contain Islandora PIDs.
+
 
 ## Maintainer
 
