@@ -55,10 +55,12 @@ function islandora_doi_datacite_mods_post_new($pid) {
   $suffix_source = variable_get('islandora_doi_datacite_mods_suffix_source', 'pid');
   if ($suffix_source == 'pid') {
     $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $pid;
+    $doi = trim($doi);
   }
   if ($suffix_source == 'uuid') {
     $uuid = islandora_doi_datacite_mods_get_uuid();
     $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $uuid;
+    $doi = trim($doi);
   }
 
   // POST the metadata first. This is a requirement of the API.
