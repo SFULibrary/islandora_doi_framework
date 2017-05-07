@@ -102,6 +102,10 @@ function islandora_doi_datacite_mods_theme() {
  */
 function islandora_doi_datacite_mods_islandora_doi_framework_mint($pid) {
   module_load_include('inc', 'islandora_doi_datacite_mods', 'includes/utilities');
+  if (islandora_doi_datacite_mods_check_for_doi($pid)) {
+    drupal_set_message(t("This object already has a DOI: !doi.", array('!doi' => $doi)));
+    return FALSE;
+  }
   if ($doi = islandora_doi_datacite_mods_post_new($pid)) {
     return $doi;
   }
@@ -121,8 +125,8 @@ function islandora_doi_datacite_mods_islandora_doi_framework_persist($doi, $pid)
     $dom->loadXML($object['MODS']->content);
     $xpath = new DOMXPath($dom);
 
-    $existing_doi_identifiers = $xpath->query("//mods:identifier[@type='doi']");
-    if ($existing_doi_identifiers->length == 0) {
+    module_load_include('inc', 'islandora_doi_datacite_mods', 'includes/utilities');
+    if (!islandora_doi_datacite_mods_check_for_doi($pid)) {
       $doi_element_string = '<identifier type="doi">' . $doi . '</identifier>';
       $doi_element = $dom->createDocumentFragment();
       $doi_element->appendXML($doi_element_string);
@@ -131,7 +135,7 @@ function islandora_doi_datacite_mods_islandora_doi_framework_persist($doi, $pid)
       // Replace the MODS datastream content.
       $mods_xml = $dom->saveXML();
       $object['MODS']->content = $mods_xml;
-      drupal_set_message(t('DOI !doi successfully save in MODS datastreamof object !pid', array('!doi' => $doi, '!pid' => $pid)));
+      drupal_set_message(t("DOI !doi successfully saved in !pid's MODS datastream.", array('!doi' => $doi, '!pid' => $pid)));
       return TRUE;
     }
     else {

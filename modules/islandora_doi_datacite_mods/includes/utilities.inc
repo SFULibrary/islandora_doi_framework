@@ -33,6 +33,56 @@ function islandora_doi_datacite_mods_get_dc_values($xml) {
 }
 
 /**
+ * Checks for the presence of a DOI in an object's MODS datastream.
+ *
+ * @param string $pid
+ *   The PID of the object to check.
+ *
+ * @return string|bool
+ *   The value of the DOI if present, FALSE otherwise. 
+ */
+function islandora_doi_datacite_mods_check_for_doi($pid) {
+  $object = islandora_object_load($pid);
+  if ($object['MODS']) {
+    $dom = new DOMDocument();
+    $dom->loadXML($object['MODS']->content);
+    $xpath = new DOMXPath($dom);
+    $existing_doi_identifiers = $xpath->query("//mods:identifier[@type='doi']");
+    if ($existing_doi_identifiers->length == 0) {
+      return FALSE;
+    }
+    elseif ($existing_doi_identifiers->length == 1) {
+      return $existing_doi_identifiers->item(0)->nodeValue;
+    }
+    else {
+    watchdog(
+      'islandora_doi_datacite_mods',
+      'Object !pid has multiple (!count) DOIs in its MODS datastream.',
+      array(
+        '!pid' => $pid,
+        '!count' => $existing_doi_identifiers->length,
+      ),
+      WATCHDOG_ERROR
+    );
+    return FALSE;
+
+    }
+  }
+  else {
+    watchdog(
+      'islandora_doi_datacite_mods',
+      'Object !pid has no MODS datastream.',
+      array(
+        '!pid' => $pid,
+      ),
+      WATCHDOG_ERROR
+    );
+    return FALSE;
+  }
+}
+
+
+/**
  * Registers a DOI and associated metadata with DataCite.
  *
  * Also checks to make sure that the source DC datastream
