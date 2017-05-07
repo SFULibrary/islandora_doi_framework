@@ -102,8 +102,8 @@ function islandora_doi_datacite_mods_theme() {
  */
 function islandora_doi_datacite_mods_islandora_doi_framework_mint($pid) {
   module_load_include('inc', 'islandora_doi_datacite_mods', 'includes/utilities');
-  if (islandora_doi_datacite_mods_check_for_doi($pid)) {
-    drupal_set_message(t("This object already has a DOI: !doi.", array('!doi' => $doi)));
+  if ($doi = islandora_doi_datacite_mods_check_for_doi($pid)) {
+    drupal_set_message(t("This object already has a DOI: !doi.", array('!doi' => $doi)), 'warning');
     return FALSE;
   }
   if ($doi = islandora_doi_datacite_mods_post_new($pid)) {
