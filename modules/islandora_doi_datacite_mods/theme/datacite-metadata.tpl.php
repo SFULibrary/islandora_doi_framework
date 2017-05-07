@@ -22,9 +22,7 @@
   <?php foreach($publishers as $publisher): ?>
   <publisher><?php print $publisher; ?></publisher>
   <?php endforeach; ?>
-  <?php foreach($publication_years as $publication_year): ?>
   <publicationYear><?php print $publication_year; ?></publicationYear>
-  <?php endforeach; ?>
   <?php if (isset($subjects) && count($subjects)): ?>
   <subjects>
   <?php foreach($subjects as $subject): ?>
@@ -37,9 +35,7 @@
     <language><?php print $language; ?></language>
     <?php endforeach; ?>
   <?php endif; ?>
-  <?php foreach($resource_types as $resource_type): ?>
   <resourceType resourceTypeGeneral="<?php print $resource_type; ?>"><?php print $resource_type; ?></resourceType>
-  <?php endforeach; ?>
   <?php if (isset($descriptions) && count($descriptions)): ?>
   <descriptions>
     <?php foreach($descriptions as $description): ?>

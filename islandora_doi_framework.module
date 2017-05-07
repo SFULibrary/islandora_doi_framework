@@ -64,14 +64,7 @@ function islandora_doi_framework_assign_doi_submit($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
   if ($doi = islandora_doi_framework_mint_doi($pid)) {
-    if (islandora_doi_framework_persist_doi($doi, $pid)) {
-      drupal_set_message(t('DOI !doi assigned successfully to object !pid',
-        array('!doi' => $doi, '!pid' => $pid)));
-    }
-    else {
-      drupal_set_message(t('DOI !doi was not assigned to object !pid',
-        array('!doi' => $doi, '!pid' => $pid)), 'error');
-    }
+    islandora_doi_framework_persist_doi($doi, $pid);
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }
 }

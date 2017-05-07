@@ -108,11 +108,11 @@ function islandora_doi_datacite_mods_post_new($pid) {
     return FALSE;
   }
 
-  // resourceType must be Audiovisual, Collection, Dataset, Event Image,
+  // resourceType must be Audiovisual, Collection, Dataset, Event, Image,
   // InteractiveResource, Model, PhysicalObject, Service, Software, Sound,
   // Text, Workflow, or Other.
   if (isset($dc_values['type'])) {
-    $dc_values['type'] = islandora_doi_datacite_mods_normalize_resourcetype($dc_values['type']);
+    $resource_type = islandora_doi_datacite_mods_normalize_resourcetype($dc_values['type']);
   }
 
   $metadata_xml = theme('datacite_metadata', array(
@@ -120,10 +120,10 @@ function islandora_doi_datacite_mods_post_new($pid) {
     'creators' => $dc_values['creator'],
     'titles' => isset($dc_values['creator']) ? $dc_values['title'] : array(),
     'publishers' => isset($dc_values['publisher']) ? $dc_values['publisher'] : array(),
-    'publication_years' => array($year),
+    'publication_year' => $year,
     'subjects' => isset($dc_values['subject']) ? $dc_values['subject'] : array(),
     'languages' => isset($dc_values['language']) ? $dc_values['language'] : array(),
-    'resource_types' => isset($dc_values['type']) ? $dc_values['type'] : array(),
+    'resource_type' => $resource_type,
     'descriptions' => isset($dc_values['description']) ? $dc_values['description'] : array(),
   ));
 
@@ -171,6 +171,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
     'data' => 'doi=' . $doi . PHP_EOL . 'url=' . $url,
   ));
   if ($response->code == 201) {
+    drupal_set_message(t('DOI !doi successfully minted for object !pid', array('!doi' => $doi, '!pid' => $pid)));
     return $doi;
   }
   else {
@@ -202,8 +203,8 @@ function islandora_doi_datacite_mods_post_new($pid) {
  * @param array $resourcetypes
  *   The array of dc.type values.
  *
- * @return array
- *   The normalized array of dc.type values.
+ * @return string
+ *   The first member of the normalized array of dc.type values.
  */
 function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
   $replacements = variable_get('islandora_doi_datacite_mods_resourcetype_replacements', "StillImage|Image\nThesis|Text");
@@ -214,7 +215,7 @@ function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
       $resourcetype = preg_replace('/' . $before . '/', trim($after), $resourcetype);
     }
   }
-  return $resourcetypes;
+  return $resourcetypes[0];
 }
 
 /**

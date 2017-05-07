@@ -86,10 +86,10 @@ function islandora_doi_datacite_mods_theme() {
         'creators' => NULL,
         'titles' => NULL,
         'publishers' => NULL,
-        'publication_years' => NULL,
+        'publication_year' => NULL,
         'subjects' => NULL,
         'language' => NULL,
-        'resource_types' => NULL,
+        'resource_type' => NULL,
         'descriptions' => NULL,
       ),
       'template' => 'theme/datacite-metadata',
@@ -99,9 +99,6 @@ function islandora_doi_datacite_mods_theme() {
 
 /**
  * Implements hook_islandora_doi_framework_mint().
- *
- * This example implementation generates a DOI locally
- * instead of requesting one from an external service. 
  */
 function islandora_doi_datacite_mods_islandora_doi_framework_mint($pid) {
   module_load_include('inc', 'islandora_doi_datacite_mods', 'includes/utilities');
@@ -134,6 +131,7 @@ function islandora_doi_datacite_mods_islandora_doi_framework_persist($doi, $pid)
       // Replace the MODS datastream content.
       $mods_xml = $dom->saveXML();
       $object['MODS']->content = $mods_xml;
+      drupal_set_message(t('DOI !doi successfully save in MODS datastreamof object !pid', array('!doi' => $doi, '!pid' => $pid)));
       return TRUE;
     }
     else {
