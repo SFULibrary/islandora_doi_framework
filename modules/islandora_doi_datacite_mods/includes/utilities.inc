@@ -55,17 +55,16 @@ function islandora_doi_datacite_mods_check_for_doi($pid) {
       return $existing_doi_identifiers->item(0)->nodeValue;
     }
     else {
-    watchdog(
-      'islandora_doi_datacite_mods',
-      'Object !pid has multiple (!count) DOIs in its MODS datastream.',
-      array(
-        '!pid' => $pid,
-        '!count' => $existing_doi_identifiers->length,
-      ),
-      WATCHDOG_ERROR
-    );
-    return FALSE;
-
+      watchdog(
+        'islandora_doi_datacite_mods',
+        'Object !pid has multiple (!count) DOIs in its MODS datastream.',
+        array(
+          '!pid' => $pid,
+          '!count' => $existing_doi_identifiers->length,
+        ),
+        WATCHDOG_ERROR
+      );
+      return FALSE;
     }
   }
   else {
