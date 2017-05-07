@@ -56,38 +56,56 @@ function islandora_doi_framework_persist_doi($doi, $pid) {
 }
 
 /**
- * Returns a list of PIDs from a PID file.
+ * Defines hook_islandora_doi_framework_update().
  *
- * @param string $pid_file_path
- *   The absolute path to the PID file.
+ * @param string $doi
+ *   The fetched DOI.
+ * @param string $pid
+ *   The object's PID.
+ * @param string $action
+ *   One of 'url', 'metadata', or 'both'
+ *
+ * @return boolan
+ *   True if the DOI was updated, false if not.
+ */
+function islandora_doi_framework_update_doi($doi, $pid, $action = 'both') {
+  $dois_updated = module_invoke_all('islandora_doi_framework_update', $doi, $pid, $action);
+  // @todo: the rest of this function....
+}
+
+/**
+ * Returns a list of PIDs or DOIs from a file.
+ *
+ * @param string $path
+ *   The absolute path to the file.
  *
  * @return array
- *   A list of PIDs.
+ *   A list of PIDs or DOIs.
  */
-function islandora_doi_framework_read_pid_file($pid_file_path) {
-  if (!file_exists($pid_file_path)) {
-    drush_set_error('PID_FILE_NOT_FOUND',
-    dt('The specified PID file (!pid_file) does not exist.',
-      array('!pid_file' => $pid_file_path)));
+function islandora_doi_framework_read_input_file($path) {
+  if (!file_exists($path)) {
+    drush_set_error('INPUT_FILE_NOT_FOUND',
+    dt('The specified input file (!file) does not exist.',
+      array('!file' => $path)));
     drupal_exit();
   }
 
-  $pids = array();
-  $lines = file($pid_file_path);
-  foreach ($lines as $pid) {
-    $pid = trim($pid);
+  $items = array();
+  $lines = file($path);
+  foreach ($lines as $item) {
+    $item = trim($item);
     // Skip commented out rows.
-    if (!preg_match('!(#|//)!', $pid)) {
-      $pids[] = $pid;
+    if (!preg_match('!(#|//)!', $item)) {
+      $items[] = $item;
     }
   }
 
-  if (!count($pids) || !$pids) {
-    drush_set_error('PID_FILE_IS_EMPTY',
-    dt('The specified PID file (!pid_file) is empty.',
-      array('!pid_file' => $pid_file_path)));
+  if (!count($items) || !$items) {
+    drush_set_error('INPUT_FILE_IS_EMPTY',
+    dt('The specified input file (!file) is empty.',
+      array('!file' => $path)));
     drupal_exit();
   }
 
-  return $pids;
+  return $items;
 }

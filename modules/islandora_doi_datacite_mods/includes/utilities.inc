@@ -71,27 +71,40 @@ function islandora_doi_datacite_mods_post_new($pid) {
   $object = islandora_object_load($pid);
   $dc_values = islandora_doi_datacite_mods_get_dc_values($object['DC']->content);
 
-  // Check for required fields: creator, title, publisher, publication_year,
-  // resource_type, and that there is a YYYY value in date..
+  if (variable_get('islandora_doi_datacite_mods_combine_creator', 0)) {
+    $dc_values['creator'] = isset($dc_values['creator']) ? $dc_values['creator'] : array();
+    $dc_values['contributor'] = isset($dc_values['contributor']) ? $dc_values['contributor'] : array();
+    $dc_values['creator'] = array_merge($dc_values['creator'], $dc_values['contributor']);
+  }
+
+  // Check for source DC elements (creator, title, publisher, date) that
+  // correspond to the required DataCite elements creator, title, publisher,
+  // publicationYear, and resourceType, and that there is a YYYY value in date.
   $required_values = array('creator', 'title', 'publisher', 'date', 'type');
+  $missing_required_elements = array();
   foreach ($required_values as $value) {
     if (!isset($dc_values[$value]) || !count($dc_values[$value])) {
-      drupal_set_message(t("Can't assign DOI to object !pid because its DC is missing a required value, \"!value\".", array('!pid' => $pid, '!value' => $value)), 'error');
-      return FALSE;
+      $missing_required_elements[] = $value;
     }
   }
+  if (count($missing_required_elements)) {
+    $missing_elements_string = implode(', ', $missing_required_elements);
+    drupal_set_message(t("Can't assign DOI to object !pid because its DC is missing one or more required values: !values.", array('!pid' => $pid, '!values' => trim($missing_elements_string))), 'error');
+    return FALSE;
+  }
+
   $year_present = FALSE;
   if (isset($dc_values['date'])) {
     foreach ($dc_values['date'] as $date) {
       if (preg_match('/(\d\d\d\d)/', $date, $matches)) {
-        $year = $matches[1];
+        $year = trim($matches[1]);
         $year_present = TRUE;
         break;
       }
     }
   }
   if (!$year_present) {
-    drupal_set_message(t("Can't assign DOI to object !pid because its DC is missing a required value, !value.", array('!pid' => $pid, '!value' => $value)), 'error');
+    drupal_set_message(t("Can't assign DOI to object !pid because its DC.date value does not contain a year in yyyy format, !value.", array('!pid' => $pid, '!value' => $value)), 'error');
     return FALSE;
   }
 
@@ -104,10 +117,10 @@ function islandora_doi_datacite_mods_post_new($pid) {
 
   $metadata_xml = theme('datacite_metadata', array(
     'doi' => $doi,
-    'creators' => isset($dc_values['creator']) ? $dc_values['creator'] : array(),
+    'creators' => $dc_values['creator'],
     'titles' => isset($dc_values['creator']) ? $dc_values['title'] : array(),
     'publishers' => isset($dc_values['publisher']) ? $dc_values['publisher'] : array(),
-    'publication_years' => isset($dc_values['date']) ? $dc_values['date'] : array(),
+    'publication_years' => array($year),
     'subjects' => isset($dc_values['subject']) ? $dc_values['subject'] : array(),
     'languages' => isset($dc_values['language']) ? $dc_values['language'] : array(),
     'resource_types' => isset($dc_values['type']) ? $dc_values['type'] : array(),
@@ -123,13 +136,20 @@ function islandora_doi_datacite_mods_post_new($pid) {
     'data' => $metadata_xml,
   ));
   if ($response->code != 201) {
+    if ($response->code == '400') {
+      // The DataCite API provides specific error messages in the response body.
+      $message = $response->status_message . ': ' . $response->data;
+    }
+    else {
+      $message = $response->status_message;
+    }
     watchdog(
       'islandora_doi_datacite_mods',
       'Error registering metadata for object !pid, so cannot mint DOI: !code, !message',
       array(
         '!pid' => $pid,
         '!code' => $response->code,
-        '!message' => $response->status_message,
+        '!message' => $message,
       ),
       WATCHDOG_ERROR
     );
@@ -154,6 +174,13 @@ function islandora_doi_datacite_mods_post_new($pid) {
     return $doi;
   }
   else {
+    if ($response->code == '400') {
+      // The DataCite API provides specific error messages in the response body.
+      $message = $response->status_message . ': ' . $response->data;
+    }
+    else {
+      $message = $response->status_message;
+    }
     watchdog(
       'islandora_doi_datacite_mods',
       'Error minting DOI !doi for object !pid: !code, !message',
@@ -161,7 +188,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
         '!doi' => $doi,
         '!pid' => $pid,
         '!code' => $response->code,
-        '!message' => $response->status_message),
+        '!message' => $message),
       WATCHDOG_ERROR
     );
     drupal_set_message(t("Can't mint DOI for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
@@ -199,4 +226,3 @@ function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
 function islandora_doi_datacite_mods_get_uuid() {
   return shell_exec('uuidgen');
 }
-

@@ -4,7 +4,7 @@
 
 Submodule of the Islandora DOI framework module that manages DOIs provided by [DataCite](https://www.datacite.org/) and persists them to objects' MODS datastream.
 
-This module creates a record complying with the [DataCite Metadata Schema](https://schema.datacite.org/) from an object's DC datastream, and using the "Assign DOI" functionality provided by the Islandora DOI Framework module, posts it to the DataCite Metadata Store along with the object's URL. These two tasks together mint a DOI for the object. The object's PID is used as its DOI's "suffix", resulting in DOIs that look like 10.5072/islandora:1234 ('10.5072' is the test DOI prefix; the one assigned to your institution will be used instead).
+This module creates a record complying with the [DataCite Metadata Schema](https://schema.datacite.org/) from an object's DC datastream, and using the "Assign DOI" functionality provided by the Islandora DOI Framework module, posts it to the DataCite Metadata Store along with the object's URL. These two tasks together mint a DOI for the object. The object's PID is used as its DOI's "suffix", resulting in DOIs that look like 10.5072/islandora:1234 ('10.5072' is the test DOI prefix; the one assigned to your institution will be used instead). Optionally, the module can generate a UUID to use as the DOI suffix.
 
 Note that the DataCite Metadata Schema enforces some constraints. Specifically, the schema requires what are the equivalents of DC's 'creator', 'title', 'publisher', 'date', and 'type'. Also, the 'date' must be a year (yyyy). If a user of this module tries to assign a DOI for an object that doesn't meet these metadata, they are told that the object is missing a required metadata value.
 
@@ -30,6 +30,8 @@ Thesis|Text
 Using these default replacement pairs as an example, if an object's DC.type element has a value of "Thesis", the DataCite metadata record will get a "resourceType" value of "Text".
 
 This module also provides the option of using an object's PID as the DOI suffix or using a UUID (version 4). PIDs are specific to an Islandora instance, while UUIDs are globally unique. PIDs make completely suitable DOI suffixes, but should you migrate to another platform in the future, your DOIs would still contain Islandora PIDs.
+
+There is also an option to use both the object's DC.creator and DC.contributor values to populate DataCite's reqiured 'creator' element. Because of the way that the Library of Congress' MODS-to-DC stylesheet generates DC datastreams, many Islandora objects' DC datastreams contain 'contributor' elements rather than 'creator' elements. Enabling this option will reduce the number of validation failures based on the lack of values for the DataCite 'creator' element.
 
 
 ## Maintainer

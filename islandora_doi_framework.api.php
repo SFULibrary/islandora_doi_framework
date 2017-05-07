@@ -48,18 +48,20 @@ function hook_islandora_doi_framework_persist($doi, $pid) {
 /**
  * Updates a DOI.
  *
- * Performs updates to the DOI in the registrar (i.e., where it
- * was minted) and locally (i.e., where it was peristed).
+ * Performs updates to the DOI in the registrar (i.e., where it was minted),
+ * i.e., updates the DOI's URL, the metadata associated with it, or both.
  *
  * @param string $doi
  *   The fetched DOI.
  * @param string $pid
  *   The object's PID.
+ * @param string $action
+ *   One of 'url', 'metadata', or 'both'
  *
  * @return bool
  *   True if the DOI was updated, false if not.
  */
-function hook_islandora_doi_framework_update($doi, $pid) {
+function hook_islandora_doi_framework_update($doi, $pid, $action = 'both') {
   // Update the object's URL locally, and/or metadata at the
   // registrar, if necessary, then return a boolean value.
   return TRUE;
