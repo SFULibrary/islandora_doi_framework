@@ -39,9 +39,8 @@
   <?php if (isset($descriptions) && count($descriptions)): ?>
   <descriptions>
     <?php foreach($descriptions as $description): ?>
-    <description descriptionType="Abstract">
+    <description descriptionType="Abstract"><?php print $description; ?></description>
     <?php endforeach; ?>
-    </description>
   </descriptions>
   <?php endif; ?>
 </resource>
