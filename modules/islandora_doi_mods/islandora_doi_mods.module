@@ -58,8 +58,7 @@ function islandora_doi_mods_islandora_doi_framework_persist($doi, $pid) {
     $dom->loadXML($object['MODS']->content);
     $xpath = new DOMXPath($dom);
 
-    module_load_include('inc', 'islandora_doi_mods', 'includes/utilities');
-    if (!islandora_doi_mods_check_for_doi($pid)) {
+    if (!islandora_doi_mods_islandora_doi_framework_check_for_doi($pid)) {
       $doi_element_string = '<identifier type="doi">' . $doi . '</identifier>';
       $doi_element = $dom->createDocumentFragment();
       $doi_element->appendXML($doi_element_string);
