@@ -15,7 +15,7 @@
  *   An associative array containing element name => element values.
  *   Not all DC elements are guaranteed to be present in the array.
  */
-function islandora_doi_datacite_mods_get_dc_values($xml) {
+function islandora_doi_datacite_get_dc_values($xml) {
   $dc_values = array();
   $dom = new DOMDocument();
   $dom->loadXML($xml);
@@ -31,55 +31,6 @@ function islandora_doi_datacite_mods_get_dc_values($xml) {
   }
   return $dc_values;
 }
-
-/**
- * Checks for the presence of a DOI in an object's MODS datastream.
- *
- * @param string $pid
- *   The PID of the object to check.
- *
- * @return string|bool
- *   The value of the DOI if present, FALSE otherwise. 
- */
-function islandora_doi_datacite_mods_check_for_doi($pid) {
-  $object = islandora_object_load($pid);
-  if ($object['MODS']) {
-    $dom = new DOMDocument();
-    $dom->loadXML($object['MODS']->content);
-    $xpath = new DOMXPath($dom);
-    $existing_doi_identifiers = $xpath->query("//mods:identifier[@type='doi']");
-    if ($existing_doi_identifiers->length == 0) {
-      return FALSE;
-    }
-    elseif ($existing_doi_identifiers->length == 1) {
-      return $existing_doi_identifiers->item(0)->nodeValue;
-    }
-    else {
-      watchdog(
-        'islandora_doi_datacite_mods',
-        'Object !pid has multiple (!count) DOIs in its MODS datastream.',
-        array(
-          '!pid' => $pid,
-          '!count' => $existing_doi_identifiers->length,
-        ),
-        WATCHDOG_ERROR
-      );
-      return FALSE;
-    }
-  }
-  else {
-    watchdog(
-      'islandora_doi_datacite_mods',
-      'Object !pid has no MODS datastream.',
-      array(
-        '!pid' => $pid,
-      ),
-      WATCHDOG_ERROR
-    );
-    return FALSE;
-  }
-}
-
 
 /**
  * Registers a DOI and associated metadata with DataCite.
@@ -98,29 +49,29 @@ function islandora_doi_datacite_mods_check_for_doi($pid) {
  * @return string|bool
  *   The DOI if the request was successful, FALSE if not.
  */
-function islandora_doi_datacite_mods_post_new($pid) {
-  $symbol = variable_get('islandora_doi_datacite_mods_username', 'CISTI.FOO');
-  $password = variable_get('islandora_doi_datacite_mods_password', '');
-  $suffix_source = variable_get('islandora_doi_datacite_mods_suffix_source', 'pid');
+function islandora_doi_datacite_post_new($pid) {
+  $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
+  $password = variable_get('islandora_doi_datacite_password', '');
+  $suffix_source = variable_get('islandora_doi_datacite_suffix_source', 'pid');
   if ($suffix_source == 'pid') {
-    $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $pid;
+    $doi = variable_get('islandora_doi_datacite_prefix', '10.99999/') . $pid;
     $doi = trim($doi);
   }
   if ($suffix_source == 'uuid') {
-    $uuid = islandora_doi_datacite_mods_get_uuid();
-    $doi = variable_get('islandora_doi_datacite_mods_prefix', '10.99999/') . $uuid;
+    $uuid = islandora_doi_datacite_get_uuid();
+    $doi = variable_get('islandora_doi_datacite_prefix', '10.99999/') . $uuid;
     $doi = trim($doi);
   }
 
   // POST the metadata first. This is a requirement of the API.
   // The DOI for the resource must be encoded in the XML in the
   // <identifier identifierType="DOI"> element.
-  $api_url = variable_get('islandora_doi_datacite_mods_api_url', 'https://mds.datacite.org/') . 'metadata';
+  $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
   $object = islandora_object_load($pid);
-  $dc_values = islandora_doi_datacite_mods_get_dc_values($object['DC']->content);
+  $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
 
-  if (variable_get('islandora_doi_datacite_mods_combine_creator', 0)) {
+  if (variable_get('islandora_doi_datacite_combine_creator', 0)) {
     $dc_values['creator'] = isset($dc_values['creator']) ? $dc_values['creator'] : array();
     $dc_values['contributor'] = isset($dc_values['contributor']) ? $dc_values['contributor'] : array();
     $dc_values['creator'] = array_merge($dc_values['creator'], $dc_values['contributor']);
@@ -161,7 +112,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
   // InteractiveResource, Model, PhysicalObject, Service, Software, Sound,
   // Text, Workflow, or Other.
   if (isset($dc_values['type'])) {
-    $resource_type = islandora_doi_datacite_mods_normalize_resourcetype($dc_values['type']);
+    $resource_type = islandora_doi_datacite_normalize_resourcetype($dc_values['type']);
   }
 
   $metadata_xml = theme('datacite_metadata', array(
@@ -193,7 +144,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
       $message = $response->status_message;
     }
     watchdog(
-      'islandora_doi_datacite_mods',
+      'islandora_doi_datacite',
       'Error registering metadata for object !pid, so cannot mint DOI: !code, !message',
       array(
         '!pid' => $pid,
@@ -207,7 +158,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
   }
 
   // Then POST the resource's URL to mint the DOI.
-  $api_url = variable_get('islandora_doi_datacite_mods_api_url', 'https://mds.datacite.org/') . 'doi';
+  $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'doi';
   global $base_url;
   $url = $base_url . '/islandora/object/' . $pid;
   $data = array('doi' => $doi, 'url' => $url);
@@ -232,7 +183,7 @@ function islandora_doi_datacite_mods_post_new($pid) {
       $message = $response->status_message;
     }
     watchdog(
-      'islandora_doi_datacite_mods',
+      'islandora_doi_datacite',
       'Error minting DOI !doi for object !pid: !code, !message',
       array(
         '!doi' => $doi,
@@ -255,8 +206,8 @@ function islandora_doi_datacite_mods_post_new($pid) {
  * @return string
  *   The first member of the normalized array of dc.type values.
  */
-function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
-  $replacements = variable_get('islandora_doi_datacite_mods_resourcetype_replacements', "StillImage|Image\nThesis|Text");
+function islandora_doi_datacite_normalize_resourcetype($resourcetypes) {
+  $replacements = variable_get('islandora_doi_datacite_resourcetype_replacements', "StillImage|Image\nThesis|Text");
   $replacements_array = preg_split('/\r\n|\n|\r/', $replacements, -1, PREG_SPLIT_NO_EMPTY);
   foreach ($resourcetypes as &$resourcetype) {
     foreach ($replacements_array as $replacement) {
@@ -273,6 +224,6 @@ function islandora_doi_datacite_mods_normalize_resourcetype($resourcetypes) {
  * @return string
  *   A UUID.
  */
-function islandora_doi_datacite_mods_get_uuid() {
+function islandora_doi_datacite_get_uuid() {
   return shell_exec('uuidgen');
 }

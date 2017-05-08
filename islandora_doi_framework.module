@@ -38,6 +38,21 @@ function islandora_doi_framework_permission() {
  */
 function islandora_doi_framework_assign_doi() {
   $pid = arg(2);
+  $dois = module_invoke_all('islandora_doi_framework_check_for_doi', $pid);
+  $dois = array_unique($dois);
+  if (count($dois)) {
+    $dois = array_unique($dois);
+    // Put any non-boolean values at beginning of array.
+    rsort($dois);
+  }
+  if (strlen($dois[0])) {
+    $form['islandora_doi_framework_doi_exists_message'] = array(
+      '#markup' => t("This object already has a DOI: !doi",
+      array('!doi' => $dois[0])),
+    );
+    return $form;
+  }
+
   $object = islandora_object_load($pid);
   $form['islandora_doi_object_message'] = array(
     '#prefix' => '<div>',

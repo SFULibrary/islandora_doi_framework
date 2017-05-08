@@ -1,8 +1,8 @@
-# Islandora DOI Framework DataCite/MODS
+# Islandora DOI Framework DataCite
 
 ## Overview
 
-Submodule of the Islandora DOI framework module that manages DOIs provided by [DataCite](https://www.datacite.org/) and persists them to objects' MODS datastream.
+Submodule of the Islandora DOI framework module that manages DOIs provided by [DataCite](https://www.datacite.org/).
 
 This module creates a record complying with the [DataCite Metadata Schema](https://schema.datacite.org/) from an object's DC datastream, and using the "Assign DOI" functionality provided by the Islandora DOI Framework module, posts it to the DataCite Metadata Store along with the object's URL. These two tasks together mint a DOI for the object. The object's PID is used as its DOI's "suffix", resulting in DOIs that look like 10.5072/islandora:1234 ('10.5072' is the test DOI prefix; the one assigned to your institution will be used instead). Optionally, the module can generate a UUID to use as the DOI suffix.
 
@@ -12,6 +12,7 @@ Note that the DataCite Metadata Schema enforces some constraints. Specifically, 
 
 * [Islandora](https://github.com/Islandora/islandora)
 * [Islandora DOI Framework](../..)
+* A submodule of the Islandora DOI Framework that persists DOIs.
 
 ## Installation
 
@@ -19,7 +20,7 @@ Same as for any other Drupal module.
 
 ## Configuration
 
-Go to `admin/islandora/tools/islandora_doi_datacite_mods` to enter your DataCite institutional symbol and password, and your institution's DOI prefix (which will be assigned to you by DataCite).
+Go to `admin/islandora/tools/islandora_doi_datacite` to enter your DataCite institutional symbol and password, and your institution's DOI prefix (which will be assigned to you by DataCite).
 
 DataCite's metadata schema requires that the values used in its 'resourceType' elememts are from the list 'Audiovisual', 'Collection', 'Dataset', 'Event', 'Image', 'InteractiveResource', 'Model', 'PhysicalObject', 'Service', 'Software', 'Sound', 'Text', 'Workflow', and 'Other'. You can map DC.type values used in your repository to the required DataCite values using a list of source|replacement pairs here that maps values in your DC datastream's 'type' element to one of these values. Place each source and replacement value pair, separated by a |, on its own line. Two pairs are provided as examples:
 

@@ -17,7 +17,8 @@ This module differs from the [Islandora DOI](https://github.com/Islandora/island
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
-* A submodule, such as the included [DataCite/MODS](modules/islandora_doi_datacite_mods) module, that implements the hooks provided by this module.
+* A submodule to mint the DOIs, such as the included [DataCite](modules/islandora_doi_datacite) module
+* A submodule to persist the DOI locally, such as the included [MODS](modules/islandora_doi_mods) module
 
 ## Installation
 
@@ -29,7 +30,7 @@ This module does not have any configuration settings of its own. All settings ar
 
 ## Submodules
 
-As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. Submodules handle the combination of tasks required to mint a DOI from a specific source and then to persist it in a specific place associated with the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included [DataCite/MODS](modules/islandora_doi_datacite_mods) submodule. Note that all three hooks do not need to be implemented in the same module.
+As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. Submodules handle the combination of tasks required to mint a DOI from a specific source and then to persist it in a specific place associated with the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included [DataCite](modules/islandora_doi_datacite) and [MODS](modules/islandora_doi_mods) submodules. Note that all hooks do not need to be implemented in the same module; in fact, separating the DOI minting code from the DOI persiting code in separate modules is preferred so more combinations can be deployed.
 
 To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
 

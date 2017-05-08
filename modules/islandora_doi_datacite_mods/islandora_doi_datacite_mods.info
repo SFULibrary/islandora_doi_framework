@@ -1,7 +1,0 @@
-Name = Islandora DOI DataCite/MODS
-description = "Submodule of the Islandora DOI Framework that mints DOIs from DataCite and persists them to MODS."
-package = Islandora Tools
-configure = admin/islandora/tools/islandora_doi_datacite_mods
-dependencies[] = islandora_doi_framework
-version = 7.x-dev
-core = 7.x
