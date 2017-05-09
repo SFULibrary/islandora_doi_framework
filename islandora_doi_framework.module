@@ -49,7 +49,7 @@ function islandora_doi_framework_assign_doi() {
     $form['islandora_doi_framework_doi_exists_message'] = array(
       '#markup' => t("This object already has a DOI: !doi",
         array('!doi' => $dois[0])),
-      '#prefix' => '<div class="warning">',
+      '#prefix' => '<div class="messages warning">',
       '#suffix' => '</div>',
     );
     return $form;
