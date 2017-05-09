@@ -5,7 +5,7 @@
 Utility module that provides a framework for other modules to assign DOIs ([Digital Object Identifiers](https://en.wikipedia.org/wiki/Digital_object_identifier)) to objects. This module provides the following:
 
 * a "DOI" subtab under each object's "Mangage" tab
-* three Drupal hooks
+* four Drupal hooks
   * one for minting a DOI using an external API
   * one for persisting a DOI, for example in a datastream or database table
   * one for updating a DOI
@@ -34,6 +34,8 @@ This module does not have any configuration settings of its own. All settings ar
 As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. Submodules handle the combination of tasks required to mint a DOI from a specific source and then to persist it in a specific place associated with the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included [DataCite](modules/islandora_doi_datacite) and [MODS](modules/islandora_doi_mods) submodules. Note that all hooks do not need to be implemented in the same module; in fact, separating the DOI minting code from the DOI persiting code in separate modules is preferred so more combinations can be deployed.
 
 To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
+
+Note that you should only enable a single minting submodule and a single persisting submodule.
 
 ## Assigning DOIs to lists of objects
 
