@@ -54,20 +54,6 @@ function hook_islandora_doi_framework_persist($doi, $pid) {
 }
 
 /**
- * Checks locally for whether an object has a DOI, e.g. in a MODS datastream.
- *
- * @param string $pid
- *   The object's PID.
- *
- * @return string|bool
- *   The value of the DOI if present, FALSE otherwise.
- */
-function hook_islandora_doi_framework_check_for_doi($pid) {
-  // Check the object's MODS datastream, etc. for a presence of a DOI.
-  return FALSE;
-}
-
-/**
  * Updates a DOI.
  *
  * Performs updates to the DOI in the registrar (i.e., where it was minted),
@@ -83,10 +69,24 @@ function hook_islandora_doi_framework_check_for_doi($pid) {
  *   One of 'url', 'metadata', or 'both'
  *
  * @return bool
- *   True if the DOI was updated, false if not.
+ *   TRUE if the DOI was updated, FALSE if not.
  */
 function hook_islandora_doi_framework_update($doi, $pid, $action = 'both') {
   // Update the object's URL locally, and/or metadata at the
   // registrar, if necessary, then return a boolean value.
   return TRUE;
+}
+
+/**
+ * Checks locally for whether an object has a DOI, e.g. in a MODS datastream.
+ *
+ * @param string $pid
+ *   The object's PID.
+ *
+ * @return string|bool
+ *   The value of the DOI if present, FALSE otherwise.
+ */
+function hook_islandora_doi_framework_check_for_doi($pid) {
+  // Check the object's MODS datastream, etc. for a presence of a DOI.
+  return FALSE;
 }

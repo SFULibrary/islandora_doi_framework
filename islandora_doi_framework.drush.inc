@@ -67,6 +67,8 @@ function drush_islandora_doi_framework_assign_dois() {
 
 /**
  * Updates DOIs.
+ *
+ * Note: this functionality is not yet complete.
  */
 function drush_islandora_doi_framework_update_dois() {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');

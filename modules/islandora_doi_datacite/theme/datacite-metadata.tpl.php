@@ -39,7 +39,7 @@
   <?php if (isset($descriptions) && count($descriptions)): ?>
   <descriptions>
     <?php foreach($descriptions as $description): ?>
-    <description descriptionType="Abstract"><?php print $description; ?></description>
+    <description descriptionType="Other"><?php print $description; ?></description>
     <?php endforeach; ?>
   </descriptions>
   <?php endif; ?>
