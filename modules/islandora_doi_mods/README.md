@@ -1,14 +1,14 @@
-# Islandora DOI Framework MODS
+# Islandora DOI MODS
 
 ## Overview
 
-Submodule of the Islandora DOI framework module that persists DOIs in an object's MODS datastream, in an `<identifier type="doi">` element. This module also provides a function that will check for the existence of a DOI in a MODS datastream.
+Submodule of the Islandora DOI framework module that persists DOIs in an `<identifier type="doi">` element within the object's MODS datastream. This module also provides a function that checks for the existence of a DOI in a MODS datastream.
 
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
 * [Islandora DOI Framework](../..)
-* A submodule of Islandora DOI Framework that mints DOIs.
+* A submodule of Islandora DOI Framework that mints DOIs, such as [Islandora DOI DataCite](../islandora_doi_datacite).
 
 ## Installation
 

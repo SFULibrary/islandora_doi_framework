@@ -1,18 +1,24 @@
-# Islandora DOI Framework DataCite
+# Islandora DOI DataCite
 
 ## Overview
 
 Submodule of the Islandora DOI framework module that manages DOIs provided by [DataCite](https://www.datacite.org/).
 
-This module creates a record complying with the [DataCite Metadata Schema](https://schema.datacite.org/) from an object's DC datastream, and using the "Assign DOI" functionality provided by the Islandora DOI Framework module, posts it to the DataCite Metadata Store along with the object's URL. These two tasks together mint a DOI for the object. The object's PID is used as its DOI's "suffix", resulting in DOIs that look like 10.5072/islandora:1234 ('10.5072' is the test DOI prefix; the one assigned to your institution will be used instead). Optionally, the module can generate a UUID to use as the DOI suffix.
+This module creates a record complying with the [DataCite Metadata Schema](https://schema.datacite.org/) from an object's DC datastream, and using the "Assign DOI" functionality provided by the Islandora DOI Framework module, posts it to the [DataCite Metadata Store](https://search.datacite.org/) along with the object's URL. These two tasks together mint a DOI for the object. The object's PID is used as its DOI's "suffix", resulting in DOIs that look like 10.5072/islandora:1234 ('10.5072' is the test DOI prefix; the one assigned to your institution will be used instead). Optionally, the module can generate a UUID to use as the DOI suffix.
 
-Note that the DataCite Metadata Schema enforces some constraints. Specifically, the schema requires what are the equivalents of DC's 'creator', 'title', 'publisher', 'date', and 'type'. Also, the 'date' must be a year (yyyy). If a user of this module tries to assign a DOI for an object that doesn't meet these metadata, they are told that the object is missing a required metadata value.
+DataCite's Metadata Schema enforces some constraints. Specifically:
+
+* the schema requires elements that correspond to DC's 'creator', 'title', 'publisher', 'date', and 'type'
+* the date must be a year (yyyy)
+* the type must be from a controlled list (details below).
+
+If a user tries to assign a DOI for an object that doesn't meet these metadata, they are told that the object is missing one or more required DC metadata values.
 
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
 * [Islandora DOI Framework](../..)
-* A submodule of the Islandora DOI Framework that persists DOIs.
+* A submodule of the Islandora DOI Framework that persists DOIs, such as [Islandora DOI MODS](../islandora_doi_mods).
 
 ## Installation
 

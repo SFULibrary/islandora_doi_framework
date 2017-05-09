@@ -9,6 +9,7 @@ Utility module that provides a framework for other modules to assign DOIs ([Digi
   * one for minting a DOI using an external API
   * one for persisting a DOI, for example in a datastream or database table
   * one for updating a DOI
+  * one for checking for the presence of a DOI in a datastream or other location
 * a "Assign DOIs to Islandora objects" permission
 * a Drush script for adding a DOI to a list of objects
 
@@ -48,7 +49,7 @@ islandora:2183
 
 The command (using a file at `/tmp/pids.txt` containing the above list) is:
 
-`drush islandora_doi_framework_assign_dois --user=admin --pid_file=/tmp/pids.txt`
+`drush islandora_doi_framework_assign_dois --user=admin --objects=/tmp/pids.txt`
 
 ## Maintainer
 
@@ -58,10 +59,12 @@ The command (using a file at `/tmp/pids.txt` containing the above list) is:
 
 Pull requests against this module are welcome, as are submodules (suggestions below). Please open an issue in this module's Github repo before opening a pull request.
 
+Submodules that mint DOIs from other [registration agencies](http://www.doi.org/registration_agencies.html) are particularly welcome, as are submodules for persisting DOIs to non-MODS datastreams or other locations.
+
 ## To do
 
 * Complete the Drush script used to assign batches of DOIs.
-* Figure out best trigger and workflow for updating metadata. This should probably not happen every time the source datastream is modified, although that is one option. Maybe a second button under the "DOI" tab for updating metadata? Could also have an associated drush commnand.
+* Add the ability to update DataCite metadata and object URLs associated with DOIs. Figure out best trigger and workflow for updating metadata. This should probably not happen every time the source datastream is modified, although that is one option. Maybe a second button under the "DOI" tab for updating metadata? Could also have an associated drush commnand.
 
 ## License
 
