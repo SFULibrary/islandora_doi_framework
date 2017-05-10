@@ -117,14 +117,9 @@ function islandora_doi_datacite_post_new($pid) {
 
   $metadata_xml = theme('datacite_metadata', array(
     'doi' => $doi,
-    'creators' => $dc_values['creator'],
-    'titles' => isset($dc_values['creator']) ? $dc_values['title'] : array(),
-    'publishers' => isset($dc_values['publisher']) ? $dc_values['publisher'] : array(),
+    'dc' => $dc_values,
     'publication_year' => $year,
-    'subjects' => isset($dc_values['subject']) ? $dc_values['subject'] : array(),
-    'languages' => isset($dc_values['language']) ? $dc_values['language'] : array(),
     'resource_type' => $resource_type,
-    'descriptions' => isset($dc_values['description']) ? $dc_values['description'] : array(),
   ));
 
   $response = drupal_http_request($api_url, array(

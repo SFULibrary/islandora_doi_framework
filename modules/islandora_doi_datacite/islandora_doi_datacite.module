@@ -83,16 +83,13 @@ function islandora_doi_datacite_theme() {
     'datacite_metadata' => array(
       'variables' => array(
         'doi' => NULL,
-        'creators' => NULL,
-        'titles' => NULL,
-        'publishers' => NULL,
+        'dc' => NULL,
         'publication_year' => NULL,
-        'subjects' => NULL,
-        'language' => NULL,
         'resource_type' => NULL,
-        'descriptions' => NULL,
       ),
-      'template' => 'theme/datacite-metadata',
+      'path' => drupal_get_path('module', 'islandora_doi_datacite') . '/theme',
+      'template' => 'datacite-metadata',
+      'file' => 'theme.inc',
     ),
   );
 }
