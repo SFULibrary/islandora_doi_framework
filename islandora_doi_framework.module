@@ -45,7 +45,7 @@ function islandora_doi_framework_assign_doi() {
     // Put any non-boolean values at beginning of array.
     rsort($dois);
   }
-  if (strlen($dois[0])) {
+  if (count($dois) && strlen($dois[0])) {
     $form['islandora_doi_framework_doi_exists_message'] = array(
       '#markup' => t("This object already has a DOI: !doi",
         array('!doi' => $dois[0])),

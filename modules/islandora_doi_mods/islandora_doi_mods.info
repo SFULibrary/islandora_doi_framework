@@ -1,4 +1,4 @@
-Name = Islandora DOI MODS
+name = Islandora DOI MODS
 description = "Submodule of the Islandora DOI Framework that persists DOIs to MODS."
 package = Islandora Tools
 dependencies[] = islandora_doi_framework

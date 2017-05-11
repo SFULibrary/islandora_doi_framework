@@ -37,6 +37,11 @@ To achieve those tasks, submodules will need to provide and manage whatever conf
 
 Note that you should only enable a single minting submodule and a single persisting submodule.
 
+Two submodules are available that can be used during the development and testing of new minting and persisting modules:
+
+* A submodule to mint sample DOIs using a dummy DOI prefix, [Islandora DOI Framework Sample Mint](modules/islandora_doi_framework_sample_mint)
+* A submodule to persist DOIs to a text file, [Islandora DOI Framework Sample Persist](modules/islandora_doi_framework_sample_persist)
+
 ## Assigning DOIs to lists of objects
 
 This module provides a Drush command to assign DOIs to a list of objects identified in an input file. The PID file is a simple list of object PIDS, one PID per line, like this:

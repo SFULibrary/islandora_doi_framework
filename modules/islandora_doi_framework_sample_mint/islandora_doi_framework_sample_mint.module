@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ *
+ * DOIs minted by this module are not real DOIs. Their purpose is solely
+ * to assist in the development and testing of modules that persist (save)
+ * real DOIs to an object. These DOIs should *not* be persisted to production
+ * objects.
+ *
+ * Real DOIs must be minted via a registration agency
+ * (http://www.doi.org/registration_agencies.html). The suffix (the part to
+ * the right of the /) is assigned by the organization that wishes to register
+ * DOI names (publisher, university, etc.). The preix (the part to the left
+ * of the /) is assigned to the publisher, university, etc. by the
+ * registration agency. We use the fake prefix 10.9999 in this module.
+ */
+
+/**
+ * Implements hook_islandora_doi_framework_mint().
+ */
+function islandora_doi_framework_sample_mint_islandora_doi_framework_mint($pid) {
+  $doi = '10.99999/' . $pid;
+  drupal_set_message(t("Sample/test DOI !doi assigned to object !pid.", array('!pid' => $pid, '!doi' => $doi)));
+  return $doi;
+}
