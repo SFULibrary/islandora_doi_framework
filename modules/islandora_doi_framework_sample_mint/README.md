@@ -1,4 +1,4 @@
-# Islandora DOI Framework Sample Mint module
+# Islandora DOI Framework Sample Mint
 
 ## Overview
 

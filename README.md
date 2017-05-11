@@ -13,7 +13,7 @@ Utility module that provides a framework for other modules to assign DOIs ([Digi
 * a "Assign DOIs to Islandora objects" permission
 * a Drush script for adding a DOI to a list of objects
 
-This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) module bundled with Islandora Scholar in that this module and its submodules only mint new DOIs and manage updating the data associated with a DOI. Scholar's DOI module allows for the creation of new objects from a list of DOIs.
+This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) module bundled with Islandora Scholar in that this module and its submodules only create new DOIs and manage updating the data associated with a DOI. Scholar's DOI module provides a way for the creation of new objects from a list of DOIs.
 
 ## Requirements
 
@@ -31,11 +31,9 @@ This module does not have any configuration settings of its own. All settings ar
 
 ## Submodules
 
-As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. One or more submodules together handle the combination of tasks required to mint a DOI from a specific source and then to persist it in a specific place associated with the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included [DataCite](modules/islandora_doi_datacite) and [MODS](modules/islandora_doi_mods) submodules. Note that all hooks do not need to be implemented in the same module; in fact, separating the DOI minting code from the DOI persiting code in separate modules is preferred so more combinations can be deployed.
+As described above, submodules are responsible for minting (generating) a DOI (typically, via an API provided by an external organization), for persisting it (typically in a datastream in each object), and for performing any updates to the metadata or URL associated with the DOI. One or more submodules together handle the combination of tasks required to mint a DOI from a specific source and then to persist it in a specific place associated with the Islandora object. The Islandora DOI Framework module defines hooks for accomplishing each of those tasks. These hooks are documented in the `islandora_doi_framework.api.php` file and are illustrated in the included [DataCite](modules/islandora_doi_datacite) and [MODS](modules/islandora_doi_mods) submodules (and sample/test submodules). Note that all hooks do not need to be implemented in the same module; in fact, separating the DOI minting functionality and the DOI persisting functionality in separate modules is preferred to allow implementers to mix and match.
 
-To achieve those tasks, submodules will need to provide and manage whatever configuration settings they need, such as API endpoint URLs, API keys, etc.
-
-Two submodules are available that can be used during the development and testing of new minting and persisting modules:
+Two additional submodules are available that are intended be used during the development and testing of minting and persisting modules:
 
 * A submodule to mint sample DOIs using a dummy DOI prefix, [Islandora DOI Framework Sample Mint](modules/islandora_doi_framework_sample_mint)
 * A submodule to persist DOIs to a text file, [Islandora DOI Framework Sample Persist](modules/islandora_doi_framework_sample_persist)
@@ -72,6 +70,8 @@ Submodules that mint DOIs from other [registration agencies](http://www.doi.org/
 
 * Complete the Drush script used to assign batches of DOIs.
 * Add the ability to update DataCite metadata and object URLs associated with DOIs. Figure out best trigger and workflow for updating metadata. This should probably not happen every time the source datastream is modified, although that is one option. Maybe a second button under the "DOI" tab for updating metadata? Could also have an associated drush commnand.
+* Submodules that mint DOIs from registration agencies other than DataCite.
+* Submodules that persist DOIs to locations other than MODS.
 
 ## License
 

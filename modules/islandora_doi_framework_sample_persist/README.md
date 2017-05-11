@@ -1,4 +1,4 @@
-# Islandora DOI Framework Sample Persist module
+# Islandora DOI Framework Sample Persist
 
 ## Overview
 

@@ -3,6 +3,11 @@
  * @file
  * This file documents all available hook functions provided by the
  * Islandora DOI Framework module.
+ *
+ * Note that the Islandora DOI Framework module does not manage any
+ * admin settings. Submodules will need to provide and manage whatever
+ * configuration settings they need for minting and persisting DOIs,
+ * such as API endpoint URLs, API keys, etc.
  */
 
 /**
