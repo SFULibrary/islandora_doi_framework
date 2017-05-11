@@ -14,7 +14,7 @@
  * the right of the /) is assigned by the organization that wishes to register
  * DOI names (publisher, university, etc.). The preix (the part to the left
  * of the /) is assigned to the publisher, university, etc. by the
- * registration agency. We use the fake prefix 10.9999 in this module.
+ * registration agency. We use the fake prefix 10.99999 in this module.
  */
 
 /**

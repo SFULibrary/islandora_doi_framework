@@ -2,7 +2,7 @@
 
 ## Overview
 
-Submodule of the Islandora DOI Framework that mints sample/test DOIs. The purpose of this module is to provide a source of DOIs while developing or testing a "persisting" module. It should only be enabled during development and testing.
+Submodule of the Islandora DOI Framework that mints sample/test DOIs using the fake prefix "10.99999/". The purpose of this module is to provide a source of DOIs while developing or testing a "persisting" module. It should only be enabled during development and testing.
 
 ## Requirements
 
