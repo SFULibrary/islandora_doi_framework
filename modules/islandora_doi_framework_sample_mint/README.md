@@ -8,7 +8,7 @@ Submodule of the Islandora DOI Framework that mints sample/test DOIs using the f
 
 * [Islandora](https://github.com/Islandora/islandora)
 * [Islandora DOI Framework](../..)
-*  A submodule of the Islandora DOI Framework that persists DOIs, such as [Islandora DOI MODS](../islandora_doi_mods).
+* A submodule of the Islandora DOI Framework that persists DOIs, such as [Islandora DOI MODS](../islandora_doi_mods) or [Islandora DOI Framework Sample Persist](modules/islandora_doi_framework_sample_persist).
 
 ## Installation
 
