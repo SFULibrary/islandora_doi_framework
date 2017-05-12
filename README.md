@@ -19,7 +19,7 @@ This module differs from the [Islandora DOI](https://github.com/Islandora/island
 
 * [Islandora](https://github.com/Islandora/islandora)
 * A submodule to mint the DOIs, such as the included [DataCite](modules/islandora_doi_datacite) module
-* A submodule to persist the DOI locally, such as the included [MODS](modules/islandora_doi_mods) module
+* A submodule to persist the DOI locally, such as the included [MODS](modules/islandora_doi_mods) module or Alex Garnett's [DDI DOI](https://github.com/axfelix/islandora_doi_ddi) module
 
 ## Installation
 
@@ -55,6 +55,8 @@ islandora:2183
 The command (using a file at `/tmp/pids.txt` containing the above list) is:
 
 `drush islandora_doi_framework_assign_dois --user=admin --objects=/tmp/pids.txt`
+
+Note that this feature is not yet complete, but will be soon.
 
 ## Maintainer
 
