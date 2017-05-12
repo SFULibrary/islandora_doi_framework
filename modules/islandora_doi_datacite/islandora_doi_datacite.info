@@ -1,6 +1,6 @@
 name = Islandora DOI DataCite
 description = "Submodule of the Islandora DOI Framework that mints DOIs from DataCite."
-package = Islandora Tools
+package = Islandora DOI Framework
 configure = admin/islandora/tools/islandora_doi_datacite
 dependencies[] = islandora_doi_framework
 version = 7.x-dev

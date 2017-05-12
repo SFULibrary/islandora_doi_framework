@@ -1,6 +1,6 @@
 name = Islandora DOI Framework Sample Persist module
 description = "Sample/test submodule of the Islandora DOI Framework that persists DOIs to a text file."
-package = Islandora Tools
+package = Islandora DOI Framework
 dependencies[] = islandora_doi_framework
 version = 7.x-dev
 core = 7.x

@@ -1,6 +1,6 @@
 name = Islandora DOI MODS
 description = "Submodule of the Islandora DOI Framework that persists DOIs to MODS."
-package = Islandora Tools
+package = Islandora DOI Framework
 dependencies[] = islandora_doi_framework
 version = 7.x-dev
 core = 7.x
