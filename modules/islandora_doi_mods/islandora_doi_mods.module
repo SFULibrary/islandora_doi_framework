@@ -56,7 +56,6 @@ function islandora_doi_mods_islandora_doi_framework_persist($doi, $pid) {
     // Add the DOI to the MODS in an <identifier type="doi"> element.
     $dom = new DOMDocument();
     $dom->loadXML($object['MODS']->content);
-    $xpath = new DOMXPath($dom);
 
     if (!islandora_doi_mods_islandora_doi_framework_check_for_doi($pid)) {
       $doi_element_string = '<identifier type="doi">' . $doi . '</identifier>';
