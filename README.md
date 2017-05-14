@@ -5,15 +5,15 @@
 Utility module that provides a framework for other modules to assign DOIs ([Digital Object Identifiers](https://en.wikipedia.org/wiki/Digital_object_identifier)) to objects. This module provides the following:
 
 * a "DOI" subtab under each object's "Mangage" tab
+* a "Assign DOIs to Islandora objects" permission
 * four Drupal hooks
   * one for minting a DOI using an external API
   * one for persisting a DOI, for example in a datastream or database table
   * one for updating a DOI
   * one for checking for the presence of a DOI in a datastream or other location
-* a "Assign DOIs to Islandora objects" permission
 * a Drush script for adding a DOI to a list of objects
 
-This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) module bundled with Islandora Scholar in that this module and its submodules only create new DOIs and manage updating the data associated with a DOI. Scholar's DOI module provides a way for the creation of new objects from a list of DOIs.
+This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) module bundled with Islandora Scholar in that this module and its submodules create new DOIs and manage updating the data associated with a DOI. Scholar's DOI creates new objects from a list of DOIs.
 
 ## Requirements
 
@@ -42,7 +42,7 @@ Note that you should only enable a single minting submodule and a single persist
 
 ## Assigning DOIs to lists of objects
 
-This module provides a Drush command to assign DOIs to a list of objects identified in an input file. The PID file is a simple list of object PIDS, one PID per line, like this:
+This module provides a Drush command to assign DOIs to a list of objects identified in an input file. The object file is a simple list of object PIDS, one PID per line, like this:
 
 ```
 islandora:23
