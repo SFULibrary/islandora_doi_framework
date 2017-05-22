@@ -17,7 +17,7 @@ function islandora_doi_framework_drush_command() {
       'drush islandora_doi_frameork_assign_dois --user=admin --pid_file=/tmp/pids.txt',
     ),
     'options' => array(
-      'objects' => array(
+      'pid_file' => array(
         'description' => 'Absolute path to a file containing PIDs of objects to assign DOIs to, one per line.',
       ),
     ),
@@ -30,10 +30,10 @@ function islandora_doi_framework_drush_command() {
       'drush islandora_doi_frameork_update_dois --user=admin --pid_file=/tmp/dois.txt',
     ),
     'options' => array(
-      'objects' => array(
+      'pid_file' => array(
         'description' => 'Absolute path to a file containing PIDs of objects whose DOIs are ' .
-        'to be updated, or contianing DOIs to update, plus the corresponding PIDs and an action, ' .
-        'which is one of "url", "metadata", or "both (the default)". One tab-separated entry per line.',
+        'to be updated, plus the corresponding DOIs and an action, which is one of "url", ' .
+        '"metadata", or "both" (the default). One tab-separated entry per line.',
       ),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,

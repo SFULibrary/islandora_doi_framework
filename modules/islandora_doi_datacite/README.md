@@ -6,6 +6,8 @@ Submodule of the Islandora DOI framework module that manages DOIs provided by [D
 
 This module creates a record complying with the [DataCite Metadata Schema](https://schema.datacite.org/) from an object's DC datastream, and using the "Assign DOI" functionality provided by the Islandora DOI Framework module, posts it to the [DataCite Metadata Store](https://search.datacite.org/) along with the object's URL. These two tasks together mint a DOI for the object. The object's PID is used as its DOI's "suffix", resulting in DOIs that look like 10.5072/islandora:1234 ('10.5072' is the test DOI prefix; the one assigned to your institution will be used instead). Optionally, the module can generate a UUID to use as the DOI suffix.
 
+This module also provides the ability to update the meatadata and URL associated with a DOI. If an object has a DOI, the user is presented with an "Update DOI" button instead of an "Assign DOI" button. Currently, updating DOIs needs to be done manually. Use cases for when automatic updates should be applied are welcome.
+
 DataCite's Metadata Schema enforces some constraints. Specifically:
 
 * the schema requires elements that correspond to DC's 'creator', 'title', 'publisher', 'date', and 'type'

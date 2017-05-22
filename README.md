@@ -42,7 +42,7 @@ Note that you should only enable a single minting submodule and a single persist
 
 ## Assigning DOIs to lists of objects
 
-This module provides a Drush command to assign DOIs to a list of objects identified in an input file. The PID file is a simple list of object PIDS, one PID per line, like this:
+This module provides a Drush command to assign DOIs to a list of objects identified in a PID file. The PID file is a simple list of object PIDS, one PID per line, like this:
 
 ```
 islandora:23
@@ -54,7 +54,7 @@ islandora:2183
 
 The command (using a file at `/tmp/pids.txt` containing the above list) is:
 
-`drush islandora_doi_framework_assign_dois --user=admin --objects=/tmp/pids.txt`
+`drush islandora_doi_framework_assign_dois --user=admin --pid_file=/tmp/pids.txt`
 
 Note that this feature is not yet complete, but will be soon.
 
