@@ -5,7 +5,7 @@
 Utility module that provides a framework for other modules to assign DOIs ([Digital Object Identifiers](https://en.wikipedia.org/wiki/Digital_object_identifier)) to objects. This module provides the following:
 
 * a "DOI" subtab under each object's "Mangage" tab
-* a "Assign DOIs to Islandora objects" permission
+* a "Manage DOIs for Islandora objects" permission
 * four Drupal hooks
   * one for minting a DOI using an external API
   * one for persisting a DOI, for example in a datastream or database table
@@ -27,7 +27,7 @@ Same as for any other Drupal module.
 
 ## Configuration
 
-This module does not have any configuration settings of its own. All settings are managed by submodules. It does provide a single permission, "Assign DOIs to Islandora objects", which enables users to access the "DOI" subtab under each object's "Manage" tab.
+This module does not have any configuration settings of its own. All settings are managed by submodules. It does provide a single permission, "Manage DOIs for Islandora objects", which enables users to access the "DOI" subtab under each object's "Manage" tab.
 
 ## Submodules
 

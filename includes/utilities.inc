@@ -39,8 +39,6 @@ function islandora_doi_framework_persist_doi($doi, $pid) {
 /**
  * Defines hook_islandora_doi_framework_update().
  *
- * @param string $doi
- *   The fetched DOI.
  * @param string $pid
  *   The object's PID.
  * @param string $action
@@ -49,9 +47,14 @@ function islandora_doi_framework_persist_doi($doi, $pid) {
  * @return boolan
  *   True if the DOI was updated, false if not.
  */
-function islandora_doi_framework_update_doi($doi, $pid, $action = 'both') {
-  $dois_updated = module_invoke_all('islandora_doi_framework_update', $doi, $pid, $action);
-  // @todo: the rest of this function....
+function islandora_doi_framework_update_doi($pid, $action = 'both') {
+  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $action);
+  if (count($updates)) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
 }
 
 /**
