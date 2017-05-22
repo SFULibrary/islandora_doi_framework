@@ -42,7 +42,7 @@ Note that you should only enable a single minting submodule and a single persist
 
 ## Assigning DOIs to lists of objects
 
-This module provides a Drush command to assign DOIs to a list of objects identified in an input file. The object file is a simple list of object PIDS, one PID per line, like this:
+This module provides a Drush command to assign DOIs to a list of objects identified in an input file. The PID file is a simple list of object PIDS, one PID per line, like this:
 
 ```
 islandora:23
@@ -70,8 +70,8 @@ Submodules that mint DOIs from other [registration agencies](http://www.doi.org/
 
 ## To do
 
-* Complete the Drush script used to assign batches of DOIs.
-* Add the ability to update DataCite metadata and object URLs associated with DOIs. Figure out best trigger and workflow for updating metadata. This should probably not happen every time the source datastream is modified, although that is one option. Maybe a second button under the "DOI" tab for updating metadata? Could also have an associated drush commnand.
+* Complete the Drush script used to assign and update batches of DOIs. For updates, the PID file will need to include PIDs and DOIs.
+* Figure out best trigger and workflow for automatically updating metadata associated with a DOI. This should probably not happen every time the source datastream is modified, although that is one option.
 * Submodules that mint DOIs from registration agencies other than DataCite.
 * Submodules that persist DOIs to locations other than MODS.
 

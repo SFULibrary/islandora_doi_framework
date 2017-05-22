@@ -63,6 +63,10 @@ function islandora_doi_framework_manage_doi() {
       '#value' => 'Update DOI',
       '#submit' => array('islandora_doi_framework_update_doi_submit'),
     );
+    $form['islandora_doi_doi'] = array(
+      '#type' => 'value',
+      '#value' => $dois[0],
+    );
     return $form;
   }
   else {
@@ -99,7 +103,8 @@ function islandora_doi_framework_assign_doi_submit($form, &$form_state) {
 function islandora_doi_framework_update_doi_submit($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
-  if (islandora_doi_framework_update_doi($pid)) {
+  $doi = $form_state['values']['islandora_doi_doi'];
+  if (islandora_doi_framework_update_doi($pid, $doi)) {
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }
 }

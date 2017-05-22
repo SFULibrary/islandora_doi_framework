@@ -110,9 +110,9 @@ function islandora_doi_datacite_islandora_doi_framework_mint($pid) {
 /**
  * Implements hook_islandora_doi_framework_update().
  */
-function islandora_doi_datacite_islandora_doi_framework_update($pid, $action = 'both') {
+function islandora_doi_datacite_islandora_doi_framework_update($pid, $doi, $action = 'both') {
   module_load_include('inc', 'islandora_doi_datacite', 'includes/utilities');
-  if (islandora_doi_datacite_update_doi($pid, $action)) {
+  if (islandora_doi_datacite_update_doi($pid, $doi, $action)) {
     return TRUE;
   }
   else {

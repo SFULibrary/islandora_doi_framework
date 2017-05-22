@@ -119,20 +119,22 @@ function islandora_doi_datacite_post_new($pid) {
  *
  * @param string $pid
  *   The object's PID.
+ * @param string $doi
+ *   The object's DOI.
  * @param string $action
  *   One of 'url', 'metadata', or 'both'
  *
  * @return bool
  *   TRUE if the DOI was updated, FALSE if not.
  */
-function islandora_doi_datacite_update_doi($pid, $action) {
+function islandora_doi_datacite_update_doi($pid, $doi, $action) {
   $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_password', '');
 
   if ($action == 'both' || $action == 'metadata') {
     $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-    $metadata_xml = islandora_doi_datacite_generate_metadata($pid);
+    $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
 
     // DataCite's API uses POST to update the metadata.
     $response = drupal_http_request($api_url, array(
@@ -216,11 +218,13 @@ function islandora_doi_datacite_update_doi($pid, $action) {
  *
  * @param string $pid
  *   The PID of the object to generate the metadata for.
+ * @param string $doi
+ *   The DOI of the object to generate the metadata for.
  *
  * @return string
  *   The DataCite metadata XML.
  */
-function islandora_doi_datacite_generate_metadata($pid) {
+function islandora_doi_datacite_generate_metadata($pid, $doi = NULL) {
   $object = islandora_object_load($pid);
   $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
 

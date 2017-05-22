@@ -41,14 +41,16 @@ function islandora_doi_framework_persist_doi($doi, $pid) {
  *
  * @param string $pid
  *   The object's PID.
+ * @param string $doi
+ *   The object's DOI.
  * @param string $action
  *   One of 'url', 'metadata', or 'both'
  *
  * @return boolan
  *   True if the DOI was updated, false if not.
  */
-function islandora_doi_framework_update_doi($pid, $action = 'both') {
-  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $action);
+function islandora_doi_framework_update_doi($pid, $doi, $action = 'both') {
+  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi, $action);
   if (count($updates)) {
     return TRUE;
   }
@@ -58,13 +60,15 @@ function islandora_doi_framework_update_doi($pid, $action = 'both') {
 }
 
 /**
- * Returns a list of PIDs or DOIs from a file.
+ * Returns a list of PIDs from a file.
+ *
+ * @todo: Add DOIs and action for update functionality.
  *
  * @param string $path
  *   The absolute path to the file.
  *
  * @return array
- *   A list of PIDs or DOIs.
+ *   A list of PIDs.
  */
 function islandora_doi_framework_read_input_file($path) {
   if (!file_exists($path)) {
