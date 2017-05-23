@@ -16,8 +16,15 @@
  */
 function islandora_doi_framework_mint_doi($pid) {
   $dois = module_invoke_all('islandora_doi_framework_mint', $pid);
-  if (count($dois) && strlen($dois[0])) {
-    return array_pop($dois);
+  if (count($dois)) {
+    // We want the one minted in the last hook to fire.
+    $doi = array_pop($dois);
+  }
+  else {
+    return FALSE;
+  }
+  if (preg_match('#^10\..+/.+#', $doi)) {
+    return $doi;
   }
   else {
     return FALSE;
