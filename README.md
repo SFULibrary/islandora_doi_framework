@@ -56,8 +56,6 @@ The command (using a file at `/tmp/pids.txt` containing the above list) is:
 
 `drush islandora_doi_framework_assign_dois --user=admin --pid_file=/tmp/pids.txt`
 
-Note that this feature is not yet complete, but will be soon.
-
 ## Maintainer
 
 * [Mark Jordan](https://github.com/mjordan)
@@ -70,7 +68,7 @@ Submodules that mint DOIs from other [registration agencies](http://www.doi.org/
 
 ## To do
 
-* Complete the Drush script used to assign and update batches of DOIs. For updates, the PID file will need to include PIDs and DOIs.
+* Complete the Drush script used to update batches of DOIs.
 * Figure out best trigger and workflow for automatically updating metadata associated with a DOI. This should probably not happen every time the source datastream is modified, although that is one option.
 * Submodules that mint DOIs from registration agencies other than DataCite.
 * Submodules that persist DOIs to locations other than MODS.
