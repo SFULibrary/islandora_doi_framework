@@ -14,7 +14,7 @@ function islandora_doi_framework_menu() {
     'title' => 'DOI',
     'access arguments' => array('assign DOIs to Islandora objects'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('islandora_doi_framework_manage_doi'),
+    'page arguments' => array('islandora_doi_framework_assign_doi'),
     'type' => MENU_LOCAL_TASK,
     'weight' => 1,
   );
@@ -26,9 +26,9 @@ function islandora_doi_framework_menu() {
  */
 function islandora_doi_framework_permission() {
   return array(
-    'manage DOIs for Islandora objects' => array(
-      'title' => t('Manage DOIs for Islandora objects'),
-      'description' => t('Assign and update DOIs for Islandora objects using the Islandora DOI Framework'),
+    'assign DOIs to Islandora objects' => array(
+      'title' => t('Assign DOIs to Islandora objects'),
+      'description' => t('Assign DOIs to Islandora objects using the Islandora DOI Framework'),
     ),
   );
 }
@@ -36,13 +36,8 @@ function islandora_doi_framework_permission() {
 /**
  * Form definition for assigning a DOI.
  */
-function islandora_doi_framework_manage_doi() {
+function islandora_doi_framework_assign_doi() {
   $pid = arg(2);
-  $object = islandora_object_load($pid);
-  $form['islandora_doi_pid'] = array(
-    '#type' => 'value',
-    '#value' => $pid,
-  );
   $dois = module_invoke_all('islandora_doi_framework_check_for_doi', $pid);
   $dois = array_unique($dois);
   if (count($dois)) {
@@ -50,39 +45,45 @@ function islandora_doi_framework_manage_doi() {
     // Put any non-boolean values at beginning of array.
     rsort($dois);
   }
-
   if (count($dois) && strlen($dois[0])) {
     $form['islandora_doi_framework_doi_exists_message'] = array(
-      '#markup' => t("This object already has a DOI: !doi. Do you want to update the object's information associated with the DOI?",
+      '#markup' => t("This object already has a DOI: !doi",
         array('!doi' => $dois[0])),
       '#prefix' => '<div class="messages warning">',
       '#suffix' => '</div>',
     );
-    $form['islandora_doi_framework_update_doi'] = array(
-      '#type' => 'submit',
-      '#value' => 'Update DOI',
-      '#submit' => array('islandora_doi_framework_update_doi_submit'),
-    );
-    $form['islandora_doi_doi'] = array(
-      '#type' => 'value',
-      '#value' => $dois[0],
-    );
     return $form;
   }
-  else {
-    $form['islandora_doi_object_message'] = array(
-      '#prefix' => '<div class="messages warning">',
-      '#markup' => t("You are about to assign a DOI to object !pid (!label)",
-        array('!pid' => $pid, '!label' => $object->label)),
-      '#suffix' => '</div>',
+
+  $object = islandora_object_load($pid);
+  $options = array(
+    'Audiovisual','Collection','Dataset','Event','Image','InteractiveResource',
+    'Model','PhysicalObject','Service','Software','Sound','Text','Workflow',
+    'Other'
+  );
+  $form['islandora_doi_object_message'] = array(
+    '#prefix' => '<div>',
+    '#markup' => t("You are about to assign a DOI to object !pid (!label)",
+      array('!pid' => $pid, '!label' => $object->label)),
+    '#suffix' => '</div>',
+  );
+  $form['islandora_doi_pid'] = array(
+    '#type' => 'value',
+    '#value' => $pid,
+  );
+  if (variable_get('islandora_doi_datacite_manual_resourcetype', TRUE)) {
+    $form['islandora_doi_resourcetype'] = array(
+      '#type' => 'select',
+      '#title' => t("Select a resource type for DataCite's API"),
+      '#options' => $options, 
     );
-    $form['islandora_doi_framework_assign_doi'] = array(
-      '#type' => 'submit',
-      '#value' => 'Assign DOI',
-      '#submit' => array('islandora_doi_framework_assign_doi_submit'),
-    );
-    return $form;
   }
+  $form['islandora_doi_framework_assign_doi'] = array(
+    '#title' => t('Configuration ID'),
+    '#type' => 'submit',
+    '#value' => 'Assign DOI',
+  );
+  return $form;
 }
 
 /**
@@ -91,20 +92,9 @@ function islandora_doi_framework_manage_doi() {
 function islandora_doi_framework_assign_doi_submit($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
-  if ($doi = islandora_doi_framework_mint_doi($pid)) {
+  $resourcetype = $form_state['values']['islandora_doi_resourcetype'];
+  if ($doi = islandora_doi_framework_mint_doi($pid, $resourcetype)) {
     islandora_doi_framework_persist_doi($doi, $pid);
-    $form_state['redirect'] = 'islandora/object/' . $pid;
-  }
-}
-
-/**
- * Form submit handler.
- */
-function islandora_doi_framework_update_doi_submit($form, &$form_state) {
-  module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
-  $pid = $form_state['values']['islandora_doi_pid'];
-  $doi = $form_state['values']['islandora_doi_doi'];
-  if (islandora_doi_framework_update_doi($pid, $doi)) {
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }
 }

@@ -16,15 +16,8 @@
  */
 function islandora_doi_framework_mint_doi($pid) {
   $dois = module_invoke_all('islandora_doi_framework_mint', $pid);
-  if (count($dois)) {
-    // We want the one minted in the last hook to fire.
-    $doi = array_pop($dois);
-  }
-  else {
-    return FALSE;
-  }
-  if (preg_match('#^10\..+/.+#', $doi)) {
-    return $doi;
+  if (count($dois) && strlen($dois[0])) {
+    return array_pop($dois);
   }
   else {
     return FALSE;
@@ -46,36 +39,29 @@ function islandora_doi_framework_persist_doi($doi, $pid) {
 /**
  * Defines hook_islandora_doi_framework_update().
  *
+ * @param string $doi
+ *   The fetched DOI.
  * @param string $pid
  *   The object's PID.
- * @param string $doi
- *   The object's DOI.
  * @param string $action
  *   One of 'url', 'metadata', or 'both'
  *
  * @return boolan
  *   True if the DOI was updated, false if not.
  */
-function islandora_doi_framework_update_doi($pid, $doi, $action = 'both') {
-  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi, $action);
-  if (count($updates)) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
+function islandora_doi_framework_update_doi($doi, $pid, $action = 'both') {
+  $dois_updated = module_invoke_all('islandora_doi_framework_update', $doi, $pid, $action);
+  // @todo: the rest of this function....
 }
 
 /**
- * Returns a list of PIDs from a file.
- *
- * @todo: Add DOIs and action for update functionality.
+ * Returns a list of PIDs or DOIs from a file.
  *
  * @param string $path
  *   The absolute path to the file.
  *
  * @return array
- *   A list of PIDs.
+ *   A list of PIDs or DOIs.
  */
 function islandora_doi_framework_read_input_file($path) {
   if (!file_exists($path)) {
