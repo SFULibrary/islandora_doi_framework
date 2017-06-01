@@ -1,0 +1,6 @@
+name = Islandora DOI DDI
+description = "Submodule of the Islandora DOI Framework that persists DOIs to DDI."
+package = Islandora Tools
+dependencies[] = islandora_doi_framework
+version = 7.x-dev
+core = 7.x
