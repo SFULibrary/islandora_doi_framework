@@ -20,7 +20,7 @@
 /**
  * Implements hook_islandora_doi_framework_mint().
  */
-function islandora_doi_framework_sample_mint_islandora_doi_framework_mint($pid) {
+function islandora_doi_framework_sample_mint_islandora_doi_framework_mint($pid, $resourcetype) {
   $doi = '10.99999/' . $pid;
   drupal_set_message(t("Sample/test DOI !doi assigned to object !pid.", array('!pid' => $pid, '!doi' => $doi)));
   return $doi;
