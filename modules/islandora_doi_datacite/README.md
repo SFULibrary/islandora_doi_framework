@@ -19,7 +19,7 @@ If a user tries to assign a DOI for an object that doesn't meet these metadata, 
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
-* [Islandora DOI Framework](../..)
+* [Islandora DOI Framework](../../islandora_doi_framework)
 * A submodule of the Islandora DOI Framework that persists DOIs, such as [Islandora DOI MODS](../islandora_doi_mods).
 
 ## Installation

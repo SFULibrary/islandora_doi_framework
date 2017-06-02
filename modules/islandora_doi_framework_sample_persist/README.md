@@ -7,7 +7,7 @@ Submodule of the Islandora DOI Framework that persists sample/test DOIs to `/tmp
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
-* [Islandora DOI Framework](../..)
+* [Islandora DOI Framework](../../islandora_doi_framework)
 * A submodule of Islandora DOI Framework that mints DOIs, such as [Islandora DOI DataCite](../islandora_doi_datacite) or [Islandora DOI Framework Sample Mint](modules/islandora_doi_framework_sample_mint).
 
 ## Installation
