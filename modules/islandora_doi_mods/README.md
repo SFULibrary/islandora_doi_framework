@@ -7,7 +7,7 @@ Submodule of the Islandora DOI framework module that persists DOIs in an `<ident
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
-* [Islandora DOI Framework](../../islandora_doi_framework)
+* [Islandora DOI Framework](https://github.com/mjordan/islandora_doi_framework)
 * A submodule of Islandora DOI Framework that mints DOIs, such as [Islandora DOI DataCite](../islandora_doi_datacite).
 
 ## Installation

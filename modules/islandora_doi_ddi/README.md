@@ -9,7 +9,7 @@ This is a clone of Mark Jordan's Islandora DOI MODS module, with small changes t
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
-* [Islandora DOI Framewor](../../islandora_doi_framework)
+* [Islandora DOI Framework](https://github.com/mjordan/islandora_doi_framework)
 * A submodule of Islandora DOI Framework that mints DOIs, such as [Islandora DOI DataCite](../islandora_doi_datacite).
 
 ## Installation
