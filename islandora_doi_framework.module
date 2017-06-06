@@ -57,11 +57,13 @@ function islandora_doi_framework_manage_doi() {
         array('!doi' => $dois[0])),
       '#prefix' => '<div class="messages warning">',
       '#suffix' => '</div>',
+      '#weight' => -10,
     );
     $form['islandora_doi_framework_update_doi'] = array(
       '#type' => 'submit',
       '#value' => 'Update DOI',
       '#submit' => array('islandora_doi_framework_update_doi_submit'),
+      '#weight' => 10,
     );
     $form['islandora_doi_doi'] = array(
       '#type' => 'value',
@@ -75,11 +77,13 @@ function islandora_doi_framework_manage_doi() {
       '#markup' => t("You are about to assign a DOI to object !pid (!label)",
         array('!pid' => $pid, '!label' => $object->label)),
       '#suffix' => '</div>',
+      '#weight' => -10,
     );
     $form['islandora_doi_framework_assign_doi'] = array(
       '#type' => 'submit',
       '#value' => 'Assign DOI',
       '#submit' => array('islandora_doi_framework_assign_doi_submit'),
+      '#weight' => 10,
     );
     return $form;
   }
