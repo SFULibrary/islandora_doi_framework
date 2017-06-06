@@ -40,9 +40,13 @@ Two additional submodules are available that are intended be used during the dev
 
 Note that you should only enable a single minting submodule and a single persisting submodule. Therefore, if you enable one or both of these sample submodules, be sure to disable them before enabling your production minting and persisting submodules.
 
+## Customizing submodules
+
+If existing submodules don't meet your needs, it is possible to customize or extend them using standard Drupal API techniques. For example, the [Islandora DOI DataCite Resource Types](https://github.com/mjordan/islandora_doi_sfu) module injects a select list of DataCite 'resourceType' values into the "DOI" management form, allowing users to choose which DataCite resourceType value to assign as they are minting DOIs. That module uses standard `hook_form_alter()` and a theme preprocess override function to add this ability to the DOI DataCite module.
+
 ## Assigning DOIs to lists of objects
 
-This module provides a Drush command to assign DOIs to a list of objects identified in a PID file. The PID file is a simple list of object PIDS, one PID per line, like this:
+The Framework module provides a Drush command to assign DOIs to a list of objects identified in a PID file. The PID file is a simple list of object PIDS, one PID per line, like this:
 
 ```
 islandora:23
