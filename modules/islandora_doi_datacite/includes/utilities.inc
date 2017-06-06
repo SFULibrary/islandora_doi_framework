@@ -23,7 +23,7 @@
  * @return string|bool
  *   The DOI if the request was successful, FALSE if not.
  */
-function islandora_doi_datacite_post_new($pid) {
+function islandora_doi_datacite_post_new($pid, $resourcetype) {
   $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_password', '');
   $suffix_source = variable_get('islandora_doi_datacite_suffix_source', 'pid');
@@ -42,7 +42,7 @@ function islandora_doi_datacite_post_new($pid) {
   // <identifier identifierType="DOI"> element.
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-  $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
+  $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi, $resourcetype);
 
   $response = drupal_http_request($api_url, array(
     'headers' => array(
@@ -127,14 +127,14 @@ function islandora_doi_datacite_post_new($pid) {
  * @return bool
  *   TRUE if the DOI was updated, FALSE if not.
  */
-function islandora_doi_datacite_update_doi($pid, $doi, $action) {
+function islandora_doi_datacite_update_doi($pid, $doi, $action, $resourcetype) {
   $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_password', '');
 
   if ($action == 'both' || $action == 'metadata') {
     $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-    $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
+    $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi, $resourcetype);
 
     // DataCite's API uses POST to update the metadata.
     $response = drupal_http_request($api_url, array(
@@ -224,7 +224,7 @@ function islandora_doi_datacite_update_doi($pid, $doi, $action) {
  * @return string
  *   The DataCite metadata XML.
  */
-function islandora_doi_datacite_generate_metadata($pid, $doi = NULL) {
+function islandora_doi_datacite_generate_metadata($pid, $doi = NULL, $resourcetype) {
   $object = islandora_object_load($pid);
   $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
 
@@ -268,7 +268,8 @@ function islandora_doi_datacite_generate_metadata($pid, $doi = NULL) {
   // resourceType must be Audiovisual, Collection, Dataset, Event, Image,
   // InteractiveResource, Model, PhysicalObject, Service, Software, Sound,
   // Text, Workflow, or Other.
-  if (isset($dc_values['type'])) {
+  $resource_type = $resourcetype
+  if (isset($dc_values['type']) && variable_get('islandora_doi_datacite_manual_resourcetype', FALSE)) {
     $resource_type = islandora_doi_datacite_normalize_resourcetype($dc_values['type']);
   }
 

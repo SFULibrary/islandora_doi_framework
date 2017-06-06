@@ -51,6 +51,12 @@ function islandora_doi_framework_manage_doi() {
     rsort($dois);
   }
 
+  $resourcetype_values = array(
+    'Audiovisual','Collection','Dataset','Event','Image','InteractiveResource',
+    'Model','PhysicalObject','Service','Software','Sound','Text','Workflow',
+    'Other'
+  );
+
   if (count($dois) && strlen($dois[0])) {
     $form['islandora_doi_framework_doi_exists_message'] = array(
       '#markup' => t("This object already has a DOI: !doi. Do you want to update the object's information associated with the DOI?",
@@ -59,6 +65,13 @@ function islandora_doi_framework_manage_doi() {
       '#suffix' => '</div>',
       '#weight' => -10,
     );
+    if (variable_get('islandora_doi_datacite_manual_resourcetype', TRUE)) {
+      $form['islandora_doi_resourcetype'] = array(
+        '#type' => 'select',
+        '#title' => t("Select a resource type for DataCite's API"),
+        '#options' => $resourcetype_values, 
+      );
+    }
     $form['islandora_doi_framework_update_doi'] = array(
       '#type' => 'submit',
       '#value' => 'Update DOI',
@@ -79,6 +92,13 @@ function islandora_doi_framework_manage_doi() {
       '#suffix' => '</div>',
       '#weight' => -10,
     );
+    if (variable_get('islandora_doi_datacite_manual_resourcetype', TRUE)) {
+      $form['islandora_doi_resourcetype'] = array(
+        '#type' => 'select',
+        '#title' => t("Select a resource type for DataCite's API"),
+        '#options' => $resourcetype_values, 
+      );
+    }
     $form['islandora_doi_framework_assign_doi'] = array(
       '#type' => 'submit',
       '#value' => 'Assign DOI',
@@ -95,7 +115,8 @@ function islandora_doi_framework_manage_doi() {
 function islandora_doi_framework_assign_doi_submit($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
-  if ($doi = islandora_doi_framework_mint_doi($pid)) {
+  $resourcetype = $form_state['values']['islandora_doi_resourcetype'];
+  if ($doi = islandora_doi_framework_mint_doi($pid, $resourcetype)) {
     islandora_doi_framework_persist_doi($doi, $pid);
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }
