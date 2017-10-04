@@ -48,7 +48,7 @@ function islandora_doi_framework_sample_persist_islandora_doi_framework_check_fo
 /**
  * Implements hook_islandora_doi_framework_persist().
  */
-function islandora_doi_framework_sample_persist_islandora_doi_framework_persist($doi, $pid) {
+function islandora_doi_framework_sample_persist_islandora_doi_framework_persist($doi, $pid, $form, $form_state) {
   if ($existing_doi = islandora_doi_framework_sample_persist_islandora_doi_framework_check_for_doi($pid)) {
     drupal_set_message(t("Object !pid already has a sample/test DOI (!doi).", array('!pid' => $pid, '!doi' => $existing_doi)), 'error');
     return FALSE;

@@ -19,11 +19,15 @@
  *
  * @param string $pid
  *   The PID of the object.
+ * @param array $form
+ *   The islandora_doi_framework_manage_doi form.
+ * @param array $form_state
+ *   The form state of islandora_doi_framework_manage_doi form on submission.
  *
  * @return string|bool
  *   The DOI if the request was successful, FALSE if not.
  */
-function islandora_doi_datacite_post_new($pid) {
+function islandora_doi_datacite_post_new($pid, $form, $form_state) {
   $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_password', '');
   $suffix_source = variable_get('islandora_doi_datacite_suffix_source', 'pid');
@@ -43,6 +47,8 @@ function islandora_doi_datacite_post_new($pid) {
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
   $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
+  // @todo: test and document this drupal_alter().
+  drupal_alter($metadata_xml, $pid, $form_state);
 
   $response = drupal_http_request($api_url, array(
     'headers' => array(

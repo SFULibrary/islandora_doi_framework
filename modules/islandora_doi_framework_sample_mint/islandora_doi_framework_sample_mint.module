@@ -18,12 +18,19 @@
  */
 
 /**
- * Implements hook_islandora_doi_framework_mint().
+ * Implements hook_form_alter().
+ *
+ * This example shows how a module can inject its own form elements or
+ * otherwise alter the islandora_doi_framework_manage_doi form provided by
+ * the main framework module. In this example, all we use the form value for
+ * is to display it to the user on form submission.
  */
-function islandora_doi_framework_sample_mint_islandora_doi_framework_mint($pid) {
-  $doi = '10.99999/' . $pid;
-  drupal_set_message(t("Sample/test DOI !doi assigned to object !pid.", array('!pid' => $pid, '!doi' => $doi)));
-  return $doi;
+function islandora_doi_framework_sample_mint_form_islandora_doi_framework_manage_doi_alter(&$form, $form_state, $form_id) {
+  $form['islandora_doi_framework_sample_mint_doi_color'] = array(
+    '#type' => 'select',
+    '#title' => t("Select a color name to display in the 'Hello' test message."),
+    '#options' => array('blue' => 'blue', 'green' => 'green', 'yellow' => 'yellow'),
+  );
 }
 
 /**
@@ -42,6 +49,18 @@ function islandora_doi_framework_sample_mint_islandora_doi_framework_form_handle
   );
 }
 
+/**
+ * Form submit handler.
+ */
 function islandora_doi_framework_sample_mint_assign_doi_submit($form, &$form_state) {
-  drupal_set_message(t("Hello from the Islandora DOI Framework sample mint module."));
+  drupal_set_message(t("Hello from the Islandora DOI Framework sample mint module. You chose !color.", array('!color' => $form_state['values']['islandora_doi_framework_sample_mint_doi_color'])));
+}
+
+/**
+ * Implements hook_islandora_doi_framework_mint().
+ */
+function islandora_doi_framework_sample_mint_islandora_doi_framework_mint($pid, $form, $form_state) {
+  $doi = '10.99999/' . $pid;
+  drupal_set_message(t("Sample/test DOI !doi assigned to object !pid.", array('!pid' => $pid, '!doi' => $doi)));
+  return $doi;
 }

@@ -14,8 +14,8 @@
  * @return string|bool
  *   The DOI that was fetched, FALSE if DOI was not fetched.
  */
-function islandora_doi_framework_mint_doi($pid) {
-  $dois = module_invoke_all('islandora_doi_framework_mint', $pid);
+function islandora_doi_framework_mint_doi($pid, $form, $form_state) {
+  $dois = module_invoke_all('islandora_doi_framework_mint', $pid, $form, $form_state);
   if (count($dois)) {
     // We want the one minted in the last hook to fire.
     $doi = array_pop($dois);
@@ -39,8 +39,8 @@ function islandora_doi_framework_mint_doi($pid) {
  * @param string $pid
  *   The object's PID.
  */
-function islandora_doi_framework_persist_doi($doi, $pid) {
-  $persists = module_invoke_all('islandora_doi_framework_persist', $doi, $pid);
+function islandora_doi_framework_persist_doi($doi, $pid, $form, $form_state) {
+  $persists = module_invoke_all('islandora_doi_framework_persist', $doi, $pid, $form, $form_state);
   if (count($persists)) {
     // We want the one persited in the last hook to fire.
     return array_pop($persists);
@@ -62,9 +62,7 @@ function islandora_doi_framework_persist_doi($doi, $pid) {
  *   TRUE if the DOI (and/or metadata) was updated, FALSE if not.
  */
 function islandora_doi_framework_update($pid, $doi) {
-  dd('OK baby');
   $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi);
-  dd($updates, 'Updates');
   if (count($updates)) {
     // We want the one updated in the last hook to fire.
     return array_pop($updates);

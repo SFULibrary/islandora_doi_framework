@@ -115,9 +115,10 @@ function islandora_doi_framework_manage_doi() {
 function islandora_doi_framework_manage_doi_assign_submit_($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
-  // @question: Why do ther modules want to add their own submit handlers if we fire these functions?
-  if ($doi = islandora_doi_framework_mint_doi($pid)) {
-    islandora_doi_framework_persist_doi($doi, $pid);
+  // We pass the form and form state into hook implementations so they
+  // have access to the form values.
+  if ($doi = islandora_doi_framework_mint_doi($pid, $form, $form_state)) {
+    islandora_doi_framework_persist_doi($doi, $pid, $form, $form_state);
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }
 }
@@ -135,7 +136,6 @@ function islandora_doi_framework_manage_doi_update_submit_($form, &$form_state) 
   $doi = $form_state['values']['islandora_doi_doi'];
   $updated = islandora_doi_framework_update($pid, $doi);
   if ($updated) {
-    dd("It is true, dat");
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }
 }

@@ -97,9 +97,9 @@ function islandora_doi_datacite_theme() {
 /**
  * Implements hook_islandora_doi_framework_mint().
  */
-function islandora_doi_datacite_islandora_doi_framework_mint($pid) {
+function islandora_doi_datacite_islandora_doi_framework_mint($pid, $form, $form_state) {
   module_load_include('inc', 'islandora_doi_datacite', 'includes/utilities');
-  if ($doi = islandora_doi_datacite_post_new($pid)) {
+  if ($doi = islandora_doi_datacite_post_new($pid, $form, $form_state)) {
     return $doi;
   }
   else {
@@ -118,4 +118,42 @@ function islandora_doi_datacite_islandora_doi_framework_update($pid, $doi, $acti
   else {
     return FALSE;
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$form, $form_state, $form_id) {
+  $resourcetype_values = array(
+    'Audiovisual' => 'Audiovisual', 'Collection' => 'Collection', 'Dataset' => 'Dataset',
+    'Event' => 'Event', 'Image' => 'Image', 'InteractiveResource' => 'InteractiveResource',
+    'Model' => 'Model', 'PhysicalObject' => 'PhysicalObject', 'Service' => 'Service',
+    'Software' => 'Software', 'Sound' => 'Sound', 'Text' => 'Text', 'Workflow' => 'Workflow',
+    'Other' => 'Other',
+  );
+  $form['islandora_doi_sfu_resourcetype'] = array(
+    '#type' => 'select',
+    '#title' => t("Select a resource type to use in the DataCite metadata."),
+    '#options' => $resourcetype_values,
+  );
+  // We add a custom validate handler instead of a custom submit handler
+  // because the submit handler is not fired if there is an error in
+  // generating the DataCite XML.
+  // $form['#validate'][] = 'islandora_doi_sfu_get_resourcetype';
+}
+
+/**
+ * Implements hook_islandora_doi_framework_form_handlers().
+ */
+function islandora_doi_datacite_islandora_doi_framework_form_handlers() {
+  return array(
+    'assign_doi' => array(
+      'validate' => array(),
+      'submit' => array('islandora_doi_framework_sample_mint_assign_doi_submit'),
+     ),
+    'update_doi' => array(
+      'validate' => array(),
+      'submit' => array('islandora_doi_framework_sample_mint_update_doi_submit'),
+     ),
+  );
 }

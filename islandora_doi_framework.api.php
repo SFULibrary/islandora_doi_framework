@@ -38,6 +38,8 @@ function hook_islandora_doi_framework_form_handlers() {
 /**
  * Mints a DOI using an external API.
  *
+ * See the islandora_doi_framework_sample_mint module for an example.
+ *
  * Note that if multiple implementations of this hook exist,
  * the value from the last implementation is used. Implementations
  * are responsible for issuing feedback to the user and for
@@ -45,11 +47,16 @@ function hook_islandora_doi_framework_form_handlers() {
  *
  * @param string $pid
  *   The object's PID.
+ * @param array $form
+ *   The islandora_doi_framework_manage_doi form.
+ * @param array $form_state
+ *   The form state of islandora_doi_framework_manage_doi form on submission.
+
  *
  * @return string|bool
  *   The DOI that was minted, FALSE if DOI was not minted.
  */
-function hook_islandora_doi_framework_mint($pid) {
+function hook_islandora_doi_framework_mint($pid, $form, $form_state) {
   // Each institution has its own DOI prefix (the part to the left of the /),
   // assigned by an registration agency
   // (http://www.doi.org/registration_agencies.html). The suffix (the part to
@@ -64,6 +71,8 @@ function hook_islandora_doi_framework_mint($pid) {
 /**
  * Saves an object's DOI somewhere (e.g., in a datastream).
  *
+ * See the islandora_doi_framework_sample_perist module for an example.
+ *
  * Note that if multiple implementations of this hook exist,
  * the value from the last implementation is used. Implementations
  * are responsible for issuing feedback to the user and for
@@ -73,11 +82,15 @@ function hook_islandora_doi_framework_mint($pid) {
  *   The fetched DOI.
  * @param string $pid
  *   The object's PID.
+ * @param array $form
+ *   The islandora_doi_framework_manage_doi form.
+ * @param array $form_state
+ *   The form state of islandora_doi_framework_manage_doi form on submission.
  *
  * @return bool
  *   TRUE if the DOI was saved, FALSE if not.
  */
-function hook_islandora_doi_framework_persist($doi, $pid) {
+function hook_islandora_doi_framework_persist($doi, $pid, $form, $form_state) {
   // Add the DOI to MODS, etc., then return a boolean value.
   drupal_set_message(t("DOI !doi saved for object !pid.", array('!pid' => $pid, '!doi' => $doi)));
   return TRUE;
