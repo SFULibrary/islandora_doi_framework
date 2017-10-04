@@ -11,6 +11,31 @@
  */
 
 /**
+ * Registers validate and submit handlers.
+ *
+ * @return array
+ *   An array with two keys, 'assign_doi' and 'update_doi', each of which has
+ *   two members, 'validate' and 'submit'. Each of these has as their
+ *   value an array of validate and submit functions. The 'assign_doi',
+ *   'update_doi', and their respective 'validate' and 'submit' keys should
+ *   all exist, and the 'validate' and 'submit' keys should return empty
+ *   arrays if necessary.
+ */
+function hook_islandora_doi_framework_form_handlers() {
+  return array(
+    'assign_doi' =>array(
+      'validate' => array('my_assign_validate_function'),
+      'submit' => array('my_first_assign_submit_function',
+        'my_second_assign_submit_function'),
+     ),
+    'update_doi' =>array(
+      'validate' => array(),
+      'submit' => array('my_update_submit_function'),
+     ),
+  );
+} 
+
+/**
  * Mints a DOI using an external API.
  *
  * Note that if multiple implementations of this hook exist,
@@ -22,7 +47,7 @@
  *   The object's PID.
  *
  * @return string|bool
- *   The DOI that was minted, false if DOI was not minted.
+ *   The DOI that was minted, FALSE if DOI was not minted.
  */
 function hook_islandora_doi_framework_mint($pid) {
   // Each institution has its own DOI prefix (the part to the left of the /),
@@ -50,7 +75,7 @@ function hook_islandora_doi_framework_mint($pid) {
  *   The object's PID.
  *
  * @return bool
- *   True if the DOI was saved, false if not.
+ *   TRUE if the DOI was saved, FALSE if not.
  */
 function hook_islandora_doi_framework_persist($doi, $pid) {
   // Add the DOI to MODS, etc., then return a boolean value.
@@ -70,13 +95,11 @@ function hook_islandora_doi_framework_persist($doi, $pid) {
  *   The object's PID.
  * @param string $doi
  *   The object's DOI (either a DOI name or a resolvable URL).
- * @param string $action
- *   One of 'url', 'metadata', or 'both'
  *
  * @return bool
  *   TRUE if the DOI was updated, FALSE if not.
  */
-function hook_islandora_doi_framework_update($pid, $doi, $action = 'both') {
+function hook_islandora_doi_framework_update($pid, $doi) {
   // Update the object's metadata at the registrar, or update the object's
   // URL at the registrar, then return a boolean value.
   return TRUE;

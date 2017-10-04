@@ -37,6 +37,7 @@ function islandora_doi_framework_permission() {
  * Form definition for assigning a DOI.
  */
 function islandora_doi_framework_manage_doi() {
+  $form = array();
   $pid = arg(2);
   $object = islandora_object_load($pid);
   $form['islandora_doi_pid'] = array(
@@ -50,6 +51,8 @@ function islandora_doi_framework_manage_doi() {
     // Put any non-boolean values at beginning of array.
     rsort($dois);
   }
+
+  $handlers = module_invoke_all('islandora_doi_framework_form_handlers');
 
   if (count($dois) && strlen($dois[0])) {
     $form['islandora_doi_framework_doi_exists_message'] = array(
@@ -69,6 +72,14 @@ function islandora_doi_framework_manage_doi() {
       '#type' => 'value',
       '#value' => $dois[0],
     );
+
+    if (count($handlers)) {
+      foreach ($handlers['update_doi']['submit'] as $handler) {
+        $form['#submit'][] = $handler;
+      }
+    }
+    $form['#submit'][] = 'islandora_doi_framework_manage_doi_update_submit_';
+
     return $form;
   }
   else {
@@ -82,19 +93,29 @@ function islandora_doi_framework_manage_doi() {
     $form['islandora_doi_framework_assign_doi'] = array(
       '#type' => 'submit',
       '#value' => 'Assign DOI',
-      '#submit' => array('islandora_doi_framework_assign_doi_submit'),
       '#weight' => 10,
     );
+
+    if (count($handlers)) {
+      foreach ($handlers['assign_doi']['submit'] as $handler) {
+        $form['#submit'][] = $handler;
+      }
+    }
+    $form['#submit'][] = 'islandora_doi_framework_manage_doi_assign_submit_';
+
     return $form;
   }
 }
 
 /**
- * Form submit handler.
+ * Form submit handler. We provide a "default" form handler in case no
+ * submodules provide any. We append a "_" to the end of the function name
+ * so it doesn't overwrite the '#submit' property defined in the form.
  */
-function islandora_doi_framework_assign_doi_submit($form, &$form_state) {
+function islandora_doi_framework_manage_doi_assign_submit_($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
+  // @question: Why do ther modules want to add their own submit handlers if we fire these functions?
   if ($doi = islandora_doi_framework_mint_doi($pid)) {
     islandora_doi_framework_persist_doi($doi, $pid);
     $form_state['redirect'] = 'islandora/object/' . $pid;
@@ -102,13 +123,19 @@ function islandora_doi_framework_assign_doi_submit($form, &$form_state) {
 }
 
 /**
- * Form submit handler.
+ * Form submit handler. We provide a "default" form handler in case no
+ * submodules provide any. We append a "_" to the end of the function name
+ * so it doesn't overwrite the '#submit' property defined in the form.
+ *
+ * @todo: We need to settle on what 'update' means. Is it even possible to update a DOI? Maybe just the metadata?
  */
-function islandora_doi_framework_update_doi_submit($form, &$form_state) {
+function islandora_doi_framework_manage_doi_update_submit_($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
   $doi = $form_state['values']['islandora_doi_doi'];
-  if (islandora_doi_framework_update_doi($pid, $doi)) {
+  $updated = islandora_doi_framework_update($pid, $doi);
+  if ($updated) {
+    dd("It is true, dat");
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }
 }

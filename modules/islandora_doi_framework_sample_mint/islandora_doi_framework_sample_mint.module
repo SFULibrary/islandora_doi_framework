@@ -25,3 +25,23 @@ function islandora_doi_framework_sample_mint_islandora_doi_framework_mint($pid) 
   drupal_set_message(t("Sample/test DOI !doi assigned to object !pid.", array('!pid' => $pid, '!doi' => $doi)));
   return $doi;
 }
+
+/**
+ * Implements hook_islandora_doi_framework_form_handlers().
+ */
+function islandora_doi_framework_sample_mint_islandora_doi_framework_form_handlers() {
+  return array(
+    'assign_doi' => array(
+      'validate' => array(),
+      'submit' => array('islandora_doi_framework_sample_mint_assign_doi_submit'),
+     ),
+    'update_doi' => array(
+      'validate' => array(),
+      'submit' => array('islandora_doi_framework_sample_mint_update_doi_submit'),
+     ),
+  );
+}
+
+function islandora_doi_framework_sample_mint_assign_doi_submit($form, &$form_state) {
+  drupal_set_message(t("Hello from the Islandora DOI Framework sample mint module."));
+}

@@ -65,3 +65,11 @@ function islandora_doi_framework_sample_persist_islandora_doi_framework_persist(
     }
   }
 }
+
+/**
+ * Implements hook_islandora_doi_framework_update().
+ */
+function islandora_doi_framework_sample_persist_islandora_doi_framework_update($pid, $doi) {
+  // We just return TRUE here since the updated DOI will be the same as the existing one.
+  return 'url';
+}

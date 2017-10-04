@@ -40,7 +40,14 @@ function islandora_doi_framework_mint_doi($pid) {
  *   The object's PID.
  */
 function islandora_doi_framework_persist_doi($doi, $pid) {
-  module_invoke_all('islandora_doi_framework_persist', $doi, $pid);
+  $persists = module_invoke_all('islandora_doi_framework_persist', $doi, $pid);
+  if (count($persists)) {
+    // We want the one persited in the last hook to fire.
+    return array_pop($persists);
+  }
+  else {
+    return FALSE;
+  }
 }
 
 /**
@@ -50,16 +57,17 @@ function islandora_doi_framework_persist_doi($doi, $pid) {
  *   The object's PID.
  * @param string $doi
  *   The object's DOI.
- * @param string $action
- *   One of 'url', 'metadata', or 'both'
  *
  * @return boolan
- *   True if the DOI was updated, false if not.
+ *   TRUE if the DOI (and/or metadata) was updated, FALSE if not.
  */
-function islandora_doi_framework_update_doi($pid, $doi, $action = 'both') {
-  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi, $action);
+function islandora_doi_framework_update($pid, $doi) {
+  dd('OK baby');
+  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi);
+  dd($updates, 'Updates');
   if (count($updates)) {
-    return TRUE;
+    // We want the one updated in the last hook to fire.
+    return array_pop($updates);
   }
   else {
     return FALSE;
