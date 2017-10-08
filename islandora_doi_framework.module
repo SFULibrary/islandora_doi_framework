@@ -108,9 +108,11 @@ function islandora_doi_framework_manage_doi() {
 }
 
 /**
- * Form submit handler. We provide a "default" form handler in case no
- * submodules provide any. We append a "_" to the end of the function name
- * so it doesn't overwrite the '#submit' property defined in the form.
+ * Form submit handler.
+ *
+ * We provide a "default" submit handler in case no submodules provide any.
+ * We append a "_" to the end of the function name so it doesn't overwrite
+ * the '#submit' property defined in the form.
  */
 function islandora_doi_framework_manage_doi_assign_submit_($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
@@ -124,11 +126,14 @@ function islandora_doi_framework_manage_doi_assign_submit_($form, &$form_state) 
 }
 
 /**
- * Form submit handler. We provide a "default" form handler in case no
- * submodules provide any. We append a "_" to the end of the function name
- * so it doesn't overwrite the '#submit' property defined in the form.
+ * Form submit handler.
  *
- * @todo: We need to settle on what 'update' means. Is it even possible to update a DOI? Maybe just the metadata?
+ * We provide a "default" submit handler in case no submodules provide any.
+ * We append a "_" to the end of the function name so it doesn't overwrite
+ * the '#submit' property defined in the form.
+ *
+ * @todo: We need to settle on what 'update' means. Is it even possible to
+ * update a DOI? Maybe just the metadata?
  */
 function islandora_doi_framework_manage_doi_update_submit_($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');

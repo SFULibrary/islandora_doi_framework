@@ -59,7 +59,7 @@ function islandora_doi_ddi_islandora_doi_framework_persist($doi, $pid) {
 
     if (!islandora_doi_ddi_islandora_doi_framework_check_for_doi($pid)) {
       // This is typically awful PHP but seems to work
-      // Why I can't deserialize this all from one line I'll never know
+      // Why I can't deserialize this all from one line I'll never know.
       $doi_element_string = '<IDNo agency="doi">' . $doi . '</IDNo>';
       $doi_element = $dom->createDocumentFragment();
       $doi_element->appendXML($doi_element_string);

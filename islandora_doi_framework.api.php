@@ -4,6 +4,8 @@
  * This file documents all available hook functions provided by the
  * Islandora DOI Framework module.
  *
+ * See the sample mint and persist modules for further examples.
+ *
  * Note that the Islandora DOI Framework module does not manage any
  * admin settings. Submodules will need to provide and manage whatever
  * configuration settings they need for minting and persisting DOIs,
@@ -11,7 +13,7 @@
  */
 
 /**
- * Registers validate and submit handlers.
+ * Registers handlers for the islandora_doi_framework_manage_doi form.
  *
  * @return array
  *   An array with two keys, 'assign_doi' and 'update_doi', each of which has
@@ -20,20 +22,27 @@
  *   'update_doi', and their respective 'validate' and 'submit' keys should
  *   all exist, and the 'validate' and 'submit' keys should return empty
  *   arrays if necessary.
+ *
+ * Note that hook_islandora_doi_framework_mint() and
+ * hook_islandora_doi_framework_persist() are fired even if this hook is not
+ * implemented. Therefore, this hook is optional. Implement it if you want to
+ * perform additional tasks on submission of the
+ * islandora_doi_framework_manage_doi form, like a custom
+ * drupal_set_message(), or if you need to perform some custom validation.
  */
 function hook_islandora_doi_framework_form_handlers() {
   return array(
-    'assign_doi' =>array(
+    'assign_doi' => array(
       'validate' => array('my_assign_validate_function'),
       'submit' => array('my_first_assign_submit_function',
         'my_second_assign_submit_function'),
-     ),
-    'update_doi' =>array(
+    ),
+    'update_doi' => array(
       'validate' => array(),
       'submit' => array('my_update_submit_function'),
-     ),
+    ),
   );
-} 
+}
 
 /**
  * Mints a DOI using an external API.
@@ -51,7 +60,6 @@ function hook_islandora_doi_framework_form_handlers() {
  *   The islandora_doi_framework_manage_doi form.
  * @param array $form_state
  *   The form state of islandora_doi_framework_manage_doi form on submission.
-
  *
  * @return string|bool
  *   The DOI that was minted, FALSE if DOI was not minted.
@@ -65,7 +73,6 @@ function hook_islandora_doi_framework_mint($pid, $form, $form_state) {
   drupal_set_message(t("DOI !doi assigned to object !pid.", array('!pid' => $pid, '!doi' => $doi)));
   $doi = '10.99999/' . $pid;
   return $doi;
-
 }
 
 /**

@@ -150,10 +150,10 @@ function _islandora_doi_datacite_islandora_doi_framework_form_handlers() {
     'assign_doi' => array(
       'validate' => array(),
       'submit' => array('islandora_doi_datacite_assign_submit'),
-     ),
+    ),
     'update_doi' => array(
       'validate' => array(),
       'submit' => array('islandora_doi_datacite_update_submit'),
-     ),
+    ),
   );
 }

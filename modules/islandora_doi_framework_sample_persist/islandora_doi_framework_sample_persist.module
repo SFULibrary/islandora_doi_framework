@@ -7,11 +7,11 @@
  * This module is for testing and development purposes only. It should not be
  * used on a producation site.
  *
- * Modules that implement hook_islandora_doi_framework_persist() would
- * save the DOI in an object's MODS, or other datastream, or to a database
- * table. This sample module simply saves it to a text file. This module
- * can be used to "persist" DOIs during the development and testing of
- * Islandora DOI Framework submodules that "mint" DOIs.
+ * Modules that implement hook_islandora_doi_framework_persist() save the
+ * DOI in an object's MODS, or other datastream, or to a database table.
+ * This sample module simply saves it to a text file. This module can be
+ * used to "persist" DOIs during the development and testing of Islandora
+ * DOI Framework submodules that "mint" DOIs.
  */
 
 define('ISLANDORA_DOI_FRAMEWORK_SAMPLE_PERSIST_OUTPUT_PATH', '/tmp/dois_sample_persist.txt');
@@ -70,6 +70,7 @@ function islandora_doi_framework_sample_persist_islandora_doi_framework_persist(
  * Implements hook_islandora_doi_framework_update().
  */
 function islandora_doi_framework_sample_persist_islandora_doi_framework_update($pid, $doi) {
-  // We just return TRUE here since the updated DOI will be the same as the existing one.
+  // We just return TRUE here since the updated DOI will be the same as the
+  // existing one.
   return 'url';
 }
