@@ -47,8 +47,7 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
   $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
-  // @todo: test and document this drupal_alter().
-  drupal_alter($metadata_xml, $pid, $form_state);
+  drupal_alter('islandora_doi_datacite_metadata_xml', $metadata_xml, $pid, $form_state);
 
   $response = drupal_http_request($api_url, array(
     'headers' => array(
