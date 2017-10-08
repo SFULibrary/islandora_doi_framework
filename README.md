@@ -26,6 +26,8 @@ This module differs from the [Islandora DOI](https://github.com/Islandora/island
 
 Same as for any other Drupal module.
 
+Note that, normally, you should enable only one module that implments each of the `hook_islandora_doi_framework_mint()` and `hook_islandora_doi_framework_persist()` submodule hooks (see below for more information on submodules). If multiple implememtations of these hooks exist in enabled modules, the last implementation is the one that is used.
+
 ## Configuration
 
 This module does not have any configuration settings of its own. All settings are managed by submodules. It does provide a single permission, "Manage DOIs for Islandora objects", which enables users to access the "DOI" subtab under each object's "Manage" tab.
@@ -43,7 +45,7 @@ Note that you should only enable a single minting submodule and a single persist
 
 ### Custom submit and validation handlers
 
-hook_islandora_doi_framework_mint() and hook_islandora_doi_framework_persist() are invoked when the `islandora_doi_framework_manage_doi` form is submitted. If you want to perform your own validation and submission tasks, you can register form handler functions by implementing `hook_islandora_doi_framework_form_handlers()`. Implementing this hook is optional; you only need it if you want to perform your own validation and submission tasks.
+`hook_islandora_doi_framework_mint()` and `hook_islandora_doi_framework_persist()` are invoked when the `islandora_doi_framework_manage_doi` form is submitted. If you want to perform your own validation and submission tasks, you can register form handler functions by implementing `hook_islandora_doi_framework_form_handlers()`. Implementing this hook is optional; you only need it if you want to perform your own validation and submission tasks.
 
 ## Maintainer
 
