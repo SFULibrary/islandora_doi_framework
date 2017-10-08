@@ -145,15 +145,15 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
 /**
  * Implements hook_islandora_doi_framework_form_handlers().
  */
-function islandora_doi_datacite_islandora_doi_framework_form_handlers() {
+function _islandora_doi_datacite_islandora_doi_framework_form_handlers() {
   return array(
     'assign_doi' => array(
       'validate' => array(),
-      'submit' => array('islandora_doi_framework_sample_mint_assign_doi_submit'),
+      'submit' => array('islandora_doi_datacite_assign_submit'),
      ),
     'update_doi' => array(
       'validate' => array(),
-      'submit' => array('islandora_doi_framework_sample_mint_update_doi_submit'),
+      'submit' => array('islandora_doi_datacite_update_submit'),
      ),
   );
 }
