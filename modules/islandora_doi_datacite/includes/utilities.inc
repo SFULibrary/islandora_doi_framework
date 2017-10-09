@@ -126,95 +126,89 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
  *   The object's PID.
  * @param string $doi
  *   The object's DOI.
- * @param string $action
- *   One of 'url', 'metadata', or 'both'
  *
  * @return bool
  *   TRUE if the DOI was updated, FALSE if not.
  */
-function islandora_doi_datacite_update_doi($pid, $doi, $action) {
+function islandora_doi_datacite_update_doi($pid, $doi) {
   $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_password', '');
 
-  if ($action == 'both' || $action == 'metadata') {
-    $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
+  $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-    $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
+  $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
 
-    // DataCite's API uses POST to update the metadata.
-    $response = drupal_http_request($api_url, array(
-      'headers' => array(
-        'Content-Type' => 'application/xml;charset=UTF-8',
-        'Authorization' => 'Basic ' . base64_encode($symbol . ':' . $password),
-      ),
-      'method' => 'POST',
-      'data' => $metadata_xml,
-    ));
-    if ($response->code != 201) {
-      if ($response->code == '400') {
-        // The DataCite API provides specific error messages in the
-        // response body.
-        $message = $response->status_message . ': ' . $response->data;
-      }
-      else {
-        $message = $response->status_message;
-      }
-      watchdog(
-        'islandora_doi_datacite',
-        'Error updating metadata for object !pid: !code, !message',
-        array(
-          '!pid' => $pid,
-          '!code' => $response->code,
-          '!message' => $message,
-        ),
-        WATCHDOG_ERROR
-      );
-      drupal_set_message(t("Can't update DataCite metadata for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
-      return FALSE;
+  // DataCite's API uses POST to update the metadata.
+  $response = drupal_http_request($api_url, array(
+    'headers' => array(
+      'Content-Type' => 'application/xml;charset=UTF-8',
+      'Authorization' => 'Basic ' . base64_encode($symbol . ':' . $password),
+    ),
+    'method' => 'POST',
+    'data' => $metadata_xml,
+  ));
+  if ($response->code != 201) {
+    if ($response->code == '400') {
+      // The DataCite API provides specific error messages in the
+      // response body.
+      $message = $response->status_message . ': ' . $response->data;
     }
+    else {
+      $message = $response->status_message;
+    }
+    watchdog(
+      'islandora_doi_datacite',
+      'Error updating metadata for object !pid: !code, !message',
+      array(
+        '!pid' => $pid,
+        '!code' => $response->code,
+        '!message' => $message,
+      ),
+      WATCHDOG_ERROR
+    );
+    drupal_set_message(t("Can't update DataCite metadata for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    return FALSE;
   }
 
   // There aren't many use cases for updating the URL of an object associated
   // with a DOI, but we include the ability to do so anyway.
-  if ($action == 'both' || $action == 'url') {
-    $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'doi';
-    global $base_url;
-    $url = $base_url . '/islandora/object/' . $pid;
-    $data = array('doi' => $doi, 'url' => $url);
-    $response = drupal_http_request($api_url, array(
-      'headers' => array(
-        'Content-Type' => 'text/plain;charset=UTF-8',
-        'Authorization' => 'Basic ' . base64_encode($symbol . ':' . $password),
-      ),
-      'method' => 'POST',
-      'data' => 'doi=' . $doi . PHP_EOL . 'url=' . $url,
-    ));
-    if ($response->code == 201) {
-      drupal_set_message(t('URL for DOI !doi successfully updated (object !pid)', array('!doi' => $doi, '!pid' => $pid)));
-      return $doi;
+  $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'doi';
+  global $base_url;
+  $url = $base_url . '/islandora/object/' . $pid;
+  $data = array('doi' => $doi, 'url' => $url);
+  $response = drupal_http_request($api_url, array(
+    'headers' => array(
+      'Content-Type' => 'text/plain;charset=UTF-8',
+      'Authorization' => 'Basic ' . base64_encode($symbol . ':' . $password),
+    ),
+    'method' => 'POST',
+    'data' => 'doi=' . $doi . PHP_EOL . 'url=' . $url,
+  ));
+  if ($response->code == 201) {
+    drupal_set_message(t('URL for DOI !doi successfully updated (object !pid)', array('!doi' => $doi, '!pid' => $pid)));
+    return $doi;
+  }
+  else {
+    if ($response->code == '400') {
+      // The DataCite API provides specific error messages in
+      // the response body.
+      $message = $response->status_message . ': ' . $response->data;
     }
     else {
-      if ($response->code == '400') {
-        // The DataCite API provides specific error messages in
-        // the response body.
-        $message = $response->status_message . ': ' . $response->data;
-      }
-      else {
-        $message = $response->status_message;
-      }
-      watchdog(
-        'islandora_doi_datacite',
-        'Error updating URL associated with DOI !doi (object !pid): !code, !message',
-        array(
-          '!doi' => $doi,
-          '!pid' => $pid,
-          '!code' => $response->code,
-          '!message' => $message),
-        WATCHDOG_ERROR
-      );
-      drupal_set_message(t("Can't update URL for DOI !doi (object !PID). See the Drupal log for more information.", array('!pid' => $pid)), 'error');
-      return FALSE;
+      $message = $response->status_message;
     }
+    watchdog(
+      'islandora_doi_datacite',
+      'Error updating URL associated with DOI !doi (object !pid): !code, !message',
+      array(
+        '!doi' => $doi,
+        '!pid' => $pid,
+        '!code' => $response->code,
+        '!message' => $message),
+      WATCHDOG_ERROR
+    );
+    drupal_set_message(t("Can't update URL for DOI !doi (object !PID). See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    return FALSE;
   }
 }
 

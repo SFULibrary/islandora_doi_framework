@@ -12,7 +12,7 @@ function islandora_doi_framework_menu() {
   $items = array();
   $items['islandora/object/%islandora_object/manage/assign_doi'] = array(
     'title' => 'DOI',
-    'access arguments' => array('assign DOIs to Islandora objects'),
+    'access arguments' => array('manage DOIs to Islandora objects'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('islandora_doi_framework_manage_doi'),
     'type' => MENU_LOCAL_TASK,
@@ -64,7 +64,7 @@ function islandora_doi_framework_manage_doi() {
     );
     $form['islandora_doi_framework_update_doi'] = array(
       '#type' => 'submit',
-      '#value' => 'Update DOI',
+      '#value' => t('Update DOI'),
       '#submit' => array('islandora_doi_framework_update_doi_submit'),
       '#weight' => 10,
     );
@@ -92,7 +92,7 @@ function islandora_doi_framework_manage_doi() {
     );
     $form['islandora_doi_framework_assign_doi'] = array(
       '#type' => 'submit',
-      '#value' => 'Assign DOI',
+      '#value' => t('Assign DOI'),
       '#weight' => 10,
     );
 
@@ -110,7 +110,7 @@ function islandora_doi_framework_manage_doi() {
 /**
  * Form submit handler.
  *
- * We provide a "default" submit handler in case no submodules provide any.
+ * We provide a default submit handler in case no submodules provide any.
  * We append a "_" to the end of the function name so it doesn't overwrite
  * the '#submit' property defined in the form.
  */
@@ -128,12 +128,12 @@ function islandora_doi_framework_manage_doi_assign_submit_($form, &$form_state) 
 /**
  * Form submit handler.
  *
- * We provide a "default" submit handler in case no submodules provide any.
+ * We provide a default submit handler in case no submodules provide any.
  * We append a "_" to the end of the function name so it doesn't overwrite
  * the '#submit' property defined in the form.
  *
- * @todo: We need to settle on what 'update' means. Is it even possible to
- * update a DOI? Maybe just the metadata?
+ * @todo: "Update" refers to changing either or both the URL and metadata,
+ * not the DOI itself.
  */
 function islandora_doi_framework_manage_doi_update_submit_($form, &$form_state) {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');

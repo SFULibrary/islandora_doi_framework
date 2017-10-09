@@ -70,7 +70,7 @@ function islandora_doi_framework_sample_persist_islandora_doi_framework_persist(
  * Implements hook_islandora_doi_framework_update().
  */
 function islandora_doi_framework_sample_persist_islandora_doi_framework_update($pid, $doi) {
-  // We just return TRUE here since the updated DOI will be the same as the
-  // existing one.
-  return 'url';
+  // We just return TRUE here since we are pretending that the updated URL and
+  // metadata will be the same as the existing URL and meatdata.
+  return TRUE;
 }

@@ -107,21 +107,21 @@ function hook_islandora_doi_framework_persist($doi, $pid, $form, $form_state) {
  * Updates a DOI.
  *
  * Performs updates to the object's DOI in the registrar (i.e., where it was
- * minted), i.e., updates the DOI's URL, the metadata associated with it, or
- *  both. Implementations are responsible for issuing feedback to the user
- * and for logging success/failure.
+ * minted), i.e., updates the DOI's URL and the metadata associated with it.
+ * Implementations are responsible for issuing feedback to the user and for
+ * logging success/failure.
  *
  * @param string $pid
  *   The object's PID.
  * @param string $doi
- *   The object's DOI (either a DOI name or a resolvable URL).
+ *   The object's DOI.
  *
  * @return bool
- *   TRUE if the DOI was updated, FALSE if not.
+ *   TRUE if the URL and metadata is now up to date, FALSE if not.
  */
 function hook_islandora_doi_framework_update($pid, $doi) {
-  // Update the object's metadata at the registrar, or update the object's
-  // URL at the registrar, then return a boolean value.
+  // Update the object's metadata and URL at the registrar,
+  // then return a boolean value.
   return TRUE;
 }
 

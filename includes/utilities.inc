@@ -59,7 +59,7 @@ function islandora_doi_framework_persist_doi($doi, $pid, $form, $form_state) {
  *   The object's DOI.
  *
  * @return boolan
- *   TRUE if the DOI (and/or metadata) was updated, FALSE if not.
+ *   TRUE if the DOI (and/or metadata) is now up to date FALSE if not.
  */
 function islandora_doi_framework_update($pid, $doi) {
   $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi);
