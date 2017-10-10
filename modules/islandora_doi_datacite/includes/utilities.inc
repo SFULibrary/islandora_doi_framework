@@ -236,7 +236,9 @@ function islandora_doi_datacite_generate_metadata($pid, $doi = NULL) {
   // Check for source DC elements (creator, title, publisher, date) that
   // correspond to the required DataCite elements creator, title, publisher,
   // publicationYear, and resourceType, and that there is a YYYY value in date.
-  $required_values = array('creator', 'title', 'publisher', 'date', 'type');
+  // We don't include type here since its value is assigned by the user via the
+  // select list of resrourceType values we provide in our hook_form_alter().
+  $required_values = array('creator', 'title', 'publisher', 'date');
   $missing_required_elements = array();
   foreach ($required_values as $value) {
     if (!isset($dc_values[$value]) || !count($dc_values[$value])) {
