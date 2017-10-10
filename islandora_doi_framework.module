@@ -139,7 +139,7 @@ function islandora_doi_framework_manage_doi_update_submit_($form, &$form_state) 
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
   $pid = $form_state['values']['islandora_doi_pid'];
   $doi = $form_state['values']['islandora_doi_doi'];
-  $updated = islandora_doi_framework_update($pid, $doi);
+  $updated = islandora_doi_framework_update($pid, $doi, $form, $form_state);
   if ($updated) {
     $form_state['redirect'] = 'islandora/object/' . $pid;
   }

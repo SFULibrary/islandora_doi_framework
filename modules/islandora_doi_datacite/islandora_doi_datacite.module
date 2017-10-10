@@ -110,9 +110,9 @@ function islandora_doi_datacite_islandora_doi_framework_mint($pid, $form, $form_
 /**
  * Implements hook_islandora_doi_framework_update().
  */
-function islandora_doi_datacite_islandora_doi_framework_update($pid, $doi) {
+function islandora_doi_datacite_islandora_doi_framework_update($pid, $doi, $form, $form_state) {
   module_load_include('inc', 'islandora_doi_datacite', 'includes/utilities');
-  if (islandora_doi_datacite_update_doi($pid, $doi)) {
+  if (islandora_doi_datacite_update_doi($pid, $doi, $form_state)) {
     return TRUE;
   }
   else {
@@ -131,7 +131,7 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
     'Software' => 'Software', 'Sound' => 'Sound', 'Text' => 'Text', 'Workflow' => 'Workflow',
     'Other' => 'Other',
   );
-  $form['islandora_doi_sfu_resourcetype'] = array(
+  $form['islandora_doi_resourcetype'] = array(
     '#type' => 'select',
     '#title' => t("Select a resource type to use in the DataCite metadata."),
     '#options' => $resourcetype_values,

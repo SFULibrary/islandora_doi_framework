@@ -10,6 +10,10 @@
  *
  * @param string $pid
  *   The object's PID.
+ * @param array $form
+ *   The islandora_doi_framework_manage_doi form.
+ * @param array $form_state
+ *   The form state of islandora_doi_framework_manage_doi form on submission.
  *
  * @return string|bool
  *   The DOI that was fetched, FALSE if DOI was not fetched.
@@ -38,6 +42,10 @@ function islandora_doi_framework_mint_doi($pid, $form, $form_state) {
  *   The fetched DOI.
  * @param string $pid
  *   The object's PID.
+ * @param array $form
+ *   The islandora_doi_framework_manage_doi form.
+ * @param array $form_state
+ *   The form state of islandora_doi_framework_manage_doi form on submission.
  */
 function islandora_doi_framework_persist_doi($doi, $pid, $form, $form_state) {
   $persists = module_invoke_all('islandora_doi_framework_persist', $doi, $pid, $form, $form_state);
@@ -57,12 +65,16 @@ function islandora_doi_framework_persist_doi($doi, $pid, $form, $form_state) {
  *   The object's PID.
  * @param string $doi
  *   The object's DOI.
+ * @param array $form
+ *   The islandora_doi_framework_manage_doi form.
+ * @param array $form_state
+ *   The form state of islandora_doi_framework_manage_doi form on submission.
  *
  * @return boolan
  *   TRUE if the DOI (and/or metadata) is now up to date FALSE if not.
  */
-function islandora_doi_framework_update($pid, $doi) {
-  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi);
+function islandora_doi_framework_update($pid, $doi, $form, $form_state) {
+  $updates = module_invoke_all('islandora_doi_framework_update', $pid, $doi, $form, $form_state);
   if (count($updates)) {
     // We want the one updated in the last hook to fire.
     return array_pop($updates);

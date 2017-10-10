@@ -115,11 +115,15 @@ function hook_islandora_doi_framework_persist($doi, $pid, $form, $form_state) {
  *   The object's PID.
  * @param string $doi
  *   The object's DOI.
+ * @param array $form
+ *   The islandora_doi_framework_manage_doi form.
+ * @param array $form_state
+ *   The form state of islandora_doi_framework_manage_doi form on submission.
  *
  * @return bool
  *   TRUE if the URL and metadata is now up to date, FALSE if not.
  */
-function hook_islandora_doi_framework_update($pid, $doi) {
+function hook_islandora_doi_framework_update($pid, $doi, $form, $form_state) {
   // Update the object's metadata and URL at the registrar,
   // then return a boolean value.
   return TRUE;

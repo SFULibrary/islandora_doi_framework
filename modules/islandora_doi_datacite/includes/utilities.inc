@@ -46,7 +46,7 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
   // <identifier identifierType="DOI"> element.
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-  $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
+  $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi, $form_state);
   drupal_alter('islandora_doi_datacite_metadata_xml', $metadata_xml, $pid, $form_state);
 
   $response = drupal_http_request($api_url, array(
@@ -130,13 +130,13 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
  * @return bool
  *   TRUE if the DOI was updated, FALSE if not.
  */
-function islandora_doi_datacite_update_doi($pid, $doi) {
+function islandora_doi_datacite_update_doi($pid, $doi, $form_state) {
   $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_password', '');
 
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-  $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi);
+  $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi, $form_state);
 
   // DataCite's API uses POST to update the metadata.
   $response = drupal_http_request($api_url, array(
@@ -223,7 +223,7 @@ function islandora_doi_datacite_update_doi($pid, $doi) {
  * @return string
  *   The DataCite metadata XML.
  */
-function islandora_doi_datacite_generate_metadata($pid, $doi = NULL) {
+function islandora_doi_datacite_generate_metadata($pid, $doi, $form_state) {
   $object = islandora_object_load($pid);
   $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
 
@@ -269,15 +269,15 @@ function islandora_doi_datacite_generate_metadata($pid, $doi = NULL) {
   // resourceType must be Audiovisual, Collection, Dataset, Event, Image,
   // InteractiveResource, Model, PhysicalObject, Service, Software, Sound,
   // Text, Workflow, or Other.
-  if (isset($dc_values['type'])) {
-    $resource_type = islandora_doi_datacite_normalize_resourcetype($dc_values['type']);
-  }
+  // if (isset($dc_values['type'])) {
+    // $resource_type = islandora_doi_datacite_normalize_resourcetype($dc_values['type']);
+  // }
 
   $metadata_xml = theme('datacite_metadata', array(
     'doi' => $doi,
     'dc' => $dc_values,
     'publication_year' => $year,
-    'resource_type' => $resource_type,
+    'resource_type' => $form_state['values']['islandora_doi_resourcetype'],
   ));
 
   return $metadata_xml;
@@ -312,6 +312,8 @@ function islandora_doi_datacite_get_dc_values($xml) {
 
 /**
  * Replaces values in DC type element with preferred values.
+ *
+ * @todo: Currently not used because the resourceType is assigned manually.
  *
  * @param array $resourcetypes
  *   The array of dc.type values.
