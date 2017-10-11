@@ -15,7 +15,6 @@ function islandora_doi_datacite_uninstall() {
     'islandora_doi_datacite_suffix_source',
     'islandora_doi_datacite_username',
     'islandora_doi_datacite_password',
-    'islandora_doi_datacite_resourcetype_replacements',
     'islandora_doi_datacite_combine_creator',
   );
   array_walk($variables, 'variable_del');

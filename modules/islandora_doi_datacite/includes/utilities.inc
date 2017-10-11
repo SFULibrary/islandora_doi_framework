@@ -266,13 +266,6 @@ function islandora_doi_datacite_generate_metadata($pid, $doi, $form_state) {
     return FALSE;
   }
 
-  // resourceType must be Audiovisual, Collection, Dataset, Event, Image,
-  // InteractiveResource, Model, PhysicalObject, Service, Software, Sound,
-  // Text, Workflow, or Other.
-  // if (isset($dc_values['type'])) {
-    // $resource_type = islandora_doi_datacite_normalize_resourcetype($dc_values['type']);
-  // }
-
   $metadata_xml = theme('datacite_metadata', array(
     'doi' => $doi,
     'dc' => $dc_values,
@@ -308,29 +301,6 @@ function islandora_doi_datacite_get_dc_values($xml) {
     }
   }
   return $dc_values;
-}
-
-/**
- * Replaces values in DC type element with preferred values.
- *
- * @todo: Currently not used because the resourceType is assigned manually.
- *
- * @param array $resourcetypes
- *   The array of dc.type values.
- *
- * @return string
- *   The first member of the normalized array of dc.type values.
- */
-function islandora_doi_datacite_normalize_resourcetype($resourcetypes) {
-  $replacements = variable_get('islandora_doi_datacite_resourcetype_replacements', "StillImage|Image\nThesis|Text");
-  $replacements_array = preg_split('/\r\n|\n|\r/', $replacements, -1, PREG_SPLIT_NO_EMPTY);
-  foreach ($resourcetypes as &$resourcetype) {
-    foreach ($replacements_array as $replacement) {
-      list($before, $after) = explode('|', $replacement);
-      $resourcetype = preg_replace('/' . $before . '/', trim($after), $resourcetype);
-    }
-  }
-  return $resourcetypes[0];
 }
 
 /**

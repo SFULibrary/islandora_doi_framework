@@ -56,14 +56,6 @@ function islandora_doi_datacite_admin_settings() {
     '#default_value' => variable_get('islandora_doi_datacite_password', ''),
     '#description' => t("Your insitution's DataCite password."),
   );
-  $default_replacements = "StillImage|Image\nThesis|Text";
-  $form['islandora_doi_datacite_resourcetype_replacements'] = array(
-    '#type' => 'textarea',
-    '#title' => t('resourceType replacements'),
-    '#rows' => 10,
-    '#default_value' => variable_get('islandora_doi_datacite_resourcetype_replacements', $default_replacements),
-    '#description' => t("DataCite's metadata specification requires that the values of 'resourceType' are from the list 'Audiovisual', 'Collection', 'Dataset', 'Event', 'Image', 'InteractiveResource', 'Model', 'PhysicalObject', 'Service', 'Software', 'Sound', 'Text', 'Workflow', and 'Other'. You can define a list of source|replacement pairs here that maps values in your DC datastream's 'type' element to one of these values. Place each source and replacement value pair, separated by a |, on its own line."),
-  );
   $form['islandora_doi_datacite_combine_creator'] = array(
     '#type' => 'checkbox',
     '#title' => t('Combine DC.creator and DC.contributor values'),
