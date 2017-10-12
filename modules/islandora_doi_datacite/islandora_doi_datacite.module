@@ -142,7 +142,7 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
     $creators = array_merge($dc_values['creator'], $dc_values['contributor']);
   }
   else {
-    $creators = $dc_values['creator'];
+    $creators = isset($dc_values['creator']) ? $dc_values['creator'] : array();
   }
 
   $creator = implode('; ', $creators);
@@ -153,7 +153,8 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
     '#description' => t("Separate multiple creators with semicolons."),
     '#required' => TRUE,
   );
-  $date = implode('; ', $dc_values['date']);
+  $dates = isset($dc_values['date']) ? $dc_values['date'] : array();
+  $date = implode('; ', $dates);
   $form['islandora_doi_datacite_date'] = array(
     '#type' => 'textfield',
     '#title' => t('Date'),
@@ -161,7 +162,8 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
     '#description' => t("Must be a single year in YYYY format."),
     '#required' => TRUE,
   );
-  $publisher = implode('; ', $dc_values['publisher']);
+  $publishers = isset($dc_values['publisher']) ? $dc_values['publisher'] : array();
+  $publisher = implode('; ', $publishers);
   $form['islandora_doi_datacite_publisher'] = array(
     '#type' => 'textfield',
     '#title' => t('Publisher'),
