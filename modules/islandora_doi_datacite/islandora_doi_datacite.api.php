@@ -15,7 +15,7 @@
  * @param array $form_state
  *   The form state of the form that mints a new Datacite DOI.
  */
-function hook_islandora_doi_datacite_metadata_xml_alter(&$metadata_xml, &$pid, &$form_state) {
+function hook_islandora_doi_datacite_metadata_xml_alter(&$metadata_xml, $pid, $form_state) {
   // Modify the Datacite XML, either by simple preg_replace() on the serialized
   // string, or by using the DOM, etc.
 

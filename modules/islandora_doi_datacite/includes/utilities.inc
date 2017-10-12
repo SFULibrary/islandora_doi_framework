@@ -47,7 +47,6 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
   $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi, $form_state);
-  drupal_alter('islandora_doi_datacite_metadata_xml', $metadata_xml, $pid, $form_state);
 
   $response = drupal_http_request($api_url, array(
     'headers' => array(
@@ -237,6 +236,7 @@ function islandora_doi_datacite_generate_metadata($pid, $doi, $form_state) {
     'resource_type' => $form_state['values']['islandora_doi_datacite_resourcetype'],
   ));
 
+  drupal_alter('islandora_doi_datacite_metadata_xml', $metadata_xml, $pid, $form_state);
   return $metadata_xml;
 }
 
