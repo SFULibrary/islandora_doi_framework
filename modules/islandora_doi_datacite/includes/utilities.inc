@@ -227,52 +227,17 @@ function islandora_doi_datacite_generate_metadata($pid, $doi, $form_state) {
   $object = islandora_object_load($pid);
   $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
 
-  if (variable_get('islandora_doi_datacite_combine_creator', 0)) {
-    $dc_values['creator'] = isset($dc_values['creator']) ? $dc_values['creator'] : array();
-    $dc_values['contributor'] = isset($dc_values['contributor']) ? $dc_values['contributor'] : array();
-    $dc_values['creator'] = array_merge($dc_values['creator'], $dc_values['contributor']);
-  }
-
-  // Check for source DC elements (creator, title, publisher, date) that
-  // correspond to the required DataCite elements creator, title, publisher,
-  // publicationYear, and resourceType, and that there is a YYYY value in date.
-  // We don't include type here since its value is assigned by the user via the
-  // select list of resrourceType values we provide in our hook_form_alter().
-  $required_values = array('creator', 'title', 'publisher', 'date');
-  $missing_required_elements = array();
-  foreach ($required_values as $value) {
-    if (!isset($dc_values[$value]) || !count($dc_values[$value])) {
-      $missing_required_elements[] = $value;
-    }
-  }
-  if (count($missing_required_elements)) {
-    $missing_elements_string = implode(', ', $missing_required_elements);
-    drupal_set_message(t("Can't assign DOI to object !pid because its DC is missing one or more required values: !values.", array('!pid' => $pid, '!values' => trim($missing_elements_string))), 'error');
-    return FALSE;
-  }
-
-  $year_present = FALSE;
-  if (isset($dc_values['date'])) {
-    foreach ($dc_values['date'] as $date) {
-      if (preg_match('/(\d\d\d\d)/', $date, $matches)) {
-        $year = trim($matches[1]);
-        $year_present = TRUE;
-        break;
-      }
-    }
-  }
-  if (!$year_present) {
-    drupal_set_message(t("Can't assign DOI to object !pid because its DC.date value does not contain a year in yyyy format, !value.", array('!pid' => $pid, '!value' => $value)), 'error');
-    return FALSE;
-  }
-
   $metadata_xml = theme('datacite_metadata', array(
     'doi' => $doi,
-    'dc' => $dc_values,
-    'publication_year' => $year,
-    'resource_type' => $form_state['values']['islandora_doi_resourcetype'],
+    'dc_values' => $dc_values,
+    'title' => $form_state['values']['islandora_doi_datacite_title'],
+    'creators' => $form_state['values']['islandora_doi_datacite_creator'],
+    'publication_year' => $form_state['values']['islandora_doi_datacite_date'],
+    'publisher' => $form_state['values']['islandora_doi_datacite_publisher'],
+    'resource_type' => $form_state['values']['islandora_doi_datacite_resourcetype'],
   ));
 
+  dd($metadata_xml);
   return $metadata_xml;
 }
 

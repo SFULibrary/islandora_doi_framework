@@ -9,13 +9,10 @@
  * Prepares variables for use in datacite-metadata.tpl.php.
  */
 function template_preprocess_datacite_metadata(&$variables) {
-  // Populate variables with selected DC values. DC.date and DC.type have
-  // already been validated to conform to DataCite metadata requirements
-  // and are not reprocessed here.
-  $variables['creators'] = $variables['dc']['creator'];
-  $variables['titles'] = isset($variables['dc']['title']) ? $variables['dc']['title'] : array();
-  $variables['publishers'] = isset($variables['dc']['publisher']) ? $variables['dc']['publisher'] : array();
-  $variables['subjects'] = isset($variables['dc']['subject']) ? $variables['dc']['subject'] : array();
-  $variables['languages'] = isset($variables['dc']['language']) ? $variables['dc']['language'] : array();
-  $variables['descriptions'] = isset($variables['dc']['description']) ? $variables['dc']['description'] : array();
+  // title, publication_year, publisher, and resource_type are all required
+  // in the DOI minting form so we don't preprocess them here.
+  $variables['creators'] = explode(';', $variables['creators']);
+  $variables['subjects'] = isset($variables['dc_values']['subject']) ? $variables['dc_values']['subject'] : array();
+  $variables['languages'] = isset($variables['dc_values']['language']) ? $variables['dc_values']['language'] : array();
+  $variables['descriptions'] = isset($variables['dc_values']['description']) ? $variables['dc_values']['description'] : array();
 }

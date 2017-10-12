@@ -54,6 +54,7 @@ function islandora_doi_framework_manage_doi() {
 
   $handlers = module_invoke_all('islandora_doi_framework_form_handlers');
 
+  // There is a DOI already, so we're updating.
   if (count($dois) && strlen($dois[0])) {
     $form['islandora_doi_framework_doi_exists_message'] = array(
       '#markup' => t("This object already has a DOI: !doi. Do you want to update the object's information associated with the DOI?",
@@ -77,11 +78,15 @@ function islandora_doi_framework_manage_doi() {
       foreach ($handlers['update_doi']['submit'] as $handler) {
         $form['#submit'][] = $handler;
       }
+      foreach ($handlers['update_doi']['validate'] as $handler) {
+        $form['#validate'][] = $handler;
+      }
     }
     $form['#submit'][] = 'islandora_doi_framework_manage_doi_update_submit_';
 
     return $form;
   }
+  // There is no DOI yet, so we're minting.
   else {
     $form['islandora_doi_object_message'] = array(
       '#prefix' => '<div class="messages warning">',
@@ -96,9 +101,14 @@ function islandora_doi_framework_manage_doi() {
       '#weight' => 10,
     );
 
+    dd($handlers, 'Handlers where I need them.');
+
     if (count($handlers)) {
       foreach ($handlers['assign_doi']['submit'] as $handler) {
         $form['#submit'][] = $handler;
+      }
+      foreach ($handlers['assign_doi']['valdiate'] as $handler) {
+        $form['#validate'][] = $handler;
       }
     }
     $form['#submit'][] = 'islandora_doi_framework_manage_doi_assign_submit_';

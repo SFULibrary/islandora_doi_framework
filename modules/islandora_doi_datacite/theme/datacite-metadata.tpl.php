@@ -15,13 +15,9 @@
   <?php endforeach; ?>
   </creators>
   <titles>
-  <?php foreach($titles as $title): ?>
     <title><?php print $title; ?></title>
-  <?php endforeach; ?>
   </titles>
-  <?php foreach($publishers as $publisher): ?>
   <publisher><?php print $publisher; ?></publisher>
-  <?php endforeach; ?>
   <publicationYear><?php print $publication_year; ?></publicationYear>
   <?php if (isset($subjects) && count($subjects)): ?>
   <subjects>

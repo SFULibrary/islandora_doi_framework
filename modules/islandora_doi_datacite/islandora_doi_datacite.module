@@ -75,8 +75,11 @@ function islandora_doi_datacite_theme() {
     'datacite_metadata' => array(
       'variables' => array(
         'doi' => NULL,
-        'dc' => NULL,
+        'dc_values' => NULL,
+        'title' => NULL,
+        'creator' => NULL,
         'publication_year' => NULL,
+        'publisher' => NULL,
         'resource_type' => NULL,
       ),
       'path' => drupal_get_path('module', 'islandora_doi_datacite') . '/theme',
@@ -116,6 +119,56 @@ function islandora_doi_datacite_islandora_doi_framework_update($pid, $doi, $form
  * Implements hook_form_alter().
  */
 function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$form, $form_state, $form_id) {
+  $form['islandora_doi_datacite_metadata_overview'] = array(
+    '#markup' => '<p>' . t("DataCite requires the following elements in the metadata for a DOI. The values below are taken from this object's DC description. If subject, language, and description are present in this object's Dublin Core description, they are also added to the DataCite metadata.") . '</p>',
+  );
+
+  module_load_include('inc', 'islandora_doi_datacite', 'includes/utilities');
+  $pid = $form['islandora_doi_pid']['#value'];
+  $object = islandora_object_load($pid);
+  $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
+
+  $title = implode('; ', $dc_values['title']);
+  $form['islandora_doi_datacite_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title'),
+    '#default_value' => $title,
+    '#required' => TRUE,
+  );
+
+  if (variable_get('islandora_doi_datacite_combine_creator', 0)) {
+    $dc_values['creator'] = isset($dc_values['creator']) ? $dc_values['creator'] : array();
+    $dc_values['contributor'] = isset($dc_values['contributor']) ? $dc_values['contributor'] : array();
+    $creators = array_merge($dc_values['creator'], $dc_values['contributor']);
+  }
+  else {
+    $creators = $dc_values['creator'];
+  }
+
+  $creator = implode('; ', $creators);
+  $form['islandora_doi_datacite_creator'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Creator'),
+    '#default_value' => $creator,
+    '#description' => t("Separate multiple creators with a semicolon."),
+    '#required' => TRUE,
+  );
+  $date = implode('; ', $dc_values['date']);
+  $form['islandora_doi_datacite_date'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Date'),
+    '#default_value' => $date,
+    '#description' => t("Must be a single year in YYYY format."),
+    '#required' => TRUE,
+  );
+  $publisher = implode('; ', $dc_values['publisher']);
+  $form['islandora_doi_datacite_publisher'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Publisher'),
+    '#default_value' => $publisher,
+    '#description' => t("Must be a single publisher."),
+    '#required' => TRUE,
+  );
   $resourcetype_values = array(
     'Audiovisual' => 'Audiovisual', 'Collection' => 'Collection', 'Dataset' => 'Dataset',
     'Event' => 'Event', 'Image' => 'Image', 'InteractiveResource' => 'InteractiveResource',
@@ -123,10 +176,11 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
     'Software' => 'Software', 'Sound' => 'Sound', 'Text' => 'Text', 'Workflow' => 'Workflow',
     'Other' => 'Other',
   );
-  $form['islandora_doi_resourcetype'] = array(
+  $form['islandora_doi_datacite_resourcetype'] = array(
     '#type' => 'select',
-    '#title' => t("Select a resource type to use in the DataCite metadata."),
+    '#title' => t("Resource type"),
     '#options' => $resourcetype_values,
+    '#required' => TRUE,
   );
   // We add a custom validate handler instead of a custom submit handler
   // because the submit handler is not fired if there is an error in
@@ -137,15 +191,25 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
 /**
  * Implements hook_islandora_doi_framework_form_handlers().
  */
-function _islandora_doi_datacite_islandora_doi_framework_form_handlers() {
+function islandora_doi_datacite_islandora_doi_framework_form_handlers() {
+  dd("Hi!!");
   return array(
     'assign_doi' => array(
-      'validate' => array(),
-      'submit' => array('islandora_doi_datacite_assign_submit'),
+      'validate' => array('islandora_doi_datacite_validate_publication_year'),
+      'submit' => array(),
     ),
     'update_doi' => array(
       'validate' => array(),
-      'submit' => array('islandora_doi_datacite_update_submit'),
+      'submit' => array(),
     ),
   );
+}
+
+/**
+ * Form validation function.
+ */
+function islandora_doi_datacite_validate_publication_year($form, &$form_state) {
+  if (!preg_match('/^\d\d\d\d$/', $form_state['values']['islandora_doi_datacite_date'])) {
+    form_set_error('islandora_doi_datacite_date', t('The date must be in YYYY format.'));
+  }
 }
