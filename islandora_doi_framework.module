@@ -101,13 +101,11 @@ function islandora_doi_framework_manage_doi() {
       '#weight' => 10,
     );
 
-    dd($handlers, 'Handlers where I need them.');
-
     if (count($handlers)) {
       foreach ($handlers['assign_doi']['submit'] as $handler) {
         $form['#submit'][] = $handler;
       }
-      foreach ($handlers['assign_doi']['valdiate'] as $handler) {
+      foreach ($handlers['assign_doi']['validate'] as $handler) {
         $form['#validate'][] = $handler;
       }
     }

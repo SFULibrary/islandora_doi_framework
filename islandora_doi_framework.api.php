@@ -29,6 +29,10 @@
  * perform additional tasks on submission of the
  * islandora_doi_framework_manage_doi form, like a custom
  * drupal_set_message(), or if you need to perform some custom validation.
+ *
+ * A common use for registering a validate handler is if you are altering
+ * the islandora_doi_framework_manage_doi form and you want to validate
+ * the value supplied in your custom form element.
  */
 function hook_islandora_doi_framework_form_handlers() {
   return array(

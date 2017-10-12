@@ -182,17 +182,12 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
     '#options' => $resourcetype_values,
     '#required' => TRUE,
   );
-  // We add a custom validate handler instead of a custom submit handler
-  // because the submit handler is not fired if there is an error in
-  // generating the DataCite XML.
-  // $form['#validate'][] = 'islandora_doi_sfu_get_resourcetype';
 }
 
 /**
  * Implements hook_islandora_doi_framework_form_handlers().
  */
 function islandora_doi_datacite_islandora_doi_framework_form_handlers() {
-  dd("Hi!!");
   return array(
     'assign_doi' => array(
       'validate' => array('islandora_doi_datacite_validate_publication_year'),

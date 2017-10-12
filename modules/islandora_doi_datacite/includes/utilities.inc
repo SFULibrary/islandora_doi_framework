@@ -237,7 +237,6 @@ function islandora_doi_datacite_generate_metadata($pid, $doi, $form_state) {
     'resource_type' => $form_state['values']['islandora_doi_datacite_resourcetype'],
   ));
 
-  dd($metadata_xml);
   return $metadata_xml;
 }
 
