@@ -120,7 +120,7 @@ function islandora_doi_datacite_islandora_doi_framework_update($pid, $doi, $form
  */
 function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$form, $form_state, $form_id) {
   $form['islandora_doi_datacite_metadata_overview'] = array(
-    '#markup' => '<p>' . t("DataCite requires the following elements in the metadata for a DOI. The values below are taken from this object's DC description. If subject, language, and description are present in this object's Dublin Core description, they are also added to the DataCite metadata.") . '</p>',
+    '#markup' => '<p>' . t("DataCite requires the following elements in the metadata accompanying the DOI. The values below are taken from this object's DC description. If subject, language, and description are present in this object's Dublin Core description, they are also added to the DataCite metadata.") . '</p>',
   );
 
   module_load_include('inc', 'islandora_doi_datacite', 'includes/utilities');
@@ -150,7 +150,7 @@ function islandora_doi_datacite_form_islandora_doi_framework_manage_doi_alter(&$
     '#type' => 'textfield',
     '#title' => t('Creator'),
     '#default_value' => $creator,
-    '#description' => t("Separate multiple creators with a semicolon."),
+    '#description' => t("Separate multiple creators with semicolons."),
     '#required' => TRUE,
   );
   $date = implode('; ', $dc_values['date']);

@@ -7,10 +7,10 @@ Utility module that provides a framework for other modules to assign DOIs ([Digi
 * a "DOI" subtab under each object's "Mangage" tab
 * a "Manage DOIs for Islandora objects" permission
 * five Drupal hooks
-  * a hook for registering custom form submit handlers
+  * a hook for registering custom form validate and submit handlers
   * a hook for minting a DOI using an external API
   * a hook for persisting a DOI, for example in a datastream or database table
-  * a hook for updating a DOI
+  * a hook for updating a DOI's metadata and URL
   * a hook for checking for the presence of a DOI in a datastream or other location
 
 This module differs from the [Islandora DOI](https://github.com/Islandora/islandora_scholar/tree/7.x/modules/doi) module bundled with Islandora Scholar in that this module and its submodules create new DOIs and manage updating the data associated with a DOI. Scholar's DOI creates new objects from a list of DOIs.
@@ -58,10 +58,9 @@ Submodules that mint DOIs from other [registration agencies](http://www.doi.org/
 
 ## To do
 
-* Figure out what it means to "update" a DOI.
 * Figure out best trigger and workflow for automatically updating metadata associated with a DOI. This should probably not happen every time the source datastream is modified, although that is one option.
-* Submodules that mint DOIs from registration agencies other than DataCite.
-* Submodules that persist DOIs to locations other than MODS.
+* Submodules that mint DOIs from registration agencies other than DataCite, e.g. CrossRef.
+* Submodules that persist DOIs to locations other than MODS and DDI.
 
 ## License
 
