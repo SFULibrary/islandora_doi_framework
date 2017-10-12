@@ -8,7 +8,7 @@
  * used on a producation site.
  *
  * Modules that implement hook_islandora_doi_framework_persist() save the
- * DOI in an object's MODS, or other datastream, or to a database table.
+ * DOI in an object's MODS or other datastream, to a database table, etc.
  * This sample module simply saves it to a text file. This module can be
  * used to "persist" DOIs during the development and testing of Islandora
  * DOI Framework submodules that "mint" DOIs.
@@ -70,7 +70,9 @@ function islandora_doi_framework_sample_persist_islandora_doi_framework_persist(
  * Implements hook_islandora_doi_framework_update().
  */
 function islandora_doi_framework_sample_persist_islandora_doi_framework_update($pid, $doi) {
-  // We just return TRUE here since we are pretending that the updated URL and
-  // metadata will be the same as the existing URL and meatdata.
+  // We just return TRUE here since we're not actually updating the URL and
+  // metadata associated with this DOI. If we were going to update either one,
+  // we would attempt the update and if it was successful, return TRUE, or it
+  // failed, return FALSE.
   return TRUE;
 }

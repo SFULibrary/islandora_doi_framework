@@ -134,7 +134,8 @@ function hook_islandora_doi_framework_update($pid, $doi, $form, $form_state) {
 }
 
 /**
- * Checks locally for whether an object has a DOI, e.g. in a MODS datastream.
+ * Checks locally for whether an object already has a DOI, e.g. in a MODS
+ * datastream.
  *
  * @param string $pid
  *   The object's PID.

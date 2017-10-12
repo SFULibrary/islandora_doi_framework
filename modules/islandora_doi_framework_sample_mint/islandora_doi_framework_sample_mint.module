@@ -10,10 +10,10 @@
  * objects.
  *
  * Real DOIs must be minted via a registration agency
- * (http://www.doi.org/registration_agencies.html). The suffix (the part to
- * the right of the /) is assigned by the organization that wishes to register
- * DOI names (publisher, university, etc.). The preix (the part to the left
- * of the /) is assigned to the publisher, university, etc. by the
+ * (http://www.doi.org/registration_agencies.html). The suffix (the part to the
+ * right of the / in a DOI) is assigned by the organization that wishes to
+ * register DOI names (publisher, university, etc.). The prefix (the part to the
+ * left of the /) is assigned to the publisher, university, etc. by the
  * registration agency. We use the fake prefix 10.99999 in this module.
  */
 
@@ -24,7 +24,11 @@
  * otherwise alter the islandora_doi_framework_manage_doi form provided by
  * the main framework module using standard hook_form_alter() techniques.
  * In this example, all we use the form value for is to display it to the
- * user on form submission in the form submit handler.
+ * user on form submission in the form submit handler. If you add elements
+ * to the islandora_doi_framework_manage_doi form and you need a custom
+ * validation (or less likely custom submit) function, you should register
+ * your custom functions in an implementation of
+ *  hook_islandora_doi_framework_form_handlers().
  */
 function islandora_doi_framework_sample_mint_form_islandora_doi_framework_manage_doi_alter(&$form, $form_state, $form_id) {
   $form['islandora_doi_framework_sample_mint_doi_color'] = array(
