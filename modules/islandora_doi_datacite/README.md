@@ -12,7 +12,7 @@ DataCite's Metadata Schema enforces some constraints. Specifically:
 
 * the schema requires elements that correspond to DC's 'creator', 'title', 'publisher', 'date', and 'type'
 * the date must be a year (yyyy)
-* the type must be from a controlled list (details below).
+* the type must be from the following controlled list: 'Audiovisual', 'Collection', 'Dataset', 'Event', 'Image', 'InteractiveResource', 'Model', 'PhysicalObject', 'Service', 'Software', 'Sound', 'Text', 'Workflow', and 'Other'.
 
 If a user tries to assign a DOI for an object that doesn't meet these metadata, they are told that the object is missing one or more required DC metadata values.
 

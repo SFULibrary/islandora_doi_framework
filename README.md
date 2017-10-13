@@ -2,6 +2,8 @@
 
 ## Overview
 
+> Note: As of Oct. 12, 2017 (commit b96e5b4ae7a77814d7bb13e261e1c3078094eae2), this module and its bundled submodules have changed somewhat. If you are using the DataCite module, you will need to clear your theme cache after pulling in the changes. If you have written your own submodules, you should refer to the API docuemenation files in the main Framework module to see if the changes to its hooks affect your custom submodules.
+
 Utility module that provides a framework for other modules to assign DOIs ([Digital Object Identifiers](https://en.wikipedia.org/wiki/Digital_object_identifier)) to objects. This module provides the following:
 
 * a "DOI" subtab under each object's "Mangage" tab
