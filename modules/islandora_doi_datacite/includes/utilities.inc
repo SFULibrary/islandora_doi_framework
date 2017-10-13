@@ -47,7 +47,6 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
   $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi, $form_state);
-  dd($metadata_xml);
 
   $response = drupal_http_request($api_url, array(
     'headers' => array(
@@ -170,8 +169,8 @@ function islandora_doi_datacite_update_doi($pid, $doi, $form_state) {
     return FALSE;
   }
 
-  // There aren't many use cases for updating the URL of an object associated
-  // with a DOI, but we include the ability to do so anyway.
+  // Update the URL of an object associated with a DOI. Assumes the object
+  // is on the same server as the old URL.
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'doi';
   global $base_url;
   $url = $base_url . '/islandora/object/' . $pid;

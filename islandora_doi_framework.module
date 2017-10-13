@@ -140,7 +140,7 @@ function islandora_doi_framework_manage_doi_assign_submit_($form, &$form_state) 
  * We append a "_" to the end of the function name so it doesn't overwrite
  * the '#submit' property defined in the form.
  *
- * @todo: "Update" refers to changing either or both the URL and metadata,
+ * "Update" refers to changing either or both the URL and metadata,
  * not the DOI itself.
  */
 function islandora_doi_framework_manage_doi_update_submit_($form, &$form_state) {
