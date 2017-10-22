@@ -3,7 +3,6 @@
 /**
  * @file
  * Drush file for the Islandora DOI module.
- *@todo: Add a command to check to see if all the objects have the required DC elements.
  */
 
 /**
@@ -13,26 +12,32 @@ function islandora_doi_datacite_drush_command() {
   $items = array();
   $items['islandora_doi_datacite_assign_dois_preflight'] = array(
     'aliases' => array('iddadp'),
-    'description' => 'Checks objects to make sure they have the required DC metadat to have DOIs assigned to them.',
+    'description' => t('Checks objects to make sure they have the required DC metadat to have DOIs assigned to them.'),
     'examples' => array(
       'drush islandora_doi_datacite_assign_dois_preflight --user=admin --pid_file=/tmp/pids.txt',
     ),
     'options' => array(
       'pid_file' => array(
-        'description' => 'Absolute path to a file containing PIDs of objects to assign DOIs to, one per line.',
+        'description' => t('Absolute path to a file containing PIDs of objects to assign DOIs to, one per line.'),
+        'required' => TRUE,
       ),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
   $items['islandora_doi_datacite_assign_dois'] = array(
     'aliases' => array('iddad'),
-    'description' => 'Assign DOIs to a list of objects.',
+    'description' => t('Assign DOIs to a list of objects.'),
     'examples' => array(
       'drush islandora_doi_datacite_assign_dois --user=admin --pid_file=/tmp/pids.txt',
     ),
     'options' => array(
       'pid_file' => array(
-        'description' => 'Absolute path to a file containing PIDs of objects to assign DOIs to, one per line.',
+        'description' => t('Absolute path to a file containing PIDs of objects to assign DOIs to, one per line.'),
+        'required' => TRUE,
+      ),
+      'resource_type' => array(
+        'description' => t("The DataCite resource type to use. Must be on of .'Audiovisual', 'Collection', 'Dataset', 'Event', 'Image', 'InteractiveResource', 'Model', 'PhysicalObject', 'Service', 'Software', 'Sound', 'Text', 'Workflow', and 'Other'"),
+        'required' => TRUE,
       ),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
@@ -57,8 +62,42 @@ function drush_islandora_doi_datacite_assign_dois_preflight() {
   // Write out a log with the PIDs that pass and the ones that fail,
   // explaining the failures.
   foreach ($pids as $pid) {
-    // @todo: Check to see if the object's DC has all the right stuff.
+    $object = islandora_object_load($pid);
+    $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
+    $errors = islandora_doi_datacite_check_required_values($dc_values);
+    if (count($errors)) {
+      // @todo: Print error and.... do what?
+    }
   }
+}
+
+/**
+ * Checks for required values in the object's DC datastream.
+ *
+ * @param array $dc_values
+ *   An associative array containing the object's DC values.
+ *
+ * @return array
+ *   An array of arrays, each of which has as its first element
+ *   a DC element name and as its second element an error message.
+ */
+function islandora_doi_datacite_check_required_values($dc_values) {
+  // We don't include type because the user supplies it on the command line.
+  $required_elements = array('title', 'creator', 'publisher', 'date');
+  $ret = array();
+  foreach ($required_elements as $element => $values) {
+    if (!array_key_exists($element, $required_elements)) {
+      $ret[] = array(
+        $element,
+        t('!element not present', array('!element' => $element)),
+      );
+    }
+  }
+  // Normalize date to see if we can get a yyyy value from it.
+  if (!preg_match('/(\d\d\d\d)/', $dc_values['date'], $matches)) {
+    $ret[] = array('date', t('DC date does not have a year'));
+  }
+  return $ret;
 }
 
 /**
@@ -74,9 +113,28 @@ function drush_islandora_doi_datacite_assign_dois() {
     $pids = islandora_doi_framework_read_input_file($input_file_path);
   }
 
+  // @todo: Validate resource type value.
+  $resource_type = drush_get_option('resource_type', '');
+
   // Cycle through the objects and assign the DOIs.
   foreach ($pids as $pid) {
-    if ($doi = islandora_doi_framework_mint_doi($pid)) {
+    $object = islandora_object_load($pid);
+    $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
+    // In the GUI version, we get required metadata values from the form state
+    // of islandora_doi_framework_manage_doi. In the drush version, there is no
+    // form, so we need to populate this array with the necessary values from
+    // the DC datastream:
+    $form_state = array();
+    preg_match('/(\d\d\d\d)/', $dc_values['date'], $matches);
+    $year = trim($matches[1]);
+    $form_state['values'] = array(
+      'islandora_doi_datacite_title' => $dc_values['title'],
+      'islandora_doi_datacite_creator' => $dc_values['creator'],
+      'islandora_doi_datacite_date' => $year,
+      'islandora_doi_datacite_publisher' => $dc_values['publisher'],
+      'islandora_doi_datacite_resourcetype' => $resource_type,
+    );
+    if ($doi = islandora_doi_datacite_post_new_via_drush($pid, array(), $form_state)) {
       if (islandora_doi_framework_persist_doi($doi, $pid)) {
         drush_log(dt('DOI !doi assigned to object !pid',
           array('!doi' => $doi, '!pid' => $pid)), 'ok');
@@ -85,12 +143,10 @@ function drush_islandora_doi_datacite_assign_dois() {
   }
 }
 
-
 /**
- * Registers a DOI and associated metadata with DataCite.
+ * @todo: when this is working, move to utilities.inc.
  *
- * Note: this is based on the islandora_doi_datacite_post_new() function
- * used in the GUI.
+ * Registers a DOI and associated metadata with DataCite.
  *
  * Also checks to make sure that the source DC datastream
  * contains the elements required by the DataCite metadata
@@ -102,14 +158,14 @@ function drush_islandora_doi_datacite_assign_dois() {
  *
  * @param string $pid
  *   The PID of the object.
- * @param array $form
- *   The islandora_doi_framework_manage_doi form.
- *
+ * @param array $form_state
+ *   An array containing values in the same structure as the
+ *   islandora_doi_framework_manage_doi form.
  *
  * @return string|bool
  *   The DOI if the request was successful, FALSE if not.
  */
-function islandora_doi_datacite_post_new_via_drush($pid, $form, $form_state) {
+function islandora_doi_datacite_post_new_via_drush($pid, $form_state) {
   $symbol = variable_get('islandora_doi_datacite_username', 'CISTI.FOO');
   $password = variable_get('islandora_doi_datacite_password', '');
   $suffix_source = variable_get('islandora_doi_datacite_suffix_source', 'pid');
@@ -128,9 +184,6 @@ function islandora_doi_datacite_post_new_via_drush($pid, $form, $form_state) {
   // <identifier identifierType="DOI"> element.
   $api_url = variable_get('islandora_doi_datacite_api_url', 'https://mds.datacite.org/') . 'metadata';
 
-  // @todo: In the GUI version, the form state of islandora_doi_framework_manage_doi form on submission.
-  // In the drush version, there is no form, so we need to populate this array with the
-  // necessary values from the DC datastream.
   $metadata_xml = islandora_doi_datacite_generate_metadata($pid, $doi, $form_state);
 
   $response = drupal_http_request($api_url, array(
