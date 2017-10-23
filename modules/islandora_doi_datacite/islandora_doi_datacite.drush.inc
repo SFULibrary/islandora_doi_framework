@@ -50,6 +50,7 @@ function islandora_doi_datacite_drush_command() {
  */
 function drush_islandora_doi_datacite_assign_dois_preflight() {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
+  module_load_include('inc', 'islandora_doi_datacite', 'includes/utilities');
 
   // Check to see if there is an input file and if there is, use the PIDs
   // from it.
@@ -65,13 +66,26 @@ function drush_islandora_doi_datacite_assign_dois_preflight() {
     $object = islandora_object_load($pid);
     $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
     $errors = islandora_doi_datacite_check_required_values($dc_values);
+    $error_file_path = $input_file_path . '.errors';
+    $passed_file_path = $input_file_path . '.passed';
     if (count($errors)) {
-      // @todo: Print error and.... do what?
+      drush_log(dt("!pid does not meet DataCite's metadata requirements", array('!pid' => $pid)), 'warning');
+      foreach ($errors as $error) {
+        file_put_contents($error_file_path, $pid . "\t" . $error[0] . "\t" . $error[1] . "\n", FILE_APPEND);
+      }
     }
+    else {
+      drush_log(dt("!pid meets DataCite's metadata requirements", array('!pid' => $pid)), 'ok');
+      file_put_contents($passed_file_path, $pid . "\n", FILE_APPEND);
+    }
+  }
+  if (isset($errors) && count($errors)) {
+    drush_print(dt("Please see !error_file_path for details.", array('!error_file_path' => $error_file_path)));
   }
 }
 
 /**
+ * @todo: when this is working, move to utilities.inc.
  * Checks for required values in the object's DC datastream.
  *
  * @param array $dc_values
@@ -85,17 +99,23 @@ function islandora_doi_datacite_check_required_values($dc_values) {
   // We don't include type because the user supplies it on the command line.
   $required_elements = array('title', 'creator', 'publisher', 'date');
   $ret = array();
-  foreach ($required_elements as $element => $values) {
-    if (!array_key_exists($element, $required_elements)) {
+  foreach ($required_elements as $element) {
+    if (!array_key_exists($element, $dc_values)) {
       $ret[] = array(
         $element,
-        t('!element not present', array('!element' => $element)),
+        t('missing'),
+      );
+    }
+    if (array_key_exists($element, $dc_values) && strlen($dc_values[$element][0]) == 0) {
+      $ret[] = array(
+        $element,
+        t('empty'),
       );
     }
   }
-  // Normalize date to see if we can get a yyyy value from it.
-  if (!preg_match('/(\d\d\d\d)/', $dc_values['date'], $matches)) {
-    $ret[] = array('date', t('DC date does not have a year'));
+  // Parse out a date to see if we can get a yyyy value from it.
+  if (!preg_match('/(\d\d\d\d)/', $dc_values['date'][0], $matches)) {
+    $ret[] = array('date', t('does not have a YYYY year'));
   }
   return $ret;
 }
@@ -105,6 +125,12 @@ function islandora_doi_datacite_check_required_values($dc_values) {
  */
 function drush_islandora_doi_datacite_assign_dois() {
   module_load_include('inc', 'islandora_doi_framework', 'includes/utilities');
+
+  if (!drush_confirm(dt("You are about to mint new DOIs. Have you run the preflight check?",
+    array()))) {
+    drush_user_abort(dt('Exiting, please run the preflight check.'));
+    exit;
+  }
 
   // Check to see if there is an input file and if there is, use the PIDs
   // from it.
@@ -140,6 +166,31 @@ function drush_islandora_doi_datacite_assign_dois() {
           array('!doi' => $doi, '!pid' => $pid)), 'ok');
       }
     }
+  }
+}
+
+/**
+ * Implements drush_COMMAND_validate().
+ */
+function drush_islandora_doi_datacite_assign_dois_validate() {
+  $resource_types = array('Audiovisual',
+    'Collection',
+    'Dataset',
+    'Event',
+    'Image',
+    'InteractiveResource',
+    'Model',
+    'PhysicalObject',
+    'Service',
+    'Software',
+    'Sound',
+    'Text',
+    'Workflow',
+    'Other',
+  );
+  $type = drush_get_option('resource_type');
+  if (!in_array($type, $resource_types)) {
+    drush_set_error('INVALID DATACITE RESOURCE TYPE', $type);
   }
 }
 
