@@ -34,6 +34,21 @@ This module provides the option of using an object's PID as the DOI suffix or us
 
 There is also an option to use both the object's DC.creator and DC.contributor values to populate DataCite's reqiured 'creator' element. Because of the way that the Library of Congress' MODS-to-DC stylesheet generates DC datastreams, many Islandora objects' DC datastreams contain 'contributor' elements rather than 'creator' elements. Enabling this option will reduce the number of validation failures based on the lack of values for the DataCite 'creator' element.
 
+## Assigning DataCite DOIs from a list of PIDs
+
+This module includes a drush script that can assign DOIs from a list of PIDS. The script provides two commands, `islandora_doi_datacite_assign_dois_preflight` and `islandora_doi_datacite_assign_dois`.
+
+The preflight command checks each object identified in the PID file to confirm that its DC datastream contains the values required by the  DataCite metadata schema, specifically, for a dc.title, dc.creator, dc.publisher. It also checks the dc.date field for a YYYY year. Running the file produces two output files, named after the PID file with `.passed' and `.errors` appended. The 'passed' file contains PIDs of objects that had all the required values, and the 'errors' file contains a log of the missing elements in each object. For example:
+
+```
+drush -u 1 islandora_doi_datacite_assign_dois_preflight --pid_file=/tmp/dois.pids
+```
+
+The `islandora_doi_datacite_assign_dois` command assigns DOIs to each object listed in the PID file, skipping any objects that do not meet the requred DC values. It requires the `--resource_type` option, whose value must be from the list above. For example:
+
+```
+drush -u 1 islandora_doi_datacite_assign_dois --pid_file=/tmp/dois.pids --resource_type=Text
+```
 
 ## Maintainer
 
