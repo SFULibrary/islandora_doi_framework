@@ -64,6 +64,21 @@ function drush_islandora_doi_datacite_assign_dois_preflight() {
   // explaining the failures.
   foreach ($pids as $pid) {
     $object = islandora_object_load($pid);
+
+    // We need to check here whether the object already has a DOI. In a GUI
+    // context, hook_islandora_doi_framework_check_for_doi() is defined in
+    // the function that prepares the user-facing assignment form, so we
+    // can't rely on it here.
+    $dois = module_invoke_all('islandora_doi_framework_check_for_doi', $pid);
+    $dois = array_unique($dois);
+    if (count($dois)) {
+      $dois = array_unique($dois);
+      // Put any non-boolean values at beginning of array.
+      rsort($dois);
+      drush_log(dt("!pid already has a DOI: !doi", array('!pid' => $pid, '!doi' => $dois[0])), 'warning');
+      file_put_contents($error_file_path, $pid . "\t" . "DOI already exists\t" . $dois[0] . "\n", FILE_APPEND);
+    }
+
     $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
     $errors = islandora_doi_datacite_check_required_values($dc_values);
     $error_file_path = $input_file_path . '.errors';
@@ -109,6 +124,21 @@ function drush_islandora_doi_datacite_assign_dois() {
   // Cycle through the objects and assign the DOIs.
   foreach ($pids as $pid) {
     $object = islandora_object_load($pid);
+
+    // We need to check here whether the object already has a DOI. In a GUI
+    // context, hook_islandora_doi_framework_check_for_doi() is defined in
+    // the function that prepares the user-facing assignment form, so we
+    // can't rely on it here.
+    $dois = module_invoke_all('islandora_doi_framework_check_for_doi', $pid);
+    $dois = array_unique($dois);
+    if (count($dois)) {
+      $dois = array_unique($dois);
+      // Put any non-boolean values at beginning of array.
+      rsort($dois);
+      drush_log(dt("!pid already has a DOI: !doi", array('!pid' => $pid, '!doi' => $dois[0])), 'warning');
+      continue;
+    }
+
     $dc_values = islandora_doi_datacite_get_dc_values($object['DC']->content);
     $errors = islandora_doi_datacite_check_required_values($dc_values);
     if (count($errors)) {

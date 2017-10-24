@@ -36,7 +36,7 @@ There is also an option to use both the object's DC.creator and DC.contributor v
 
 ## Assigning DataCite DOIs from a list of PIDs
 
-This module includes a drush script that can assign DOIs from a list of PIDS. The PID file contains one PID per line, and lines can be commented:
+This module includes a drush script that can assign DOIs from a file containing a list of PIDS. The PID file contains one PID per line, and lines can be commented:
 
 ```
 islandora:10
@@ -49,9 +49,9 @@ someothernamespace:1
 someothernamespace:2
 ```
 
-The script provides two commands, `islandora_doi_datacite_assign_dois_preflight` and `islandora_doi_datacite_assign_dois`. You should run the preflight command on your list of PIDs before running the assign command. Configuration options set in the admin GUI as described above are used by the drush commands.
+The script provides two commands, `islandora_doi_datacite_assign_dois_preflight` and `islandora_doi_datacite_assign_dois`.
 
-The preflight command checks each object identified in the PID file to confirm that its DC datastream contains the values required by the  DataCite metadata schema, specifically, for a dc.title, dc.creator, dc.publisher. It also checks the dc.date field for a YYYY year. Running the file produces two output files, named after the PID file with `.passed` and `.errors` appended. The 'passed' file contains PIDs of objects that had all the required values, and the 'errors' file contains a log of the missing elements in each object. For example:
+You should run the preflight command on your list of PIDs before running the assign command. Configuration options set in the admin GUI as described above are used by the drush commands. The preflight command checks each object identified in the PID file to confirm that its DC datastream contains the values required by the  DataCite metadata schema, specifically, for a dc.title, dc.creator, dc.publisher. It also checks the dc.date field for a YYYY year. Running the file produces two output files, named after the PID file with `.passed` and `.errors` appended. The 'passed' file contains PIDs of objects that had all the required values, and the 'errors' file contains a log of the missing elements in each object. For example:
 
 ```
 drush -u 1 islandora_doi_datacite_assign_dois_preflight --pid_file=/tmp/dois.pids
@@ -70,6 +70,10 @@ drush -u 1 islandora_doi_datacite_assign_dois --pid_file=/tmp/dois.pids --resour
 ## Development and feedback
 
 Pull requests are welcome, as are use cases and suggestions.
+
+## To do
+
+* Add the ability to update the DOIs of both a single object and a group of objects. Some use cases are available in issue #7.
 
 ## License
 
