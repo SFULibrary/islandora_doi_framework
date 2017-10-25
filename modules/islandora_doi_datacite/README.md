@@ -49,9 +49,14 @@ someothernamespace:1
 someothernamespace:2
 ```
 
-The script provides two commands, `islandora_doi_datacite_assign_dois_preflight` and `islandora_doi_datacite_assign_dois`. Configuration options set in the admin GUI as described above are used by the drush commands.
+The script provides two commands:
 
-You should run the preflight command on your list of PIDs before running the assign command. That command checks each object identified in the PID file to confirm that its DC datastream contains the values required by the  DataCite metadata schema, specifically, for a dc.title, dc.creator, dc.publisher. It also checks the dc.date field for a YYYY year. Running the file produces two output files, named after the PID file with `.passed` and `.errors` appended. The 'passed' file contains PIDs of objects that had all the required values, and the 'errors' file contains a log of the missing elements in each object. For example:
+* `islandora_doi_datacite_assign_dois_preflight` and
+* `islandora_doi_datacite_assign_dois`.
+
+Configuration options set in the admin GUI as described above are used by the drush commands.
+
+You should run the preflight command on your list of PIDs before running the assign command. The preflight command checks each object identified in the PID file to confirm that its DC datastream contains the values required by the  DataCite metadata schema, specifically, for a dc.title, dc.creator, dc.publisher. It also checks the dc.date field for a YYYY year. Running the file produces two output files, named after the PID file with `.passed` and `.errors` appended. The 'passed' file contains PIDs of objects that had all the required values, and the 'errors' file contains a log of the problems (missing required elements, DOI already exists, etc.) in each object. For example:
 
 ```
 drush -u 1 islandora_doi_datacite_assign_dois_preflight --pid_file=/tmp/dois.pids
@@ -63,7 +68,7 @@ The `islandora_doi_datacite_assign_dois` command assigns DOIs to each object lis
 drush -u 1 islandora_doi_datacite_assign_dois --pid_file=/tmp/dois.pids --resource_type=Text
 ```
 
-Given a PID file `/tmp/dois.pids` that contains two PIDs `doitest:2` and `doitest:3`, running this command will assign the DOIs and produce output like this:
+For example, given a PID file `/tmp/dois.pids` that contains two PIDs `doitest:2` and `doitest:3`, running this command will assign the DOIs and produce output like this:
 
 ```
 You are about to mint new DOIs. Have you run the preflight check? (y/n): y
