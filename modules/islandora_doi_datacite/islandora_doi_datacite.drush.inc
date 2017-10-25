@@ -71,7 +71,7 @@ function drush_islandora_doi_datacite_assign_dois_preflight() {
     // can't rely on it here.
     $dois = module_invoke_all('islandora_doi_framework_check_for_doi', $pid);
     $dois = array_unique($dois);
-    if (count($dois)) {
+    if (count($dois) && strlen($dois[0])) {
       $dois = array_unique($dois);
       // Put any non-boolean values at beginning of array.
       rsort($dois);
@@ -131,7 +131,7 @@ function drush_islandora_doi_datacite_assign_dois() {
     // can't rely on it here.
     $dois = module_invoke_all('islandora_doi_framework_check_for_doi', $pid);
     $dois = array_unique($dois);
-    if (count($dois)) {
+    if (count($dois) && strlen($dois[0])) {
       $dois = array_unique($dois);
       // Put any non-boolean values at beginning of array.
       rsort($dois);
