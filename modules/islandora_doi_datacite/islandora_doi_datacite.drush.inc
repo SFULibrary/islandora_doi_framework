@@ -83,9 +83,6 @@ function drush_islandora_doi_datacite_assign_dois_preflight() {
     $errors = islandora_doi_datacite_check_required_values($dc_values);
     $error_file_path = $input_file_path . '.errors';
     $passed_file_path = $input_file_path . '.passed';
-    if (file_exists($passed_file_path)) {
-      unlink($passed_file_path);
-    }
     if (count($errors)) {
       drush_log(dt("!pid does not meet DataCite's metadata requirements", array('!pid' => $pid)), 'warning');
       foreach ($errors as $error) {
