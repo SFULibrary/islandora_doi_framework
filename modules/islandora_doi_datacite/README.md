@@ -62,13 +62,13 @@ You should run the preflight command on your list of PIDs before running the ass
 drush -u 1 islandora_doi_datacite_assign_dois_preflight --pid_file=/tmp/dois.pids
 ```
 
-The `islandora_doi_datacite_assign_dois` command assigns DOIs to each object listed in the PID file, skipping any objects that do not meet the requred DC values. It requires the `--resource_type` option, whose value must be from the list above. For example:
+The 'passed' file can then be used as the input for the `islandora_doi_datacite_assign_dois` command, which assigns DOIs to each object listed in the PID file. Since this command kips objects that do not meet the requred DC values, using the 'passed' file is not required, but using it will mean that none of the PIDs listed in it will be skipped. The `islandora_doi_datacite_assign_dois` command requires the `--resource_type` option, whose value must be from the list above. For example:
 
 ```
-drush -u 1 islandora_doi_datacite_assign_dois --pid_file=/tmp/dois.pids --resource_type=Text
+drush -u 1 islandora_doi_datacite_assign_dois --pid_file=/tmp/dois.pids.passed --resource_type=Text
 ```
 
-For example, given a PID file `/tmp/dois.pids` that contains two PIDs `doitest:2` and `doitest:3`, running this command will assign the DOIs and produce output like this:
+For example, given a PID file `/tmp/dois.pids.passed` that contains two PIDs `doitest:2` and `doitest:3`, running this command will assign the DOIs and produce output like this:
 
 ```
 You are about to mint new DOIs. Have you run the preflight check? (y/n): y
