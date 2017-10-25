@@ -61,7 +61,7 @@ Submodules that mint DOIs from other [registration agencies](http://www.doi.org/
 ## To do
 
 * Figure out best trigger and workflow for automatically updating metadata associated with a DOI. This should probably not happen every time the source datastream is modified, although that is one option.
-* Figure out how to do batch DOI minting and updating.
+* Figure out how to do batch DOI minting and updating (The DataCite module now has a drush script that will so batch minting).
 * Submodules that mint DOIs from registration agencies other than DataCite, e.g. CrossRef.
 * Submodules that persist DOIs to locations other than MODS and DDI.
 
