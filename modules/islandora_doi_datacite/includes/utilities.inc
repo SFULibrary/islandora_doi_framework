@@ -230,6 +230,28 @@ function islandora_doi_datacite_post_new_via_drush($pid, $form_state) {
 }
 
 /**
+ * Derivative function.
+ *
+ * @todo: Finish this as per https://github.com/mjordan/islandora_doi_framework/issues/9.
+ */
+function islandora_doi_datacite_autoassign_doi(AbstractObject $object, $force = FALSE) {
+  if (isset($object['DC'])) {
+    // @todo: Generate the DataCite XML from $object['DC']->content and
+    // mint the DOI.
+  }
+  return array(
+    'success' => TRUE,
+    'messages' => array(
+      array(
+        'message' => t('DataCite metadata generated for @pid!'),
+        'message_sub' => array('@pid' => $object->id),
+        'type' => 'watchdog',
+      ),
+    ),
+  );
+}
+
+/**
  * Updates an object's DOI with updated metadata and/or URL.
  *
  * @param string $pid

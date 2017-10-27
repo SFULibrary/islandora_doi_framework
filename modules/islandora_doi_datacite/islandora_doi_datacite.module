@@ -210,3 +210,19 @@ function islandora_doi_datacite_validate_publication_year($form, &$form_state) {
     form_set_error('islandora_doi_datacite_date', t('The date must be in YYYY format.'));
   }
 }
+
+/**
+ * Implements hook_islandora_derivative().
+ */
+function islandora_doi_datacite_islandora_derivative(AbstractObject $object, $ds_modified_params = array()) {
+  $derivatives[] = array(
+    'source_dsid' => 'DC',
+    'force' => TRUE,
+    'weight' => '10',
+    'function' => array(
+      'islandora_doi_datacite_autoassign_doi',
+    ),
+    'file' => drupal_get_path('module', 'islandora_doi_datacite') . '/includes/utilities.inc',
+  );
+  return $derivatives;
+}
