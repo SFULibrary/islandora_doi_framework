@@ -54,7 +54,7 @@ Note that you should only enable a single minting submodule and a single persist
 
 ## Development and feedback
 
-Pull requests against this module are welcome, as are submodules (suggestions below). Please open an issue in this module's Github repo before opening a pull request.
+Pull requests against this module are welcome, as are submodules (suggestions below). Please open an issue in this module's Github repo before opening a pull request. See CONTRIBUTING.md for more information.
 
 Submodules that mint DOIs from other [registration agencies](http://www.doi.org/registration_agencies.html) are particularly welcome, as are submodules for persisting DOIs to non-MODS datastreams or other locations.
 

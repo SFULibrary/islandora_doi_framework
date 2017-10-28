@@ -158,7 +158,7 @@ function drush_islandora_doi_datacite_assign_dois() {
     // In the GUI version, we get required metadata values from the form state
     // of islandora_doi_framework_manage_doi. In the drush version, there is no
     // form, so we need to populate this array with the necessary values from
-    // the DC datastream:
+    // the DC datastream.
     $form_state = array();
     preg_match('/(\d\d\d\d)/', $dc_values['date'][0], $matches);
     $year = trim($matches[1]);
@@ -170,7 +170,7 @@ function drush_islandora_doi_datacite_assign_dois() {
       'islandora_doi_datacite_publisher' => $dc_values['publisher'][0],
       'islandora_doi_datacite_resourcetype' => $resource_type,
     );
-    if ($doi = islandora_doi_datacite_post_new_via_drush($pid, $form_state)) {
+    if ($doi = islandora_doi_datacite_post_new($pid, array(), $form_state)) {
       if (islandora_doi_framework_persist_doi($doi, $pid, array(), $form_state)) {
         drush_log(dt('DOI !doi assigned to object !pid',
           array('!doi' => $doi, '!pid' => $pid)), 'ok');
