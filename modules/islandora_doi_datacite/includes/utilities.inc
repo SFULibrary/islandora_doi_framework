@@ -66,15 +66,15 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
     }
     watchdog(
       'islandora_doi_datacite',
-      'Error registering metadata for object !pid, so cannot mint DOI: !code, !message',
+      'Error registering metadata for object @pid, so cannot mint DOI: @code, @message',
       array(
-        '!pid' => $pid,
-        '!code' => $response->code,
-        '!message' => $message,
+        '@pid' => $pid,
+        '@code' => $response->code,
+        '@message' => $message,
       ),
       WATCHDOG_ERROR
     );
-    drupal_set_message(t("Can't post DataCite metadata for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    drupal_set_message(t("Can't post DataCite metadata for object @pid. See the Drupal log for more information.", array('@pid' => $pid)), 'error');
     return FALSE;
   }
 
@@ -92,7 +92,7 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
     'data' => 'doi=' . $doi . PHP_EOL . 'url=' . $url,
   ));
   if ($response->code == 201) {
-    drupal_set_message(t('DOI !doi successfully minted for object !pid', array('!doi' => $doi, '!pid' => $pid)));
+    drupal_set_message(t('DOI @doi successfully minted for object @pid', array('@doi' => $doi, '@pid' => $pid)));
     return $doi;
   }
   else {
@@ -105,15 +105,15 @@ function islandora_doi_datacite_post_new($pid, $form, $form_state) {
     }
     watchdog(
       'islandora_doi_datacite',
-      'Error minting DOI !doi for object !pid: !code, !message',
+      'Error minting DOI @doi for object @pid: @code, @message',
       array(
-        '!doi' => $doi,
-        '!pid' => $pid,
-        '!code' => $response->code,
-        '!message' => $message),
+        '@doi' => $doi,
+        '@pid' => $pid,
+        '@code' => $response->code,
+        '@message' => $message),
       WATCHDOG_ERROR
     );
-    drupal_set_message(t("Can't mint DOI for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    drupal_set_message(t("Can't mint DOI for object @pid. See the Drupal log for more information.", array('@pid' => $pid)), 'error');
     return FALSE;
   }
 }
@@ -177,15 +177,15 @@ function islandora_doi_datacite_post_new_via_drush($pid, $form_state) {
     }
     watchdog(
       'islandora_doi_datacite',
-      'Error registering metadata for object !pid, so cannot mint DOI: !code, !message',
+      'Error registering metadata for object @pid, so cannot mint DOI: @code, @message',
       array(
-        '!pid' => $pid,
-        '!code' => $response->code,
-        '!message' => $message,
+        '@pid' => $pid,
+        '@code' => $response->code,
+        '@message' => $message,
       ),
       WATCHDOG_ERROR
     );
-    drupal_set_message(t("Can't post DataCite metadata for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    drupal_set_message(t("Can't post DataCite metadata for object @pid. See the Drupal log for more information.", array('@pid' => $pid)), 'error');
     return FALSE;
   }
 
@@ -203,7 +203,7 @@ function islandora_doi_datacite_post_new_via_drush($pid, $form_state) {
     'data' => 'doi=' . $doi . PHP_EOL . 'url=' . $url,
   ));
   if ($response->code == 201) {
-    drupal_set_message(t('DOI !doi successfully minted for object !pid', array('!doi' => $doi, '!pid' => $pid)));
+    drupal_set_message(t('DOI @doi successfully minted for object @pid', array('@doi' => $doi, '@pid' => $pid)));
     return $doi;
   }
   else {
@@ -216,15 +216,15 @@ function islandora_doi_datacite_post_new_via_drush($pid, $form_state) {
     }
     watchdog(
       'islandora_doi_datacite',
-      'Error minting DOI !doi for object !pid: !code, !message',
+      'Error minting DOI @doi for object @pid: @code, @message',
       array(
-        '!doi' => $doi,
-        '!pid' => $pid,
-        '!code' => $response->code,
-        '!message' => $message),
+        '@doi' => $doi,
+        '@pid' => $pid,
+        '@code' => $response->code,
+        '@message' => $message),
       WATCHDOG_ERROR
     );
-    drupal_set_message(t("Can't mint DOI for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    drupal_set_message(t("Can't mint DOI for object @pid. See the Drupal log for more information.", array('@pid' => $pid)), 'error');
     return FALSE;
   }
 }
@@ -270,15 +270,15 @@ function islandora_doi_datacite_update_doi($pid, $doi, $form_state) {
     }
     watchdog(
       'islandora_doi_datacite',
-      'Error updating metadata for object !pid: !code, !message',
+      'Error updating metadata for object @pid: @code, @message',
       array(
-        '!pid' => $pid,
-        '!code' => $response->code,
-        '!message' => $message,
+        '@pid' => $pid,
+        '@code' => $response->code,
+        '@message' => $message,
       ),
       WATCHDOG_ERROR
     );
-    drupal_set_message(t("Can't update DataCite metadata for object !pid. See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    drupal_set_message(t("Can't update DataCite metadata for object @pid. See the Drupal log for more information.", array('@pid' => $pid)), 'error');
     return FALSE;
   }
 
@@ -297,7 +297,7 @@ function islandora_doi_datacite_update_doi($pid, $doi, $form_state) {
     'data' => 'doi=' . $doi . PHP_EOL . 'url=' . $url,
   ));
   if ($response->code == 201) {
-    drupal_set_message(t('URL for DOI !doi successfully updated (object !pid)', array('!doi' => $doi, '!pid' => $pid)));
+    drupal_set_message(t('URL for DOI @doi successfully updated (object @pid)', array('@doi' => $doi, '@pid' => $pid)));
     return $doi;
   }
   else {
@@ -311,15 +311,15 @@ function islandora_doi_datacite_update_doi($pid, $doi, $form_state) {
     }
     watchdog(
       'islandora_doi_datacite',
-      'Error updating URL associated with DOI !doi (object !pid): !code, !message',
+      'Error updating URL associated with DOI @doi (object @pid): @code, @message',
       array(
-        '!doi' => $doi,
-        '!pid' => $pid,
-        '!code' => $response->code,
-        '!message' => $message),
+        '@doi' => $doi,
+        '@pid' => $pid,
+        '@code' => $response->code,
+        '@message' => $message),
       WATCHDOG_ERROR
     );
-    drupal_set_message(t("Can't update URL for DOI !doi (object !PID). See the Drupal log for more information.", array('!pid' => $pid)), 'error');
+    drupal_set_message(t("Can't update URL for DOI @doi (object @PID). See the Drupal log for more information.", array('@pid' => $pid)), 'error');
     return FALSE;
   }
 }
