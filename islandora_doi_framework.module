@@ -12,7 +12,7 @@ function islandora_doi_framework_menu() {
   $items = array();
   $items['islandora/object/%islandora_object/manage/assign_doi'] = array(
     'title' => 'DOI',
-    'access arguments' => array('manage DOIs to Islandora objects'),
+    'access arguments' => array('manage DOIs for Islandora objects'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('islandora_doi_framework_manage_doi'),
     'type' => MENU_LOCAL_TASK,
